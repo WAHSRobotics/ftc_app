@@ -1,8 +1,7 @@
-package com.qualcomm.ftcrobotcontroller.opmodes;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
 
 /**
  * Created by Nathaniel S. Glover on 12/19/2015, at 11:56 AM.
@@ -47,15 +46,15 @@ public abstract class LSAutonomous extends LinearOpMode {
         fRight.setDirection(DcMotor.Direction.FORWARD);
         fLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        bRight.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        bLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        fRight.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        fLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        bRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        bRight.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        bLeft.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        fRight.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        fLeft.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        bRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         switchToWriteOnly();
 
@@ -218,25 +217,25 @@ public abstract class LSAutonomous extends LinearOpMode {
     }
 
     protected void switchToWriteOnly() throws InterruptedException {
-        bLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-        bRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-        fLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-        fRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
+//        bLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+//        bRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+//        fLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+//        fRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+//
+//        waitOneFullHardwareCycle();
+//        waitOneFullHardwareCycle();
+//        waitOneFullHardwareCycle();
     }
 
     protected void switchToReadOnly() throws InterruptedException {
-        bLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-        bRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-        fLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-        fRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
+//        bLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+//        bRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+//        fLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+//        fRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+//
+//        waitOneFullHardwareCycle();
+//        waitOneFullHardwareCycle();
+//        waitOneFullHardwareCycle();
     }
 
     protected void printEncoderValues() throws InterruptedException {

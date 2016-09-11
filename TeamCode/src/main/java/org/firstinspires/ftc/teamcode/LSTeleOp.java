@@ -1,4 +1,4 @@
-package com.qualcomm.ftcrobotcontroller.opmodes;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -41,9 +41,9 @@ public class LSTeleOp extends OpMode {
 
     @Override
     public void loop() {
-        if(telemetry.hasData()) {
-            telemetry.clearData();
-        }
+//        if(telemetry.hasData()) {
+//            telemetry.clearData();
+//        }
 
         if (gamepad1.left_bumper) {
             leftModVal = SLOW_MOD_VAL;
@@ -79,15 +79,15 @@ public class LSTeleOp extends OpMode {
         bRight.setPower(scaleMotorPower(gamepad1.right_stick_y * rightModVal));
 
         if(gamepad1.dpad_down) {
-        fLeft.setPower(1);
-        bLeft.setPower(1);
-        fRight.setPower(1);
-        bRight.setPower(1);
+            fLeft.setPower(1);
+            bLeft.setPower(1);
+            fRight.setPower(1);
+            bRight.setPower(1);
         } else if(gamepad1.dpad_up) {
-        fLeft.setPower(-1);
-        bLeft.setPower(-1);
-        fRight.setPower(-1);
-        bRight.setPower(-1);
+            fLeft.setPower(-1);
+            bLeft.setPower(-1);
+            fRight.setPower(-1);
+            bRight.setPower(-1);
         }
 
 //        try {
@@ -109,52 +109,52 @@ public class LSTeleOp extends OpMode {
 
         telemetry.addData("Left Mod Val", leftModVal);
         telemetry.addData("Right Mod Val", rightModVal);
-        }
+    }
 
-        private float scaleMotorPower(float power) {
+    private float scaleMotorPower(float power) {
 
         float scaledPower = 0.0f;
 
         power = Range.clip(power, -1, 1);
         float[] possiblePowerValues = {
-        0.00f, 0.05f, 0.09f, 0.10f, 0.12f,
-        0.15f, 0.18f, 0.24f, 0.30f, 0.36f,
-        0.43f, 0.50f, 0.60f, 0.72f, 0.85f,
-        1.00f, 1.00f
+                0.00f, 0.05f, 0.09f, 0.10f, 0.12f,
+                0.15f, 0.18f, 0.24f, 0.30f, 0.36f,
+                0.43f, 0.50f, 0.60f, 0.72f, 0.85f,
+                1.00f, 1.00f
         };
 
         int powerIndex = (int)(power * 16.0);
 
         if (powerIndex < 0) {
-        powerIndex = -powerIndex;
+            powerIndex = -powerIndex;
         } else if (powerIndex > 16) {
-        powerIndex = 16;
+            powerIndex = 16;
         }
 
         if (power < 0) {
-        scaledPower = -possiblePowerValues[powerIndex];
+            scaledPower = -possiblePowerValues[powerIndex];
         } else {
-        scaledPower = possiblePowerValues[powerIndex];
+            scaledPower = possiblePowerValues[powerIndex];
         }
 
         return scaledPower;
-        }
-
-        protected synchronized void switchToWriteOnly() throws InterruptedException {
-            bLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-            bRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-            fLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-            fRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-
-            wait(10);
-        }
-
-        protected synchronized void switchToReadOnly() throws InterruptedException {
-            bLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-            bRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-            fLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-            fRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-
-        wait(10);
     }
+
+//    protected synchronized void switchToWriteOnly() throws InterruptedException {
+//        bLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+//        bRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+//        fLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+//        fRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+//
+//        wait(10);
+//    }
+//
+//    protected synchronized void switchToReadOnly() throws InterruptedException {
+//        bLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+//        bRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+//        fLeft.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+//        fRight.getController().setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+//
+//        wait(10);
+//    }
 }
