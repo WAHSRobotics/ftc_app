@@ -281,8 +281,8 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/Servo.html" titl
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/ServoImpl.html#scaleRange(double,%20double)">scaleRange</a></strong>(double&nbsp;min,
-          double&nbsp;max)</code>
+<td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/ServoImpl.html#scaleRange(double,%20double)">scaleRange</a></strong>(double&nbsp;minimumPower,
+          double&nbsp;maximumPower)</code>
 <div class="block">Automatically scales the position of the servo.</div>
 </td>
 </tr>
@@ -600,13 +600,13 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/Servo.html" titl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>scaleRange</h4>
-<pre>public&nbsp;void&nbsp;scaleRange(double&nbsp;min,
-              double&nbsp;max)</pre>
+<pre>public&nbsp;void&nbsp;scaleRange(double&nbsp;minimumPower,
+              double&nbsp;maximumPower)</pre>
 <div class="block">Automatically scales the position of the servo.</div>
 <dl>
 <dt><strong>Specified by:</strong></dt>
 <dd><code><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#scaleRange(double,%20double)">scaleRange</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html" title="interface in com.qualcomm.robotcore.hardware">Servo</a></code></dd>
-<dt><span class="strong">Parameters:</span></dt><dd><code>min</code> - the lower limit of the servo movement range, a value in the interval [0.0, 1.0]</dd><dd><code>max</code> - the upper limit of the servo movement range, a value in the interval [0.0, 1.0]</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#setPosition(double)"><code>Servo.setPosition(double)</code></a></dd></dl>
+<dt><span class="strong">Parameters:</span></dt><dd><code>minimumPower</code> - the lower limit of the servo movement range, a value in the intervalBase [0.0, 1.0]</dd><dd><code>maximumPower</code> - the upper limit of the servo movement range, a value in the intervalBase [0.0, 1.0]</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#setPosition(double)"><code>Servo.setPosition(double)</code></a></dd></dl>
 </li>
 </ul>
 </li>

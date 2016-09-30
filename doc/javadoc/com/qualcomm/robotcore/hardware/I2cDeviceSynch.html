@@ -232,13 +232,13 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynchSimpl
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynch.HeartbeatAction.html" title="class in com.qualcomm.robotcore.hardware">I2cDeviceSynch.HeartbeatAction</a></code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynch.html#getHeartbeatAction()">getHeartbeatAction</a></strong>()</code>
-<div class="block">Returns the current action, if any, to take upon expiration of the heartbeat interval.</div>
+<div class="block">Returns the current action, if any, to take upon expiration of the heartbeat intervalBase.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynch.html#getHeartbeatInterval()">getHeartbeatInterval</a></strong>()</code>
-<div class="block">Returns the interval within which communication must be received by the I2C device lest
+<div class="block">Returns the intervalBase within which communication must be received by the I2C device lest
  a timeout occur.</div>
 </td>
 </tr>
@@ -262,13 +262,13 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynchSimpl
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynch.html#setHeartbeatAction(com.qualcomm.robotcore.hardware.I2cDeviceSynch.HeartbeatAction)">setHeartbeatAction</a></strong>(<a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynch.HeartbeatAction.html" title="class in com.qualcomm.robotcore.hardware">I2cDeviceSynch.HeartbeatAction</a>&nbsp;action)</code>
-<div class="block">Sets the action to take when the current heartbeat interval expires.</div>
+<div class="block">Sets the action to take when the current heartbeat intervalBase expires.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynch.html#setHeartbeatInterval(int)">setHeartbeatInterval</a></strong>(int&nbsp;ms)</code>
-<div class="block">Sets the interval within which communication must be received by the I2C device lest
+<div class="block">Sets the intervalBase within which communication must be received by the I2C device lest
  a timeout may occur.</div>
 </td>
 </tr>
@@ -396,10 +396,10 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynchSimpl
 <li class="blockList">
 <h4>setHeartbeatInterval</h4>
 <pre>void&nbsp;setHeartbeatInterval(int&nbsp;ms)</pre>
-<div class="block">Sets the interval within which communication must be received by the I2C device lest
- a timeout may occur. The default heartbeat interval is zero, signifying that no heartbeat
+<div class="block">Sets the intervalBase within which communication must be received by the I2C device lest
+ a timeout may occur. The default heartbeat intervalBase is zero, signifying that no heartbeat
  is maintained.</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>ms</code> - the new hearbeat interval, in milliseconds</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynch.html#getHeartbeatInterval()"><code>getHeartbeatInterval()</code></a></dd></dl>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>ms</code> - the new hearbeat intervalBase, in milliseconds</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynch.html#getHeartbeatInterval()"><code>getHeartbeatInterval()</code></a></dd></dl>
 </li>
 </ul>
 <a name="getHeartbeatInterval()">
@@ -409,9 +409,9 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynchSimpl
 <li class="blockList">
 <h4>getHeartbeatInterval</h4>
 <pre>int&nbsp;getHeartbeatInterval()</pre>
-<div class="block">Returns the interval within which communication must be received by the I2C device lest
+<div class="block">Returns the intervalBase within which communication must be received by the I2C device lest
  a timeout occur.</div>
-<dl><dt><span class="strong">Returns:</span></dt><dd>the current heartbeat interval, in milliseconds</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynch.html#setHeartbeatInterval(int)"><code>setHeartbeatInterval(int)</code></a></dd></dl>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the current heartbeat intervalBase, in milliseconds</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynch.html#setHeartbeatInterval(int)"><code>setHeartbeatInterval(int)</code></a></dd></dl>
 </li>
 </ul>
 <a name="setHeartbeatAction(com.qualcomm.robotcore.hardware.I2cDeviceSynch.HeartbeatAction)">
@@ -421,7 +421,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynchSimpl
 <li class="blockList">
 <h4>setHeartbeatAction</h4>
 <pre>void&nbsp;setHeartbeatAction(<a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynch.HeartbeatAction.html" title="class in com.qualcomm.robotcore.hardware">I2cDeviceSynch.HeartbeatAction</a>&nbsp;action)</pre>
-<div class="block">Sets the action to take when the current heartbeat interval expires.
+<div class="block">Sets the action to take when the current heartbeat intervalBase expires.
  The default action is null; thus, to be useful, an action must always
  be explicitly specified.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>action</code> - the action to take at each heartbeat.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynch.html#getHeartbeatAction()"><code>getHeartbeatAction()</code></a>, 
@@ -435,7 +435,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynchSimpl
 <li class="blockList">
 <h4>getHeartbeatAction</h4>
 <pre><a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynch.HeartbeatAction.html" title="class in com.qualcomm.robotcore.hardware">I2cDeviceSynch.HeartbeatAction</a>&nbsp;getHeartbeatAction()</pre>
-<div class="block">Returns the current action, if any, to take upon expiration of the heartbeat interval.</div>
+<div class="block">Returns the current action, if any, to take upon expiration of the heartbeat intervalBase.</div>
 <dl><dt><span class="strong">Returns:</span></dt><dd>the current heartbeat action. May be null</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../com/qualcomm/robotcore/hardware/I2cDeviceSynch.html#setHeartbeatAction(com.qualcomm.robotcore.hardware.I2cDeviceSynch.HeartbeatAction)"><code>setHeartbeatAction(HeartbeatAction)</code></a></dd></dl>
 </li>
 </ul>

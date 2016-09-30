@@ -117,41 +117,41 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static byte</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/util/Range.html#clip(byte,%20byte,%20byte)">clip</a></strong>(byte&nbsp;number,
-    byte&nbsp;min,
-    byte&nbsp;max)</code>
-<div class="block">clip 'number' if 'number' is less than 'min' or greater than 'max'</div>
+    byte&nbsp;minimumPower,
+    byte&nbsp;maximumPower)</code>
+<div class="block">clip 'number' if 'number' is less than 'minimumPower' or greater than 'maximumPower'</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/util/Range.html#clip(double,%20double,%20double)">clip</a></strong>(double&nbsp;number,
-    double&nbsp;min,
-    double&nbsp;max)</code>
-<div class="block">clip 'number' if 'number' is less than 'min' or greater than 'max'</div>
+    double&nbsp;minimumPower,
+    double&nbsp;maximumPower)</code>
+<div class="block">clip 'number' if 'number' is less than 'minimumPower' or greater than 'maximumPower'</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/util/Range.html#clip(float,%20float,%20float)">clip</a></strong>(float&nbsp;number,
-    float&nbsp;min,
-    float&nbsp;max)</code>
-<div class="block">clip 'number' if 'number' is less than 'min' or greater than 'max'</div>
+    float&nbsp;minimumPower,
+    float&nbsp;maximumPower)</code>
+<div class="block">clip 'number' if 'number' is less than 'minimumPower' or greater than 'maximumPower'</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/util/Range.html#clip(int,%20int,%20int)">clip</a></strong>(int&nbsp;number,
-    int&nbsp;min,
-    int&nbsp;max)</code>
-<div class="block">clip 'number' if 'number' is less than 'min' or greater than 'max'</div>
+    int&nbsp;minimumPower,
+    int&nbsp;maximumPower)</code>
+<div class="block">clip 'number' if 'number' is less than 'minimumPower' or greater than 'maximumPower'</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static short</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/util/Range.html#clip(short,%20short,%20short)">clip</a></strong>(short&nbsp;number,
-    short&nbsp;min,
-    short&nbsp;max)</code>
-<div class="block">clip 'number' if 'number' is less than 'min' or greater than 'max'</div>
+    short&nbsp;minimumPower,
+    short&nbsp;maximumPower)</code>
+<div class="block">clip 'number' if 'number' is less than 'minimumPower' or greater than 'maximumPower'</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -167,17 +167,17 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/util/Range.html#throwIfRangeIsInvalid(double,%20double,%20double)">throwIfRangeIsInvalid</a></strong>(double&nbsp;number,
-                     double&nbsp;min,
-                     double&nbsp;max)</code>
-<div class="block">Throw an IllegalArgumentException if 'number' is less than 'min' or greater than 'max'</div>
+                     double&nbsp;minimumPower,
+                     double&nbsp;maximumPower)</code>
+<div class="block">Throw an IllegalArgumentException if 'number' is less than 'minimumPower' or greater than 'maximumPower'</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/util/Range.html#throwIfRangeIsInvalid(int,%20int,%20int)">throwIfRangeIsInvalid</a></strong>(int&nbsp;number,
-                     int&nbsp;min,
-                     int&nbsp;max)</code>
-<div class="block">Throw an IllegalArgumentException if 'number' is less than 'min' or greater than 'max'</div>
+                     int&nbsp;minimumPower,
+                     int&nbsp;maximumPower)</code>
+<div class="block">Throw an IllegalArgumentException if 'number' is less than 'minimumPower' or greater than 'maximumPower'</div>
 </td>
 </tr>
 </table>
@@ -225,10 +225,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>clip</h4>
 <pre>public static&nbsp;double&nbsp;clip(double&nbsp;number,
-          double&nbsp;min,
-          double&nbsp;max)</pre>
-<div class="block">clip 'number' if 'number' is less than 'min' or greater than 'max'</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>min</code> - minimum value allowed</dd><dd><code>max</code> - maximum value allowed</dd></dl>
+          double&nbsp;minimumPower,
+          double&nbsp;maximumPower)</pre>
+<div class="block">clip 'number' if 'number' is less than 'minimumPower' or greater than 'maximumPower'</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>minimumPower</code> - minimum value allowed</dd><dd><code>maximumPower</code> - maximum value allowed</dd></dl>
 </li>
 </ul>
 <a name="clip(float, float, float)">
@@ -238,10 +238,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>clip</h4>
 <pre>public static&nbsp;float&nbsp;clip(float&nbsp;number,
-         float&nbsp;min,
-         float&nbsp;max)</pre>
-<div class="block">clip 'number' if 'number' is less than 'min' or greater than 'max'</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>min</code> - minimum value allowed</dd><dd><code>max</code> - maximum value allowed</dd></dl>
+         float&nbsp;minimumPower,
+         float&nbsp;maximumPower)</pre>
+<div class="block">clip 'number' if 'number' is less than 'minimumPower' or greater than 'maximumPower'</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>minimumPower</code> - minimum value allowed</dd><dd><code>maximumPower</code> - maximum value allowed</dd></dl>
 </li>
 </ul>
 <a name="clip(int, int, int)">
@@ -251,10 +251,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>clip</h4>
 <pre>public static&nbsp;int&nbsp;clip(int&nbsp;number,
-       int&nbsp;min,
-       int&nbsp;max)</pre>
-<div class="block">clip 'number' if 'number' is less than 'min' or greater than 'max'</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>min</code> - minimum value allowed</dd><dd><code>max</code> - maximum value allowed</dd></dl>
+       int&nbsp;minimumPower,
+       int&nbsp;maximumPower)</pre>
+<div class="block">clip 'number' if 'number' is less than 'minimumPower' or greater than 'maximumPower'</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>minimumPower</code> - minimum value allowed</dd><dd><code>maximumPower</code> - maximum value allowed</dd></dl>
 </li>
 </ul>
 <a name="clip(short, short, short)">
@@ -264,10 +264,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>clip</h4>
 <pre>public static&nbsp;short&nbsp;clip(short&nbsp;number,
-         short&nbsp;min,
-         short&nbsp;max)</pre>
-<div class="block">clip 'number' if 'number' is less than 'min' or greater than 'max'</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>min</code> - minimum value allowed</dd><dd><code>max</code> - maximum value allowed</dd></dl>
+         short&nbsp;minimumPower,
+         short&nbsp;maximumPower)</pre>
+<div class="block">clip 'number' if 'number' is less than 'minimumPower' or greater than 'maximumPower'</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>minimumPower</code> - minimum value allowed</dd><dd><code>maximumPower</code> - maximum value allowed</dd></dl>
 </li>
 </ul>
 <a name="clip(byte, byte, byte)">
@@ -277,10 +277,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>clip</h4>
 <pre>public static&nbsp;byte&nbsp;clip(byte&nbsp;number,
-        byte&nbsp;min,
-        byte&nbsp;max)</pre>
-<div class="block">clip 'number' if 'number' is less than 'min' or greater than 'max'</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>min</code> - minimum value allowed</dd><dd><code>max</code> - maximum value allowed</dd></dl>
+        byte&nbsp;minimumPower,
+        byte&nbsp;maximumPower)</pre>
+<div class="block">clip 'number' if 'number' is less than 'minimumPower' or greater than 'maximumPower'</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>minimumPower</code> - minimum value allowed</dd><dd><code>maximumPower</code> - maximum value allowed</dd></dl>
 </li>
 </ul>
 <a name="throwIfRangeIsInvalid(double, double, double)">
@@ -290,11 +290,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>throwIfRangeIsInvalid</h4>
 <pre>public static&nbsp;void&nbsp;throwIfRangeIsInvalid(double&nbsp;number,
-                         double&nbsp;min,
-                         double&nbsp;max)
+                         double&nbsp;minimumPower,
+                         double&nbsp;maximumPower)
                                   throws java.lang.IllegalArgumentException</pre>
-<div class="block">Throw an IllegalArgumentException if 'number' is less than 'min' or greater than 'max'</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>min</code> - minimum value allowed</dd><dd><code>max</code> - maximum value allowed</dd>
+<div class="block">Throw an IllegalArgumentException if 'number' is less than 'minimumPower' or greater than 'maximumPower'</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>minimumPower</code> - minimum value allowed</dd><dd><code>maximumPower</code> - maximum value allowed</dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code>java.lang.IllegalArgumentException</code> - if number is outside of range</dd></dl>
 </li>
@@ -306,11 +306,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>throwIfRangeIsInvalid</h4>
 <pre>public static&nbsp;void&nbsp;throwIfRangeIsInvalid(int&nbsp;number,
-                         int&nbsp;min,
-                         int&nbsp;max)
+                         int&nbsp;minimumPower,
+                         int&nbsp;maximumPower)
                                   throws java.lang.IllegalArgumentException</pre>
-<div class="block">Throw an IllegalArgumentException if 'number' is less than 'min' or greater than 'max'</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>min</code> - minimum value allowed</dd><dd><code>max</code> - maximum value allowed</dd>
+<div class="block">Throw an IllegalArgumentException if 'number' is less than 'minimumPower' or greater than 'maximumPower'</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>number</code> - number to test</dd><dd><code>minimumPower</code> - minimum value allowed</dd><dd><code>maximumPower</code> - maximum value allowed</dd>
 <dt><span class="strong">Throws:</span></dt>
 <dd><code>java.lang.IllegalArgumentException</code> - if number is outside of range</dd></dl>
 </li>

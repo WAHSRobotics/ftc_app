@@ -195,7 +195,7 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><strong><a href="../../../com/qualcomm/ftccommon/FtcEventLoopHandler.html#refreshUserTelemetry(TelemetryMessage,%20double)">refreshUserTelemetry</a></strong>(TelemetryMessage&nbsp;telemetry,
                     double&nbsp;requestedInterval)</code>
 <div class="block">Updates the (indicated) user's telemetry: the telemetry is transmitted if a sufficient
- interval has passed since the last transmission.</div>
+ intervalBase has passed since the last transmission.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -337,11 +337,11 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;void&nbsp;refreshUserTelemetry(TelemetryMessage&nbsp;telemetry,
                         double&nbsp;requestedInterval)</pre>
 <div class="block">Updates the (indicated) user's telemetry: the telemetry is transmitted if a sufficient
- interval has passed since the last transmission. If the telemetry is transmitted, the
+ intervalBase has passed since the last transmission. If the telemetry is transmitted, the
  telemetry is cleared and the timer is reset. A battery voltage key may be added to the
  message before transmission.</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>telemetry</code> - the telemetry data to send</dd><dd><code>requestedInterval</code> - the minimum interval (s) since the last transmission. NaN indicates
-                          that a default transmission interval should be used</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../com/qualcomm/robotcore/eventloop/EventLoop.html#TELEMETRY_DEFAULT_INTERVAL"><code>EventLoop.TELEMETRY_DEFAULT_INTERVAL</code></a></dd></dl>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>telemetry</code> - the telemetry data to send</dd><dd><code>requestedInterval</code> - the minimum intervalBase (s) since the last transmission. NaN indicates
+                          that a default transmission intervalBase should be used</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../com/qualcomm/robotcore/eventloop/EventLoop.html#TELEMETRY_DEFAULT_INTERVAL"><code>EventLoop.TELEMETRY_DEFAULT_INTERVAL</code></a></dd></dl>
 </li>
 </ul>
 <a name="sendBatteryInfo()">

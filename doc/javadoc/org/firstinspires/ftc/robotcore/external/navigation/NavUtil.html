@@ -130,7 +130,7 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><strong><a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/NavUtil.html#meanIntegrate(org.firstinspires.ftc.robotcore.external.navigation.Acceleration,%20org.firstinspires.ftc.robotcore.external.navigation.Acceleration)">meanIntegrate</a></strong>(<a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Acceleration.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Acceleration</a>&nbsp;cur,
              <a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Acceleration.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Acceleration</a>&nbsp;prev)</code>
 <div class="block">Integrate between two accelerations to determine a change in velocity using an assumption
- that the mean of the accelerations has been acting the entire interval.</div>
+ that the mean of the accelerations has been acting the entire intervalBase.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -138,7 +138,7 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><strong><a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/NavUtil.html#meanIntegrate(org.firstinspires.ftc.robotcore.external.navigation.Velocity,%20org.firstinspires.ftc.robotcore.external.navigation.Velocity)">meanIntegrate</a></strong>(<a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Velocity.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Velocity</a>&nbsp;cur,
              <a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Velocity.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Velocity</a>&nbsp;prev)</code>
 <div class="block">Integrate between two velocities to determine a change in position using an assumption
- that the mean of the velocities has been acting the entire interval.</div>
+ that the mean of the velocities has been acting the entire intervalBase.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -327,9 +327,9 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;<a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Position.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Position</a>&nbsp;meanIntegrate(<a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Velocity.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Velocity</a>&nbsp;cur,
                      <a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Velocity.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Velocity</a>&nbsp;prev)</pre>
 <div class="block">Integrate between two velocities to determine a change in position using an assumption
- that the mean of the velocities has been acting the entire interval.</div>
+ that the mean of the velocities has been acting the entire intervalBase.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>cur</code> - the current velocity</dd><dd><code>prev</code> - the previous velocity</dd>
-<dt><span class="strong">Returns:</span></dt><dd>an approximation to the change in position over the interval</dd><dt><span class="strong">See Also:</span></dt><dd><a href="https://en.wikipedia.org/wiki/Simpson%27s_rule">Simpson's Rule</a></dd></dl>
+<dt><span class="strong">Returns:</span></dt><dd>an approximation to the change in position over the intervalBase</dd><dt><span class="strong">See Also:</span></dt><dd><a href="https://en.wikipedia.org/wiki/Simpson%27s_rule">Simpson's Rule</a></dd></dl>
 </li>
 </ul>
 <a name="meanIntegrate(org.firstinspires.ftc.robotcore.external.navigation.Acceleration, org.firstinspires.ftc.robotcore.external.navigation.Acceleration)">
@@ -341,9 +341,9 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;<a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Velocity.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Velocity</a>&nbsp;meanIntegrate(<a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Acceleration.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Acceleration</a>&nbsp;cur,
                      <a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Acceleration.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Acceleration</a>&nbsp;prev)</pre>
 <div class="block">Integrate between two accelerations to determine a change in velocity using an assumption
- that the mean of the accelerations has been acting the entire interval.</div>
+ that the mean of the accelerations has been acting the entire intervalBase.</div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>cur</code> - the current acceleration</dd><dd><code>prev</code> - the previous acceleration</dd>
-<dt><span class="strong">Returns:</span></dt><dd>an approximation to the change in velocity over the interval</dd><dt><span class="strong">See Also:</span></dt><dd><a href="https://en.wikipedia.org/wiki/Simpson%27s_rule">Simpson's Rule</a></dd></dl>
+<dt><span class="strong">Returns:</span></dt><dd>an approximation to the change in velocity over the intervalBase</dd><dt><span class="strong">See Also:</span></dt><dd><a href="https://en.wikipedia.org/wiki/Simpson%27s_rule">Simpson's Rule</a></dd></dl>
 </li>
 </ul>
 </li>

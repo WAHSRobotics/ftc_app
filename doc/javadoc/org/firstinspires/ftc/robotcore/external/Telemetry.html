@@ -146,10 +146,10 @@
  to add to the log. See also <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#log()"><code>log()</code></a>.</p>
 
  <p>Actual transmission to the driver station is throttled to avoid use of excessive bandwidth.
- By default, transmission will occur at most every 250ms. This interval can be controlled with
+ By default, transmission will occur at most every 250ms. This intervalBase can be controlled with
  <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#setMsTransmissionInterval(int)"><code>setMsTransmissionInterval()</code></a>. Any <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#update()"><code>update()</code></a>s which
  occur more frequently will not be transmitted if superseded by a subsequent <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#update()"><code>update()</code></a>
- before the transmission interval expires.</p>
+ before the transmission intervalBase expires.</p>
 
  <p>As mentioned above, by default, after each call to <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#update()"><code>update()</code></a>, the method <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#clear()"><code>clear()</code></a>
  is automatically called. Thus, in simple usage, after each <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#update()"><code>update()</code></a>, you'll want to issue
@@ -319,7 +319,7 @@
 <tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getMsTransmissionInterval()">getMsTransmissionInterval</a></strong>()</code>
-<div class="block">Returns the minimum interval between <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> transmissions from the robot controller
+<div class="block">Returns the minimum intervalBase between <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> transmissions from the robot controller
  to the driver station</div>
 </td>
 </tr>
@@ -370,16 +370,16 @@
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#setMsTransmissionInterval(int)">setMsTransmissionInterval</a></strong>(int&nbsp;msTransmissionInterval)</code>
-<div class="block">Sets the minimum interval between <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> transmissions from the robot controller
+<div class="block">Sets the minimum intervalBase between <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> transmissions from the robot controller
  to the driver station.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><strong><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#update()">update</a></strong>()</code>
-<div class="block">Sends the receiver <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> to the driver station if more than the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getMsTransmissionInterval()"><code>transmission interval</code></a> has elapsed since the last transmission, or schedules the transmission
+<div class="block">Sends the receiver <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> to the driver station if more than the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getMsTransmissionInterval()"><code>transmission intervalBase</code></a> has elapsed since the last transmission, or schedules the transmission
  of the receiver should no subsequent <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> state be scheduled for transmission before
- the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getMsTransmissionInterval()"><code>transmission interval</code></a> expires.</div>
+ the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getMsTransmissionInterval()"><code>transmission intervalBase</code></a> expires.</div>
 </td>
 </tr>
 </table>
@@ -451,7 +451,7 @@
  <p>The valueProducer is evaluated only if actual transmission to the driver station
  is to occur. This is important, as it provides a means of displaying telemetry which
  is relatively expensive to evaluate while avoiding computation or delay on evaluations
- which won't be transmitted due to transmission interval throttling.</p></div>
+ which won't be transmitted due to transmission intervalBase throttling.</p></div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>caption</code> - the caption to use</dd><dd><code>valueProducer</code> - the object which will provide the value to display</dd>
 <dt><span class="strong">Returns:</span></dt><dd>an <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a> that can be used to update the value or append further <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a>s</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.String,%20java.lang.Object...)"><code>addData(String, String, Object...)</code></a>, 
 <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.Object)"><code>addData(String, Object)</code></a>, 
@@ -477,7 +477,7 @@
  <p>The valueProducer is evaluated only if actual transmission to the driver station
  is to occur. This is important, as it provides a means of displaying telemetry which
  is relatively expensive to evaluate while avoiding computation or delay on evaluations
- which won't be transmitted due to transmission interval throttling.</p></div>
+ which won't be transmitted due to transmission intervalBase throttling.</p></div>
 <dl><dt><span class="strong">Parameters:</span></dt><dd><code>caption</code> - the caption to use</dd><dd><code>valueProducer</code> - the object which will provide the value to display</dd>
 <dt><span class="strong">Returns:</span></dt><dd>an <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a> that can be used to update the value or append further <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.Item.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry.Item</code></a>s</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.String,%20java.lang.Object...)"><code>addData(String, String, Object...)</code></a>, 
 <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#addData(java.lang.String,%20java.lang.Object)"><code>addData(String, Object)</code></a>, 
@@ -562,9 +562,9 @@
 <li class="blockList">
 <h4>update</h4>
 <pre>boolean&nbsp;update()</pre>
-<div class="block">Sends the receiver <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> to the driver station if more than the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getMsTransmissionInterval()"><code>transmission interval</code></a> has elapsed since the last transmission, or schedules the transmission
+<div class="block">Sends the receiver <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> to the driver station if more than the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getMsTransmissionInterval()"><code>transmission intervalBase</code></a> has elapsed since the last transmission, or schedules the transmission
  of the receiver should no subsequent <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> state be scheduled for transmission before
- the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getMsTransmissionInterval()"><code>transmission interval</code></a> expires.</div>
+ the <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getMsTransmissionInterval()"><code>transmission intervalBase</code></a> expires.</div>
 <dl><dt><span class="strong">Returns:</span></dt><dd>whether a transmission to the driver station occurred or not</dd></dl>
 </li>
 </ul>
@@ -632,9 +632,9 @@
 <li class="blockList">
 <h4>getMsTransmissionInterval</h4>
 <pre>int&nbsp;getMsTransmissionInterval()</pre>
-<div class="block">Returns the minimum interval between <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> transmissions from the robot controller
+<div class="block">Returns the minimum intervalBase between <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> transmissions from the robot controller
  to the driver station</div>
-<dl><dt><span class="strong">Returns:</span></dt><dd>the minimum interval between <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> transmissions from the robot controller to the diver station</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#setMsTransmissionInterval(int)"><code>setMsTransmissionInterval(int)</code></a></dd></dl>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the minimum intervalBase between <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> transmissions from the robot controller to the diver station</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#setMsTransmissionInterval(int)"><code>setMsTransmissionInterval(int)</code></a></dd></dl>
 </li>
 </ul>
 <a name="setMsTransmissionInterval(int)">
@@ -644,9 +644,9 @@
 <li class="blockList">
 <h4>setMsTransmissionInterval</h4>
 <pre>void&nbsp;setMsTransmissionInterval(int&nbsp;msTransmissionInterval)</pre>
-<div class="block">Sets the minimum interval between <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> transmissions from the robot controller
+<div class="block">Sets the minimum intervalBase between <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> transmissions from the robot controller
  to the driver station.</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>msTransmissionInterval</code> - the minimum interval between <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> transmissions
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>msTransmissionInterval</code> - the minimum intervalBase between <a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html" title="interface in org.firstinspires.ftc.robotcore.external"><code>Telemetry</code></a> transmissions
                                 from the robot controller to the driver station</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/firstinspires/ftc/robotcore/external/Telemetry.html#getMsTransmissionInterval()"><code>getMsTransmissionInterval()</code></a></dd></dl>
 </li>
 </ul>

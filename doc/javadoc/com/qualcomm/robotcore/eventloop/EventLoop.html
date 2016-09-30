@@ -114,8 +114,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><strong><a href="../../../../com/qualcomm/robotcore/eventloop/EventLoop.html#TELEMETRY_DEFAULT_INTERVAL">TELEMETRY_DEFAULT_INTERVAL</a></strong></code>
-<div class="block">The value to pass to <a href="../../../../com/qualcomm/robotcore/eventloop/EventLoop.html#refreshUserTelemetry(TelemetryMessage,%20double)"><code>refreshUserTelemetry(TelemetryMessage, double)</code></a> as the time interval
- parameter in order to cause a system default interval to be used.</div>
+<div class="block">The value to pass to <a href="../../../../com/qualcomm/robotcore/eventloop/EventLoop.html#refreshUserTelemetry(TelemetryMessage,%20double)"><code>refreshUserTelemetry(TelemetryMessage, double)</code></a> as the time intervalBase
+ parameter in order to cause a system default intervalBase to be used.</div>
 </td>
 </tr>
 </table>
@@ -218,8 +218,8 @@
 <li class="blockList">
 <h4>TELEMETRY_DEFAULT_INTERVAL</h4>
 <pre>static final&nbsp;double TELEMETRY_DEFAULT_INTERVAL</pre>
-<div class="block">The value to pass to <a href="../../../../com/qualcomm/robotcore/eventloop/EventLoop.html#refreshUserTelemetry(TelemetryMessage,%20double)"><code>refreshUserTelemetry(TelemetryMessage, double)</code></a> as the time interval
- parameter in order to cause a system default interval to be used.</div>
+<div class="block">The value to pass to <a href="../../../../com/qualcomm/robotcore/eventloop/EventLoop.html#refreshUserTelemetry(TelemetryMessage,%20double)"><code>refreshUserTelemetry(TelemetryMessage, double)</code></a> as the time intervalBase
+ parameter in order to cause a system default intervalBase to be used.</div>
 <dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#com.qualcomm.robotcore.eventloop.EventLoop.TELEMETRY_DEFAULT_INTERVAL">Constant Field Values</a></dd></dl>
 </li>
 </ul>
@@ -282,7 +282,7 @@
                         double&nbsp;sInterval)</pre>
 <div class="block">Update's the user portion of the driver station screen with the contents of the telemetry object
  here provided if a sufficiently long duration has passed since the last update.</div>
-<dl><dt><span class="strong">Parameters:</span></dt><dd><code>telemetry</code> - the telemetry object to send</dd><dd><code>sInterval</code> - the required minimum interval. NaN indicates that a system default interval should be used.</dd></dl>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>telemetry</code> - the telemetry object to send</dd><dd><code>sInterval</code> - the required minimum intervalBase. NaN indicates that a system default intervalBase should be used.</dd></dl>
 </li>
 </ul>
 <a name="teardown()">
