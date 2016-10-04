@@ -2,16 +2,14 @@ package org.firstinspires.ftc.teamcode.util;
 
 import com.qualcomm.robotcore.util.Range;
 
+import static org.firstinspires.ftc.teamcode.util.MathUtil.setSignificantPlaces;
+
 public class PowerScale {
     private double minimumPower;
     private double maximumPower;
     private double scaleInterval;
 
-    public PowerScale(double min, double max) {
-        new PowerScale(min, max, 5);
-    }
-
-    public PowerScale(double min, double max, double scaleInterval) {
+    private void init(double min, double max, double scaleInterval) {
         if(min < 0.0 || min > 1.0) {
             throw new IllegalArgumentException("Argument 'min' should be between 0.0 and 1.0");
         }
@@ -29,6 +27,18 @@ public class PowerScale {
         this.scaleInterval = scaleInterval;
     }
 
+    public PowerScale() {
+        init(0.05, 1.0, 5.0);
+    }
+
+    public PowerScale(double min, double max) {
+        init(min, max, 5.0);
+    }
+
+    public PowerScale(double min, double max, double scaleInterval) {
+        init(min, max, scaleInterval);
+    }
+
     public double scalePower(double power) {
         boolean negative = false;
 
@@ -44,7 +54,7 @@ public class PowerScale {
         double scaledPower = Math.pow(power, Math.pow(this.scaleInterval, power));
 
         //Round scaledPower to 2 significant features
-        scaledPower = setSignificantFigures(scaledPower, 2);
+        scaledPower = setSignificantPlaces(scaledPower, 2);
 
         //Make sure that my math isn't terrible, and that it didn't somehow exceed maximum power
         scaledPower = Range.clip(scaledPower, 0.0, this.maximumPower);
@@ -52,16 +62,10 @@ public class PowerScale {
         //Turn power back into negative to keep the same direction
         //and also make sure I'm not returning below the minimum power
         if(negative) {
-            return scaledPower >= -this.minimumPower ? -scaledPower : 0.0;
+            return -scaledPower <= -this.minimumPower ? -scaledPower : 0.0;
         } else {
             return scaledPower >= this.minimumPower ? scaledPower : 0.0;
         }
-
-    }
-
-    private double setSignificantFigures(double value, int significantFigures) {
-        double multiplier = Math.pow(10, significantFigures);
-        return Math.round(value * multiplier) / multiplier;
     }
 
     public double getScaleInterval() {
