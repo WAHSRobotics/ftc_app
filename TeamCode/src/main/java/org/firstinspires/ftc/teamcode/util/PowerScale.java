@@ -9,21 +9,21 @@ public class PowerScale {
     private double maximumPower;
     private double scaleInterval;
 
-    private void init(double min, double max, double scaleInterval) {
-        if(min < 0.0 || min > 1.0) {
+    private void init(double absoluteMin, double absoluteMax, double scaleInterval) {
+        if(absoluteMin < 0.0 || absoluteMin > 1.0) {
             throw new IllegalArgumentException("Argument 'min' should be between 0.0 and 1.0");
         }
 
-        if(max < 0.0 || max > 1.0) {
+        if(absoluteMax < 0.0 || absoluteMax > 1.0) {
             throw new IllegalArgumentException("Argument 'max' should be between 0.0 and 1.0");
         }
 
-        if(max < min || min > max) {
+        if(absoluteMax < absoluteMin || absoluteMin > absoluteMax) {
             throw new IllegalArgumentException("Argument 'max' should be greater than argument 'min'.");
         }
 
-        this.minimumPower = min;
-        this.maximumPower = max;
+        this.minimumPower = absoluteMin;
+        this.maximumPower = absoluteMax;
         this.scaleInterval = scaleInterval;
     }
 
@@ -48,24 +48,24 @@ public class PowerScale {
             power = Math.abs(power);
         }
 
-        //Does some math... like y = x^s^x or something like that, where y is scaledPower,
-        //x is power, and s is this.scaleInterval and whatnot
+        //Does some math... like y = (u - l) (x^(su)^x) + l or something like that, where y is scaledPower,
+        //x is power, u is this.maximumPower, l is this.minimumPower, and s is this.scaleInterval
         //It makes a fancy function that is very nice
-        double scaledPower = Math.pow(power, Math.pow(this.scaleInterval, power));
+        double scaledPower = (this.maximumPower - this.minimumPower) * Math.pow(power, Math.pow(this.scaleInterval * this.maximumPower, power)) + this.minimumPower;
 
         //Round scaledPower to 2 significant features
         scaledPower = setSignificantPlaces(scaledPower, 2);
 
         //Make sure that my math isn't terrible, and that it didn't somehow exceed maximum power
-        scaledPower = Range.clip(scaledPower, 0.0, this.maximumPower);
+        scaledPower = Range.clip(scaledPower, 0.0, 1.0);
+
+        //Just makes sure that zero (or anything below this.minimumPower) isn't set to this.minimumPower by fancy function
+        if(this.minimumPower >= power) {
+            scaledPower = 0.0;
+        }
 
         //Turn power back into negative to keep the same direction
-        //and also make sure I'm not returning below the minimum power
-        if(negative) {
-            return -scaledPower <= -this.minimumPower ? -scaledPower : 0.0;
-        } else {
-            return scaledPower >= this.minimumPower ? scaledPower : 0.0;
-        }
+        return negative ? -scaledPower : scaledPower;
     }
 
     public double getScaleInterval() {

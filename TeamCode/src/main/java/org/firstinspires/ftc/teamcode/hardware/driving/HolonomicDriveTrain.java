@@ -2,37 +2,97 @@ package org.firstinspires.ftc.teamcode.hardware.driving;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.hardware.identification.HardwareIdentifier;
-import org.firstinspires.ftc.teamcode.hardware.identification.HardwarePosition;
-import org.firstinspires.ftc.teamcode.hardware.identification.HardwarePurpose;
-import org.firstinspires.ftc.teamcode.hardware.identification.HardwareSide;
+import org.firstinspires.ftc.teamcode.hardware.HardwareSpecifications;
 import org.firstinspires.ftc.teamcode.util.PowerScale;
+import org.firstinspires.ftc.teamcode.util.Vec2;
 
-import java.io.PrintStream;
+import static java.lang.Math.cos;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+import static java.lang.Math.toRadians;
+import static org.firstinspires.ftc.teamcode.util.MathUtil.setSignificantPlaces;
 
 public class HolonomicDriveTrain extends DriveTrain {
     private DcMotor frontLeft, frontRight, backLeft, backRight;
 
-    private PowerScale powerScale = new PowerScale(0.05, 1.00);
+    private final HardwareSpecifications specifications;
 
-    private void move(double x, double y, double rotation) {
-        frontLeft.setPower(powerScale.scalePower(- y - x + rotation));
+    private PowerScale powerScale = new PowerScale();
 
-        frontRight.setPower(powerScale.scalePower(+ y - x + rotation));
+    public HolonomicDriveTrain(HardwareSpecifications specifications) {
+        this.specifications = specifications;
+    }
 
-        backRight.setPower(powerScale.scalePower(+ y + x + rotation));
+    private Vec2 degreesToPoint(double degrees, double power) {
+        double radius = sqrt(pow(power, 2) + pow(power, 2));
 
-        backLeft.setPower(powerScale.scalePower(- y + x + rotation));
+        double angle = toRadians(degrees);
+
+        double x = radius * cos(angle);
+        double y = radius * sin(angle);
+
+        x = setSignificantPlaces(x, 2);
+        y = setSignificantPlaces(y, 2);
+
+        return new Vec2(x, y);
+    }
+
+    private void holonomicMove(double x, double y, double rotation) {
+        if(x == 0.0 && y == 0.0 && rotation == 0.0) {
+            stop();
+        } else {
+            frontLeft.setPower(powerScale.scalePower(- y - x + rotation));
+            frontRight.setPower(powerScale.scalePower(+ y - x + rotation));
+            backRight.setPower(powerScale.scalePower(+ y + x + rotation));
+            backLeft.setPower(powerScale.scalePower(- y + x + rotation));
+        }
+    }
+
+    private int millimetersToEncoderTicks(double millimeters) {
+        double rotations = millimeters / (specifications.getMmWheelCircumference() * Math.PI);
+        return (int) (rotations * specifications.getEncoderTicksPerRotation());
+    }
+
+    private int degreesToEncoderTicks(double degrees) {
+        double ratio = degrees / 360;
+        double mmRadius = sqrt(pow(specifications.getMmLength(), 2) + pow(specifications.getMmWidth(), 2));
+        double mmRobotTurnCircumference = 2 * Math.PI * mmRadius;
+        double mmTurnCurve = ratio * mmRobotTurnCircumference;
+
+        double rotations = mmTurnCurve / (specifications.getMmWheelCircumference() * Math.PI);
+        return (int) (rotations * specifications.getEncoderTicksPerRotation());
+    }
+
+    private boolean motorsBusy() {
+        return frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy();
+    }
+
+    private void setRunMode(DcMotor.RunMode runMode) {
+        frontLeft.setMode(runMode);
+        frontRight.setMode(runMode);
+        backLeft.setMode(runMode);
+        backRight.setMode(runMode);
+    }
+
+    private void setTargetPosition(int encoderTicks) {
+        frontLeft.setTargetPosition(encoderTicks);
+        frontRight.setTargetPosition(encoderTicks);
+        backLeft.setTargetPosition(encoderTicks);
+        backRight.setTargetPosition(encoderTicks);
     }
 
     @Override
-    public void init(HardwareIdentifier identifier) {
-        frontLeft = identifier.findDcMotor(HardwarePurpose.DRIVING, HardwareSide.BOTTOM, HardwarePosition.FRONT_LEFT);
-        frontRight = identifier.findDcMotor(HardwarePurpose.DRIVING, HardwareSide.BOTTOM, HardwarePosition.FRONT_RIGHT);
-        backLeft = identifier.findDcMotor(HardwarePurpose.DRIVING, HardwareSide.BOTTOM, HardwarePosition.BACK_LEFT);
-        backRight = identifier.findDcMotor(HardwarePurpose.DRIVING, HardwareSide.BOTTOM, HardwarePosition.BACK_RIGHT);
+    public void init(HardwareMap hardwareMap) {
+        frontLeft = hardwareMap.dcMotor.get("frontLeft");
+        frontRight = hardwareMap.dcMotor.get("frontRight");
+        backLeft = hardwareMap.dcMotor.get("backLeft");
+        backRight = hardwareMap.dcMotor.get("backRight");
+
+        setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
@@ -45,25 +105,59 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void driveControlled(Gamepad controller) {
-        double x = controller.left_stick_x;
-        double y = controller.left_stick_y;
-        double rotation = controller.right_stick_x;
+//        if(!motorsBusy()) {
+            setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        move(x, y, rotation);
+            holonomicMove(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
+//        }
+    }
+
+    private final double AUTONOMOUS_SPEED = 0.5;
+
+    @Override
+    public void stop() {
+        setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        frontLeft.setPower(0.0);
+        frontRight.setPower(0.0);
+        backLeft.setPower(0.0);
+        backRight.setPower(0.0);
     }
 
     @Override
     public void move(double millimeters) {
-        //TODO: Make millimeters to milliseconds function for this class
+        if(!motorsBusy()) {
+            holonomicMove(0.0, AUTONOMOUS_SPEED, 0.0);
+
+            setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            setTargetPosition(millimetersToEncoderTicks(millimeters));
+        }
     }
 
     @Override
     public void move(double millimeters, double degrees) {
+        if(!motorsBusy()) {
+            Vec2 stickPower = degreesToPoint(degrees, AUTONOMOUS_SPEED);
 
+            holonomicMove(stickPower.x, stickPower.y, 0.0);
+
+            setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            setTargetPosition(millimetersToEncoderTicks(millimeters));
+        }
     }
 
     @Override
     public void turn(double degrees) {
-        //TODO: Make degrees to milliseconds function for this class
+        if(!motorsBusy()) {
+            double multiplier = degrees >= 0 ? 1.0 : -1.0;
+
+            holonomicMove(0.0, 0.0, 0.5 * multiplier);
+
+            setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            setTargetPosition(degreesToEncoderTicks(degrees));
+        }
     }
 }
