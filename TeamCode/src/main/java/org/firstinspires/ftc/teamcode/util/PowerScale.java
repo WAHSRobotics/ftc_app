@@ -64,7 +64,7 @@ public class PowerScale {
             scaledPower = 0.0;
         }
 
-        //Turn power back into negative to keep the same direction
+        //Turn power back into negative to keep the specified direction
         return negative ? -scaledPower : scaledPower;
     }
 

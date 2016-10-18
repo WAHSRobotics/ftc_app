@@ -72,10 +72,12 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     private void setRunMode(DcMotor.RunMode runMode) {
-        frontLeft.setMode(runMode);
-        frontRight.setMode(runMode);
-        backLeft.setMode(runMode);
-        backRight.setMode(runMode);
+        if(frontLeft.getMode() != runMode && frontRight.getMode() != runMode && backLeft.getMode() != runMode && backRight.getMode() != runMode) {
+            frontLeft.setMode(runMode);
+            frontRight.setMode(runMode);
+            backLeft.setMode(runMode);
+            backRight.setMode(runMode);
+        }
     }
 
     private void setTargetPosition(int encoderTicks) {
@@ -105,11 +107,11 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void driveControlled(Gamepad controller) {
-//        if(!motorsBusy()) {
+        if(!motorsBusy()) {
             setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
             holonomicMove(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
-//        }
+        }
     }
 
     private final double AUTONOMOUS_SPEED = 0.5;
