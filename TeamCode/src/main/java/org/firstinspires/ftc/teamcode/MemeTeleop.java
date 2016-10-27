@@ -1,7 +1,77 @@
 package org.firstinspires.ftc.teamcode;
 
-/**
- * Created by srmh9 on 10/20/2016.
- */
-public class MemeTeleop {
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.util.Range;
+
+
+
+
+
+public class MemeTeleop extends OpMode {
+
+
+
+
+    private LSRobit robot = new LSRobit();
+
+    @Override
+    public void init() {
+
+        robot.rightfront.setPower(scale(y+x-z));
+        robot.leftfront.setPower(scale(y-x+z));
+        robot.rightback.setPower(scale(y-x-z));
+        robot.leftback.setPower(scale(y+x+z));
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+    public void loop(){
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

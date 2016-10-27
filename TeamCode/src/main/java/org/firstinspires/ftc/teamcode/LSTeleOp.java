@@ -5,10 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.util.Range;
 
-/**
- * Created by Nathaniel S. Glover on 12/9/2015, at 10:14 PM.
- * FTC Robotics - Loose Screws 4970
- */
 public class LSTeleOp extends OpMode {
 
     DcMotor fLeft, fRight, bLeft, bRight;
