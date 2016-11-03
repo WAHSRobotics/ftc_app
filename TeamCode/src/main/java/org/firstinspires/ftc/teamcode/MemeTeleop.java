@@ -20,8 +20,8 @@ public class MemeTeleop extends OpMode {
     @Override
     public void init() {
 
-        robot.rightfront.setPower(scale(y+x-z));
-        robot.leftfront.setPower(scale(y-x+z));
+        robot.rightfront.setPower((y+x-z));
+        robot.leftfront.setPower(sca(y-x+z));
         robot.rightback.setPower(scale(y-x-z));
         robot.leftback.setPower(scale(y+x+z));
 
