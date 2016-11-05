@@ -51,7 +51,9 @@ public class PowerScale {
         //Does some math... like y = (u - l) (x^(su)^x) + l or something like that, where y is scaledPower,
         //x is power, u is this.maximumPower, l is this.minimumPower, and s is this.scaleInterval
         //It makes a fancy function that is very nice
-        double scaledPower = (this.maximumPower - this.minimumPower) * Math.pow(power, Math.pow(this.scaleInterval * this.maximumPower, power)) + this.minimumPower;
+        double scaledPower = (this.maximumPower - this.minimumPower) * Math.pow(power,
+                Math.pow(this.scaleInterval * this.maximumPower, power)) + this.minimumPower;
+
 
         //Round scaledPower to 2 significant features
         scaledPower = setSignificantPlaces(scaledPower, 2);

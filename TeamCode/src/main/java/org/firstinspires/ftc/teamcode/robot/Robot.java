@@ -3,9 +3,10 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.hardware.driving.DriveTrain;
-import org.firstinspires.ftc.teamcode.hardware.gathering.Gatherer;
-import org.firstinspires.ftc.teamcode.hardware.shooting.Shooter;
+import org.firstinspires.ftc.teamcode.library.hardware.driving.DriveTrain;
+import org.firstinspires.ftc.teamcode.library.hardware.driving.TankDrive;
+import org.firstinspires.ftc.teamcode.library.hardware.gathering.Gatherer;
+import org.firstinspires.ftc.teamcode.library.hardware.shooting.Shooter;
 
 public abstract class Robot {
     protected OpMode opMode;
@@ -13,7 +14,7 @@ public abstract class Robot {
     protected Gatherer gatherer;
     protected Shooter shooter;
 
-    public Robot(OpMode opMode, DriveTrain driveTrain, Gatherer gatherer, Shooter shooter) {
+    protected Robot(OpMode opMode, DriveTrain driveTrain, Gatherer gatherer, Shooter shooter) {
         this.opMode = opMode;
         this.driveTrain = driveTrain;
         this.gatherer = gatherer;
@@ -28,7 +29,7 @@ public abstract class Robot {
 
     public abstract void loop();
 
-    public abstract void loopAutonomous();
+    public abstract void runAutonomous();
 
     public void stop() {
 

@@ -9,6 +9,4 @@ public abstract class Shooter extends HardwareComponent {
     public abstract void shootControlled(Gamepad gamepad);
 
     public abstract void shoot();
-
-    public abstract double rangeInMillimeters();
 }

@@ -19,13 +19,9 @@ import static org.firstinspires.ftc.teamcode.util.MathUtil.setSignificantPlaces;
 public class HolonomicDriveTrain extends DriveTrain {
     private DcMotor frontLeft, frontRight, backLeft, backRight;
 
-    private final HardwareSpecifications specifications;
-
     private PowerScale powerScale = new PowerScale();
 
-    public HolonomicDriveTrain(HardwareSpecifications specifications) {
-        this.specifications = specifications;
-    }
+    private HardwareSpecifications specifications;
 
     private Vec2 degreesToPoint(double degrees, double power) {
         double radius = sqrt(pow(power, 2) + pow(power, 2));
@@ -155,7 +151,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         if(!motorsBusy()) {
             double multiplier = degrees >= 0 ? 1.0 : -1.0;
 
-            holonomicMove(0.0, 0.0, 0.5 * multiplier);
+            holonomicMove(0.0, 0.0, AUTONOMOUS_SPEED * multiplier);
 
             setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
 
