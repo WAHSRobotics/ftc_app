@@ -23,6 +23,10 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     private HardwareSpecifications specifications;
 
+    public HolonomicDriveTrain(HardwareSpecifications specifications) {
+        this.specifications = specifications;
+    }
+
     private Vec2 degreesToPoint(double degrees, double power) {
         double radius = sqrt(pow(power, 2) + pow(power, 2));
 

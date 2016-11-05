@@ -3,10 +3,9 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.library.hardware.driving.DriveTrain;
-import org.firstinspires.ftc.teamcode.library.hardware.driving.TankDrive;
-import org.firstinspires.ftc.teamcode.library.hardware.gathering.Gatherer;
-import org.firstinspires.ftc.teamcode.library.hardware.shooting.Shooter;
+import org.firstinspires.ftc.teamcode.hardware.driving.DriveTrain;
+import org.firstinspires.ftc.teamcode.hardware.gathering.Gatherer;
+import org.firstinspires.ftc.teamcode.hardware.shooting.Shooter;
 
 public abstract class Robot {
     protected OpMode opMode;
