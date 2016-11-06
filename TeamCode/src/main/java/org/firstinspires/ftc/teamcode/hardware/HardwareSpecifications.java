@@ -2,37 +2,25 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 
 public class HardwareSpecifications {
-    private final double mmWheelCircumference;
+    private final double mmWheelDiameter;
     private final double encoderTicksPerRotation;
-    private final double mmLength;
-    private final double mmWidth;
-    private final double mmHeight;
+    private final double mmRobotDiameter;
 
-    public HardwareSpecifications(double mmWheelDiameter, double encoderTicksPerRotation, double mmLength, double mmWidth, double mmHeight) {
-        this.mmWheelCircumference = mmWheelDiameter;
+    public HardwareSpecifications(double mmWheelDiameter, double encoderTicksPerRotation, double mmRobotDiameter) {
+        this.mmWheelDiameter = mmWheelDiameter;
         this.encoderTicksPerRotation = encoderTicksPerRotation;
-        this.mmLength = mmLength;
-        this.mmWidth = mmWidth;
-        this.mmHeight = mmHeight;
+        this.mmRobotDiameter = mmRobotDiameter;
     }
 
-    public double getMmWheelCircumference() {
-        return mmWheelCircumference;
+    public double getMmWheelDiameter() {
+        return mmWheelDiameter;
     }
 
     public double getEncoderTicksPerRotation() {
         return encoderTicksPerRotation;
     }
 
-    public double getMmLength() {
-        return mmLength;
-    }
-
-    public double getMmWidth() {
-        return mmWidth;
-    }
-
-    public double getMmHeight() {
-        return mmHeight;
+    public double getMmRobotDiameter() {
+        return mmRobotDiameter;
     }
 }

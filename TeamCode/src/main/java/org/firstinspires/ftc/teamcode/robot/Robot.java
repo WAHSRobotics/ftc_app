@@ -28,7 +28,7 @@ public abstract class Robot {
 
     public abstract void loop();
 
-    public abstract void runAutonomous();
+    public abstract void runAutonomous() throws InterruptedException;
 
     public void stop() {
 

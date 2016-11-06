@@ -41,30 +41,51 @@ public class HolonomicDriveTrain extends DriveTrain {
         return new Vec2(x, y);
     }
 
+    private enum Motor {
+        FRONT_LEFT, FRONT_RIGHT, BACK_LEFT, BACK_RIGHT
+    }
+
+    private double holonomicMath(double x, double y, double rotation, Motor motor) {
+        double power = 0.0;
+
+        switch(motor) {
+            case FRONT_LEFT: power = - y - x + rotation;
+                break;
+            case FRONT_RIGHT: power = + y - x + rotation;
+                break;
+            case BACK_LEFT: power = - y + x + rotation;
+                break;
+            case BACK_RIGHT: power = + y + x + rotation;
+                break;
+        }
+
+        return power;
+    }
+
     private void holonomicMove(double x, double y, double rotation) {
         if(x == 0.0 && y == 0.0 && rotation == 0.0) {
             stop();
         } else {
             frontLeft.setPower(powerScale.scalePower(- y - x + rotation));
             frontRight.setPower(powerScale.scalePower(+ y - x + rotation));
-            backRight.setPower(powerScale.scalePower(+ y + x + rotation));
             backLeft.setPower(powerScale.scalePower(- y + x + rotation));
+            backRight.setPower(powerScale.scalePower(+ y + x + rotation));
         }
     }
 
     private int millimetersToEncoderTicks(double millimeters) {
-        double rotations = millimeters / (specifications.getMmWheelCircumference() * Math.PI);
-        return (int) (rotations * specifications.getEncoderTicksPerRotation());
+        double rotations = millimeters / (specifications.getMmWheelDiameter() * Math.PI);
+        return (int) ((rotations * specifications.getEncoderTicksPerRotation()) / Math.sqrt(Math.PI)); //Spook
     }
 
     private int degreesToEncoderTicks(double degrees) {
         double ratio = degrees / 360;
-        double mmRadius = sqrt(pow(specifications.getMmLength(), 2) + pow(specifications.getMmWidth(), 2));
-        double mmRobotTurnCircumference = 2 * Math.PI * mmRadius;
-        double mmTurnCurve = ratio * mmRobotTurnCircumference;
+        double mmRobotCircumference = Math.PI * specifications.getMmRobotDiameter();
 
-        double rotations = mmTurnCurve / (specifications.getMmWheelCircumference() * Math.PI);
-        return (int) (rotations * specifications.getEncoderTicksPerRotation());
+        double mmTurnCurve = ratio * mmRobotCircumference;
+
+        double rotations = mmTurnCurve / (specifications.getMmWheelDiameter() * Math.PI);
+        return (int) ((rotations * specifications.getEncoderTicksPerRotation()) / Math.sqrt(Math.PI) * 1.25);
     }
 
     private boolean motorsBusy() {
@@ -72,19 +93,10 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     private void setRunMode(DcMotor.RunMode runMode) {
-        if(frontLeft.getMode() != runMode && frontRight.getMode() != runMode && backLeft.getMode() != runMode && backRight.getMode() != runMode) {
-            frontLeft.setMode(runMode);
-            frontRight.setMode(runMode);
-            backLeft.setMode(runMode);
-            backRight.setMode(runMode);
-        }
-    }
-
-    private void setTargetPosition(int encoderTicks) {
-        frontLeft.setTargetPosition(encoderTicks);
-        frontRight.setTargetPosition(encoderTicks);
-        backLeft.setTargetPosition(encoderTicks);
-        backRight.setTargetPosition(encoderTicks);
+        frontLeft.setMode(runMode);
+        frontRight.setMode(runMode);
+        backLeft.setMode(runMode);
+        backRight.setMode(runMode);
     }
 
     @Override
@@ -107,19 +119,15 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void driveControlled(Gamepad controller) {
-        if(!motorsBusy()) {
-            setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-            holonomicMove(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
-        }
+        holonomicMove(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
     }
 
-    private final double AUTONOMOUS_SPEED = 0.5;
+    private final double AUTONOMOUS_SPEED = 0.1;
 
     @Override
     public void stop() {
-        setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         frontLeft.setPower(0.0);
         frontRight.setPower(0.0);
         backLeft.setPower(0.0);
@@ -127,39 +135,66 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     @Override
-    public void move(double millimeters) {
-        if(!motorsBusy()) {
-            holonomicMove(0.0, AUTONOMOUS_SPEED, 0.0);
+    public void move(double millimeters) throws InterruptedException {
+        setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-            setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+        int position = millimetersToEncoderTicks(millimeters);
 
-            setTargetPosition(millimetersToEncoderTicks(millimeters));
+        frontLeft.setTargetPosition(position);
+        frontRight.setTargetPosition(-position);
+        backLeft.setTargetPosition(position);
+        backRight.setTargetPosition(-position);
+
+        setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        frontLeft.setPower(AUTONOMOUS_SPEED);
+        frontRight.setPower(AUTONOMOUS_SPEED);
+        backLeft.setPower(AUTONOMOUS_SPEED);
+        backRight.setPower(AUTONOMOUS_SPEED);
+
+        while(motorsBusy()) {
+            Thread.sleep(1);
         }
+
+        stop();
+        setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
-    public void move(double millimeters, double degrees) {
-        if(!motorsBusy()) {
-            Vec2 stickPower = degreesToPoint(degrees, AUTONOMOUS_SPEED);
+    public void move(double millimeters, double degrees) throws InterruptedException {
+        Vec2 point = degreesToPoint(degrees, AUTONOMOUS_SPEED);
 
-            holonomicMove(stickPower.x, stickPower.y, 0.0);
-
-            setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            setTargetPosition(millimetersToEncoderTicks(millimeters));
-        }
+        double frontLeftPower = holonomicMath(point.x, point.y, 0.0, Motor.FRONT_LEFT);
+        double frontRightPower = holonomicMath(point.x, point.y, 0.0, Motor.FRONT_RIGHT);
+        double backLeftPower = holonomicMath(point.x, point.y, 0.0, Motor.BACK_LEFT);
+        double backRightPower = holonomicMath(point.x, point.y, 0.0, Motor.BACK_RIGHT);
     }
 
     @Override
-    public void turn(double degrees) {
-        if(!motorsBusy()) {
-            double multiplier = degrees >= 0 ? 1.0 : -1.0;
+    public void turn(double degrees) throws InterruptedException {
+        setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-            holonomicMove(0.0, 0.0, AUTONOMOUS_SPEED * multiplier);
+        int position = degreesToEncoderTicks(degrees);
 
-            setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeft.setTargetPosition(position);
+        frontRight.setTargetPosition(position);
+        backLeft.setTargetPosition(position);
+        backRight.setTargetPosition(position);
 
-            setTargetPosition(degreesToEncoderTicks(degrees));
+        setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        frontLeft.setPower(AUTONOMOUS_SPEED);
+        frontRight.setPower(AUTONOMOUS_SPEED);
+        backLeft.setPower(AUTONOMOUS_SPEED);
+        backRight.setPower(AUTONOMOUS_SPEED);
+
+        while(motorsBusy()) {
+            Thread.sleep(1);
         }
+
+        stop();
+        setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }
