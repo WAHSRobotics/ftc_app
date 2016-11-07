@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.hardware.HardwareSpecifications;
 import org.firstinspires.ftc.teamcode.util.PowerScale;
 import org.firstinspires.ftc.teamcode.util.Vec2;
 
@@ -19,12 +18,14 @@ import static org.firstinspires.ftc.teamcode.util.MathUtil.setSignificantPlaces;
 public class HolonomicDriveTrain extends DriveTrain {
     private DcMotor frontLeft, frontRight, backLeft, backRight;
 
-    private PowerScale powerScale = new PowerScale();
+    private PowerScale powerScale = new PowerScale(0.05, 0.75, 8.00);
 
-    private HardwareSpecifications specifications;
+    private final double mmWheelDiameter;
+    private final int encoderTicksPerRotation;
 
-    public HolonomicDriveTrain(HardwareSpecifications specifications) {
-        this.specifications = specifications;
+    public HolonomicDriveTrain(double mmWheelDiameter, int encoderTicksPerRotation) {
+        this.mmWheelDiameter = mmWheelDiameter;
+        this.encoderTicksPerRotation = encoderTicksPerRotation;
     }
 
     private Vec2 degreesToPoint(double degrees, double power) {
@@ -74,18 +75,8 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     private int millimetersToEncoderTicks(double millimeters) {
-        double rotations = millimeters / (specifications.getMmWheelDiameter() * Math.PI);
-        return (int) ((rotations * specifications.getEncoderTicksPerRotation()) / Math.sqrt(Math.PI)); //Spook
-    }
-
-    private int degreesToEncoderTicks(double degrees) {
-        double ratio = degrees / 360;
-        double mmRobotCircumference = Math.PI * specifications.getMmRobotDiameter();
-
-        double mmTurnCurve = ratio * mmRobotCircumference;
-
-        double rotations = mmTurnCurve / (specifications.getMmWheelDiameter() * Math.PI);
-        return (int) ((rotations * specifications.getEncoderTicksPerRotation()) / Math.sqrt(Math.PI) * 1.25);
+        double rotations = millimeters / (mmWheelDiameter * Math.PI);
+        return (int) ((rotations * encoderTicksPerRotation) / Math.sqrt(Math.PI)); //Spook
     }
 
     private boolean motorsBusy() {
@@ -124,7 +115,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         holonomicMove(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
     }
 
-    private final double AUTONOMOUS_SPEED = 0.1;
+    private final double AUTONOMOUS_SPEED = 0.3;
 
     @Override
     public void stop() {
@@ -169,26 +160,23 @@ public class HolonomicDriveTrain extends DriveTrain {
         double frontRightPower = holonomicMath(point.x, point.y, 0.0, Motor.FRONT_RIGHT);
         double backLeftPower = holonomicMath(point.x, point.y, 0.0, Motor.BACK_LEFT);
         double backRightPower = holonomicMath(point.x, point.y, 0.0, Motor.BACK_RIGHT);
-    }
 
-    @Override
-    public void turn(double degrees) throws InterruptedException {
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        int position = degreesToEncoderTicks(degrees);
+        int position = millimetersToEncoderTicks(millimeters);
 
-        frontLeft.setTargetPosition(position);
-        frontRight.setTargetPosition(position);
-        backLeft.setTargetPosition(position);
-        backRight.setTargetPosition(position);
+        frontLeft.setTargetPosition(frontLeftPower >= 0 ? position : -position);
+        frontRight.setTargetPosition(frontRightPower >= 0 ? position : -position);
+        backLeft.setTargetPosition(backLeftPower >= 0 ? position : -position);
+        backRight.setTargetPosition(backRightPower >= 0 ? position : -position);
 
         setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setPower(AUTONOMOUS_SPEED);
-        frontRight.setPower(AUTONOMOUS_SPEED);
-        backLeft.setPower(AUTONOMOUS_SPEED);
-        backRight.setPower(AUTONOMOUS_SPEED);
+        frontLeft.setPower(frontLeftPower);
+        frontRight.setPower(frontRightPower);
+        backLeft.setPower(backLeftPower);
+        backRight.setPower(backRightPower);
 
         while(motorsBusy()) {
             Thread.sleep(1);
@@ -196,5 +184,10 @@ public class HolonomicDriveTrain extends DriveTrain {
 
         stop();
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    @Override
+    public void turn(double degrees) throws InterruptedException {
+
     }
 }
