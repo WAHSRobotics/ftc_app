@@ -8,5 +8,5 @@ import org.firstinspires.ftc.teamcode.hardware.HardwareComponent;
 public abstract class Shooter extends HardwareComponent {
     public abstract void shootControlled(Gamepad gamepad);
 
-    public abstract void shoot();
+    public abstract void shoot() throws InterruptedException;
 }

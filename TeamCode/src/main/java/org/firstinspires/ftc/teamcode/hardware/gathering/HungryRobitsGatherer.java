@@ -13,7 +13,7 @@ public class HungryRobitsGatherer extends Gatherer {
     }
 
     @Override
-    public void gather() {
+    public void gather() throws InterruptedException {
 
     }
 

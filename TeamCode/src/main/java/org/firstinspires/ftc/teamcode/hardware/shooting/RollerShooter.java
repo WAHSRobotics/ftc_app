@@ -18,7 +18,7 @@ public class RollerShooter extends Shooter {
 
     @Override
     public void shootControlled(Gamepad gamepad) {
-        if(gamepad.right_trigger >= 0.2) {
+        if(gamepad.right_bumper) {
             setMotorPowers(1.0);
         } else {
             setMotorPowers(0.0);
@@ -31,14 +31,10 @@ public class RollerShooter extends Shooter {
     }
 
     @Override
-    public void shoot() {
+    public void shoot() throws InterruptedException {
         setMotorPowers(1.0);
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(500);
 
         setMotorPowers(0.0);
     }

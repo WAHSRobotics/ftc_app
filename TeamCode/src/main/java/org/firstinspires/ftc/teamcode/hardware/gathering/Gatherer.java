@@ -8,5 +8,5 @@ import org.firstinspires.ftc.teamcode.hardware.HardwareComponent;
 public abstract class Gatherer extends HardwareComponent {
     public abstract void gatherControlled(Gamepad gamepad);
 
-    public abstract void gather();
+    public abstract void gather() throws InterruptedException;
 }

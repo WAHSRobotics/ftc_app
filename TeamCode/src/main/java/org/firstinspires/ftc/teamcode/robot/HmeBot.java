@@ -5,12 +5,13 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.hardware.HardwareConstants;
 import org.firstinspires.ftc.teamcode.hardware.driving.HolonomicDriveTrain;
+import org.firstinspires.ftc.teamcode.hardware.gathering.HungryRobitsGatherer;
 
 public class HmeBot extends Robot {
     public HmeBot(OpMode opMode) {
         super(opMode,
                 new HolonomicDriveTrain(76.2, HardwareConstants.ANDYMARK_ENCODER_TICKS_PER_ROTATION),
-                /*new HungryRobitsGatherer()*/null,
+                new HungryRobitsGatherer(),
                 /*new RollerShooter()*/null
         );
     }
@@ -37,5 +38,11 @@ public class HmeBot extends Robot {
         Thread.sleep(100);
 
         driveTrain.move(1000, 45);
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        driveTrain.stop();
     }
 }
