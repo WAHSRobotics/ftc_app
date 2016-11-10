@@ -25,6 +25,8 @@ public class HmeBot extends Robot {
     public void loop() {
         driveTrain.driveControlled(opMode.gamepad1);
 
+        gatherer.gatherControlled(opMode.gamepad1);
+
         driveTrain.logTelemetry(opMode.telemetry);
 
         opMode.telemetry.update();
