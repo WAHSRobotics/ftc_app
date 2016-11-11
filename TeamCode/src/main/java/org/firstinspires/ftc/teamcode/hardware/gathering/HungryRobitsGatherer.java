@@ -15,11 +15,10 @@ public class HungryRobitsGatherer extends Gatherer {
 
     @Override
     public void gatherControlled(Gamepad gamepad) {
-        if(gamepad.right_trigger >= 0.2){
+        if(gamepad.right_trigger >= 0.2) {
             left.setPower(gamepad.right_trigger);
             right.setPower(gamepad.right_trigger);
-        }
-        if(gamepad.left_trigger >= 0.2) {
+        } else if(gamepad.left_trigger >= 0.2) {
             left.setPower(-gamepad.left_trigger);
             right.setPower(-gamepad.left_trigger);
         }
