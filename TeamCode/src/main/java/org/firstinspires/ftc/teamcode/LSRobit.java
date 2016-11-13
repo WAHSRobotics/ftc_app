@@ -3,21 +3,27 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
+/** Created By The Very Dank Meme Lord Shaun "Dank Indian" Sarker
+ * I like Memes
+ * Do You Like Memes?
+ * NO!!!
+ */
 
-public class LSRobit {
+    public class LSRobit {
     public DcMotor leftfront;
     public DcMotor rightfront;
     public DcMotor leftback;
     public DcMotor rightback;
-
+    public Servo Arm1;
 
 
     private HardwareMap hwMap;
 
     public void init(HardwareMap ahwMap){
         hwMap = ahwMap;
-
+        Arm1 = hwMap.servo.get("a2");
         leftfront = hwMap.dcMotor.get("lf");
         rightfront = hwMap.dcMotor.get("rf");
         leftback = hwMap.dcMotor.get("lb");

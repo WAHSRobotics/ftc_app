@@ -15,7 +15,8 @@ public class MemeTeleop extends OpMode {
         double y = gamepad1.right_stick_y;
         double x = gamepad1.right_stick_x;
         double z = 0.0;
-
+        boolean leftbumper = true;
+        boolean rightbumper = true;
         double leftBump = gamepad1.left_trigger;
         double rightBump = gamepad1.right_trigger;
         if (leftBump > 0.0) {
@@ -26,6 +27,17 @@ public class MemeTeleop extends OpMode {
             z = -rightBump;
         }
 
+        /*
+        if (leftbumper = true) {
+            leftbumper = false;
+        }
+        */
+
+        /*
+          if (rightbumper = true){
+               rightbumper = false;
+                  }
+       */
         robot.rightfront.setPower(scale(y+x-z));
         robot.leftfront.setPower(scale(y-x+z));
         robot.rightback.setPower(scale(y-x-z));
