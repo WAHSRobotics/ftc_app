@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.robot.HmeBot;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @TeleOp(name = "HME TeleOp", group = "HME")
-//@Disabled
 public class HmeTeleOp extends OpMode {
     private Robot robot = new HmeBot(this);
 

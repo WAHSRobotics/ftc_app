@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.robot.HmeBot;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @Autonomous(name = "HME Autonomous", group = "HME")
-//@Disabled
 public class HmeAutonomous extends LinearOpMode {
     private Robot robot = new HmeBot(this);
 
