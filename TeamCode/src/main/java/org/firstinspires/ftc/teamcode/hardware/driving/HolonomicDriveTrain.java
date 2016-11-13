@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.hardware.driving;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.PowerScale;
@@ -17,6 +19,7 @@ import static org.firstinspires.ftc.teamcode.util.MathUtil.setSignificantPlaces;
 
 public class HolonomicDriveTrain extends DriveTrain {
     private DcMotor frontLeft, frontRight, backLeft, backRight;
+    private GyroSensor gyroSensor;
 
     private PowerScale powerScale = new PowerScale(0.05, 0.75, 8.00);
 
@@ -67,10 +70,10 @@ public class HolonomicDriveTrain extends DriveTrain {
         if(x == 0.0 && y == 0.0 && rotation == 0.0) {
             stop();
         } else {
-            frontLeft.setPower(powerScale.scalePower(- y - x + rotation));
-            frontRight.setPower(powerScale.scalePower(+ y - x + rotation));
-            backLeft.setPower(powerScale.scalePower(- y + x + rotation));
-            backRight.setPower(powerScale.scalePower(+ y + x + rotation));
+            frontLeft.setPower(powerScale.scalePower(holonomicMath(x, y, rotation, Motor.FRONT_LEFT)));
+            frontRight.setPower(powerScale.scalePower(holonomicMath(x, y, rotation, Motor.FRONT_RIGHT)));
+            backLeft.setPower(powerScale.scalePower(holonomicMath(x, y, rotation, Motor.BACK_LEFT)));
+            backRight.setPower(powerScale.scalePower(holonomicMath(x, y, rotation, Motor.BACK_RIGHT)));
         }
     }
 
@@ -96,6 +99,9 @@ public class HolonomicDriveTrain extends DriveTrain {
         frontRight = hardwareMap.dcMotor.get("frontRight");
         backLeft = hardwareMap.dcMotor.get("backLeft");
         backRight = hardwareMap.dcMotor.get("backRight");
+
+        //TODO: Add gyro in hardware map
+//        gyroSensor = hardwareMap.gyroSensor.get("gyro");
 
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
@@ -149,7 +155,8 @@ public class HolonomicDriveTrain extends DriveTrain {
         }
 
         stop();
-        setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
@@ -183,11 +190,44 @@ public class HolonomicDriveTrain extends DriveTrain {
         }
 
         stop();
-        setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
-    public void turn(double degrees) throws InterruptedException {
+    public void turn(int degrees) throws InterruptedException {
+        degrees = Range.clip(degrees, -359, 359);
 
+        setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        gyroSensor.calibrate();
+
+        while(gyroSensor.isCalibrating()) {
+            Thread.sleep(1);
+        }
+
+        int targetHeading;
+        double powerMultiplier;
+
+        if(degrees >= 0) {
+            targetHeading = degrees;
+            powerMultiplier = 1;
+        } else {
+            targetHeading = 360 + degrees;
+            powerMultiplier = -1;
+        }
+
+        int currentHeading;
+
+        do {
+            currentHeading = gyroSensor.getHeading();
+
+            frontLeft.setPower(AUTONOMOUS_SPEED * powerMultiplier);
+            frontRight.setPower(AUTONOMOUS_SPEED * powerMultiplier);
+            backLeft.setPower(AUTONOMOUS_SPEED * powerMultiplier);
+            backRight.setPower(AUTONOMOUS_SPEED * powerMultiplier);
+        } while(currentHeading < targetHeading);
+
+        stop();
     }
 }
