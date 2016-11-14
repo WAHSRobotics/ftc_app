@@ -21,6 +21,20 @@ public class HungryRobitsGatherer extends Gatherer {
         } else if(gamepad.left_trigger >= 0.2) {
             leftArm.setPower(-gamepad.left_trigger);
             rightArm.setPower(-gamepad.left_trigger);
+        } else {
+            leftArm.setPower(0);
+            rightArm.setPower(0);
+        }
+
+        if(gamepad.a) {
+            leftGate.setPosition(1.0);
+            rightGate.setPosition(1.0);
+        } else if(gamepad.y) {
+            leftGate.setPosition(0.0);
+            rightGate.setPosition(0.0 );
+        } else {
+            leftGate.setPosition(0.8);
+            rightGate.setPosition(0.8);
         }
     }
 
@@ -38,6 +52,9 @@ public class HungryRobitsGatherer extends Gatherer {
 
         leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
         leftGate.setDirection(Servo.Direction.REVERSE);
+
+        leftGate.setPosition(0.8);
+        rightGate.setPosition(0.8);
     }
 
     @Override
