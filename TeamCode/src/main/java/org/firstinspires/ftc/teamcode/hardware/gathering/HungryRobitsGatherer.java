@@ -26,12 +26,12 @@ public class HungryRobitsGatherer extends Gatherer {
             rightArm.setPower(0);
         }
 
-        if(gamepad.a) {
+        if(gamepad.left_bumper) {
             leftGate.setPosition(1.0);
             rightGate.setPosition(1.0);
-        } else if(gamepad.y) {
+        } else if(gamepad.right_bumper) {
             leftGate.setPosition(0.0);
-            rightGate.setPosition(0.0 );
+            rightGate.setPosition(0.0);
         } else {
             leftGate.setPosition(0.8);
             rightGate.setPosition(0.8);

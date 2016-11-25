@@ -41,17 +41,8 @@ public class HmeBot extends Robot {
 
         Thread.sleep(100);
 
-        driveTrain.move(1000, 45);
+        driveTrain.turn(90);
         driveTrain.stop();
-
-        Thread.sleep(100);
-
-        driveTrain.turn(-45);
-        driveTrain.stop();
-
-        Thread.sleep(100);
-
-        driveTrain.turn(45);
     }
 
     @Override

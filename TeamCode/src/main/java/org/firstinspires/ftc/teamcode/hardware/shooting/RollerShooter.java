@@ -18,7 +18,7 @@ public class RollerShooter extends Shooter {
 
     @Override
     public void shootControlled(Gamepad gamepad) {
-        if(gamepad.right_bumper) {
+        if(gamepad.a) {
             setMotorPowers(1.0);
         } else {
             setMotorPowers(0.0);

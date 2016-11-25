@@ -100,8 +100,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         backLeft = hardwareMap.dcMotor.get("backLeft");
         backRight = hardwareMap.dcMotor.get("backRight");
 
-        //TODO: Add gyro in hardware map
-//        gyroSensor = hardwareMap.gyroSensor.get("gyro");
+        gyroSensor = hardwareMap.gyroSensor.get("gyro");
 
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
@@ -121,7 +120,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         holonomicMove(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
     }
 
-    private final double AUTONOMOUS_SPEED = 0.3;
+    private final double AUTONOMOUS_SPEED = 0.005;
 
     @Override
     public void stop() {
@@ -136,7 +135,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        int position = millimetersToEncoderTicks(millimeters);
+        int position = 1120;//millimetersToEncoderTicks(millimeters);
 
         frontLeft.setTargetPosition(position);
         frontRight.setTargetPosition(-position);
@@ -145,10 +144,10 @@ public class HolonomicDriveTrain extends DriveTrain {
 
         setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setPower(AUTONOMOUS_SPEED);
-        frontRight.setPower(AUTONOMOUS_SPEED);
-        backLeft.setPower(AUTONOMOUS_SPEED);
-        backRight.setPower(AUTONOMOUS_SPEED);
+        frontLeft.setPower(0.01);
+        frontRight.setPower(0.01);
+        backLeft.setPower(1);
+        backRight.setPower(1);
 
         while(motorsBusy()) {
             Thread.sleep(1);
@@ -196,8 +195,6 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void turn(int degrees) throws InterruptedException {
-        degrees = Range.clip(degrees, -359, 359);
-
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         gyroSensor.calibrate();
@@ -206,27 +203,18 @@ public class HolonomicDriveTrain extends DriveTrain {
             Thread.sleep(1);
         }
 
-        int targetHeading;
-        double powerMultiplier;
-
-        if(degrees >= 0) {
-            targetHeading = degrees;
-            powerMultiplier = 1;
-        } else {
-            targetHeading = 360 + degrees;
-            powerMultiplier = -1;
-        }
-
         int currentHeading;
 
         do {
             currentHeading = gyroSensor.getHeading();
 
-            frontLeft.setPower(AUTONOMOUS_SPEED * powerMultiplier);
-            frontRight.setPower(AUTONOMOUS_SPEED * powerMultiplier);
-            backLeft.setPower(AUTONOMOUS_SPEED * powerMultiplier);
-            backRight.setPower(AUTONOMOUS_SPEED * powerMultiplier);
-        } while(currentHeading < targetHeading);
+            frontLeft.setPower(AUTONOMOUS_SPEED);
+            frontRight.setPower(AUTONOMOUS_SPEED);
+            backLeft.setPower(AUTONOMOUS_SPEED);
+            backRight.setPower(AUTONOMOUS_SPEED);
+
+            Thread.sleep(1);
+        } while(currentHeading < degrees);
 
         stop();
     }
