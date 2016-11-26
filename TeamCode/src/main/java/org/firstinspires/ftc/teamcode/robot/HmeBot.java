@@ -36,11 +36,6 @@ public class HmeBot extends Robot {
 
     @Override
     public void runAutonomous() throws InterruptedException {
-        driveTrain.move(1000);
-        driveTrain.stop();
-
-        Thread.sleep(100);
-
         driveTrain.turn(90);
         driveTrain.stop();
     }

@@ -102,6 +102,16 @@ public class HolonomicDriveTrain extends DriveTrain {
 
         gyroSensor = hardwareMap.gyroSensor.get("gyro");
 
+        gyroSensor.calibrate();
+
+        while(gyroSensor.isCalibrating()) {
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
@@ -111,6 +121,11 @@ public class HolonomicDriveTrain extends DriveTrain {
         telemetry.addData("Front Right Motor: ", frontRight.getPower());
         telemetry.addData("Back Left Motor: ", backLeft.getPower());
         telemetry.addData("Back Right Motor: ", backRight.getPower());
+
+        telemetry.addData("Gyro X: ", gyroSensor.rawX());
+        telemetry.addData("Gyro Y: ", gyroSensor.rawY());
+        telemetry.addData("Gyro Z: ", gyroSensor.rawZ());
+        telemetry.addData("Gyro H: ", gyroSensor.getHeading());
     }
 
     @Override
@@ -120,7 +135,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         holonomicMove(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
     }
 
-    private final double AUTONOMOUS_SPEED = 0.005;
+    private final double AUTONOMOUS_SPEED = 0.1;
 
     @Override
     public void stop() {
@@ -135,7 +150,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        int position = 1120;//millimetersToEncoderTicks(millimeters);
+        int position = millimetersToEncoderTicks(millimeters);
 
         frontLeft.setTargetPosition(position);
         frontRight.setTargetPosition(-position);
@@ -144,10 +159,10 @@ public class HolonomicDriveTrain extends DriveTrain {
 
         setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setPower(0.01);
-        frontRight.setPower(0.01);
-        backLeft.setPower(1);
-        backRight.setPower(1);
+        frontLeft.setPower(AUTONOMOUS_SPEED);
+        frontRight.setPower(AUTONOMOUS_SPEED);
+        backLeft.setPower(AUTONOMOUS_SPEED);
+        backRight.setPower(AUTONOMOUS_SPEED);
 
         while(motorsBusy()) {
             Thread.sleep(1);
