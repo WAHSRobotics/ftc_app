@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+    package org.firstinspires.ftc.teamcode;
 
     import com.qualcomm.robotcore.hardware.DcMotor;
     import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -11,8 +11,8 @@ package org.firstinspires.ftc.teamcode;
     import java.lang.Exception;
     import java.lang.RuntimeException;
 
-public class MemeTeleop extends OpMode {
-//I am going to kill myself
+    public class MemeTeleop extends OpMode {
+    //I am going to kill myself
     private LSRobit robot = new LSRobit();
 
         @Override
@@ -33,15 +33,7 @@ public class MemeTeleop extends OpMode {
             z = -rightBump;
         }
 
-        while (leftbumper = true) {
-            leftbumper = false;
-        }
 
-
-
-          while (rightbumper = false){
-               rightbumper = true;
-                  }
 
         robot.rightfront.setPower(scale(y+x-z));
         robot.leftfront.setPower(scale(y-x+z));
@@ -58,7 +50,7 @@ public class MemeTeleop extends OpMode {
     /*
      Method for making it easier to make the robot run slowly
      */
-    
+
 
 
 
