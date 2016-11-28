@@ -39,10 +39,10 @@ public class TestTeleOp extends OpMode {
             z = -rightBump;
         }
 
-        robot.rightfront.setPower(scale(y + x - z));
-        robot.leftfront.setPower(scale(y - x + z));
-        robot.rightback.setPower(scale(y - x - z));
-        robot.leftback.setPower(scale(y + x + z));
+        robot.rightfront.setPower(scale(+ y - x + z));
+        robot.leftfront.setPower(scale(- y - x + z));
+        robot.rightback.setPower(scale(+ y + x + z));
+        robot.leftback.setPower(scale(- y + x + z));
     }
 
 }

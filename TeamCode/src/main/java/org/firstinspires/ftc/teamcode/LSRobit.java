@@ -8,10 +8,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
     public class LSRobit {
-    public DcMotor leftfront;
-    public DcMotor rightfront;
-    public DcMotor leftback;
-    public DcMotor rightback;
+        public DcMotor leftfront;
+        public DcMotor rightfront;
+        public DcMotor leftback;
+        public DcMotor rightback;
+        public Servo buttonPusher;
 //    public Servo Arm1;
 //    public Servo Arm2;
 //    public Servo Arm3;
@@ -35,6 +36,7 @@ import com.qualcomm.robotcore.hardware.Servo;
         rightfront = hwMap.dcMotor.get("rf");
         leftback = hwMap.dcMotor.get("lb");
         rightback = hwMap.dcMotor.get("rb");
+        buttonPusher = hwMap.servo.get("buttonPusher");
         leftfront.setDirection(DcMotor.Direction.FORWARD);
         rightfront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftback.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -50,27 +52,5 @@ import com.qualcomm.robotcore.hardware.Servo;
         rightfront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftback.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightback.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-
-
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
