@@ -1,14 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.util.Range;
-import java.math.BigInteger;
+    import com.qualcomm.robotcore.hardware.DcMotor;
+    import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+    import com.qualcomm.robotcore.hardware.DcMotor;
+    import com.qualcomm.robotcore.hardware.DcMotorController;
+    import com.qualcomm.robotcore.util.Range;
+    import java.math.BigInteger;
+    import java.math.BigDecimal;
+    import java.math.RoundingMode;
+    import java.lang.Exception;
+    import java.lang.RuntimeException;
 
 public class MemeTeleop extends OpMode {
-
+//I am going to kill myself
     private LSRobit robot = new LSRobit();
 
         @Override
@@ -43,11 +47,22 @@ public class MemeTeleop extends OpMode {
         robot.leftfront.setPower(scale(y-x+z));
         robot.rightback.setPower(scale(y-x-z));
         robot.leftback.setPower(scale(y+x+z));
-    }
-//make america great again
+
+
+        }
+
+
+
+
+
     /*
      Method for making it easier to make the robot run slowly
      */
+    
+
+
+
+
 
     public double scale(double inPower) {
         return inPower; //todo: make a real scale method
