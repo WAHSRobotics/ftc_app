@@ -1,5 +1,6 @@
     package org.firstinspires.ftc.teamcode;
 
+<<<<<<< HEAD:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/MemeTeleop.java
     import com.qualcomm.robotcore.hardware.DcMotor;
     import com.qualcomm.robotcore.eventloop.opmode.OpMode;
     import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,11 +11,25 @@
     import java.math.RoundingMode;
     import java.lang.Exception;
     import java.lang.RuntimeException;
+=======
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.util.Range;
+
+import java.math.BigInteger;
+
+@TeleOp(name = "Test TeleOp")
+public class TestTeleOp extends OpMode {
+>>>>>>> origin/ls_2016_SarkerShaun:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/TestTeleOp.java
 
     public class MemeTeleop extends OpMode {
     //I am going to kill myself
     private LSRobit robot = new LSRobit();
 
+<<<<<<< HEAD:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/MemeTeleop.java
         @Override
         public void init() {
         double y = gamepad1.right_stick_y;
@@ -47,6 +62,12 @@
 
 
 
+=======
+    @Override
+    public void init() {
+        robot.init(hardwareMap);
+    }
+>>>>>>> origin/ls_2016_SarkerShaun:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/TestTeleOp.java
     /*
      Method for making it easier to make the robot run slowly
      */
@@ -61,7 +82,22 @@
     }
 
     public void loop() {
+        double y = gamepad1.right_stick_y;
+        double x = gamepad1.right_stick_x;
+        double z = 0.0;
 
+        double leftBump = gamepad1.left_trigger;
+        double rightBump = gamepad1.right_trigger;
+        if (leftBump > 0.0) {
+            z = leftBump;
+        } else if (rightBump > 0.0) {
+            z = -rightBump;
+        }
+
+        robot.rightfront.setPower(scale(y + x - z));
+        robot.leftfront.setPower(scale(y - x + z));
+        robot.rightback.setPower(scale(y - x - z));
+        robot.leftback.setPower(scale(y + x + z));
     }
 
 }
