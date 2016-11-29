@@ -21,7 +21,7 @@ public class HolonomicDriveTrain extends DriveTrain {
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private GyroSensor gyroSensor;
 
-    private PowerScale powerScale = new PowerScale(0.05, 0.75, 8.00);
+    private PowerScale powerScale = new PowerScale(0.02, 0.80, 6);
 
     private final double mmWheelDiameter;
     private final int encoderTicksPerRotation;
@@ -32,7 +32,7 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     private Vec2 degreesToPoint(double degrees, double power) {
-        double radius = sqrt(pow(power, 2) + pow(power, 2));
+        double radius = sqrt(2 * pow(power, 2));
 
         double angle = toRadians(degrees);
 
