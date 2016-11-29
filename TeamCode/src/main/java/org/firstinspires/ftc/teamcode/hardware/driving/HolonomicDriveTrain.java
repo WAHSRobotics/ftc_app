@@ -117,15 +117,15 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void logTelemetry(Telemetry telemetry) {
-        telemetry.addData("Front Left Motor: ", frontLeft.getPower());
-        telemetry.addData("Front Right Motor: ", frontRight.getPower());
-        telemetry.addData("Back Left Motor: ", backLeft.getPower());
-        telemetry.addData("Back Right Motor: ", backRight.getPower());
+        telemetry.addData("Front Left Motor", frontLeft.getPower());
+        telemetry.addData("Front Right Motor", frontRight.getPower());
+        telemetry.addData("Back Left Motor", backLeft.getPower());
+        telemetry.addData("Back Right Motor", backRight.getPower());
 
-        telemetry.addData("Gyro X: ", gyroSensor.rawX());
-        telemetry.addData("Gyro Y: ", gyroSensor.rawY());
-        telemetry.addData("Gyro Z: ", gyroSensor.rawZ());
-        telemetry.addData("Gyro H: ", gyroSensor.getHeading());
+        telemetry.addData("Gyro X", gyroSensor.rawX());
+        telemetry.addData("Gyro Y", gyroSensor.rawY());
+        telemetry.addData("Gyro Z", gyroSensor.rawZ());
+        telemetry.addData("Gyro H", gyroSensor.getHeading());
     }
 
     @Override

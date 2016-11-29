@@ -12,31 +12,31 @@ public class RollerShooter extends Shooter {
 
     @Override
     public void init(HardwareMap hardwareMap) {
-        left = hardwareMap.dcMotor.get("shooter_left");
-        right = hardwareMap.dcMotor.get("shooter_right");
+        left = hardwareMap.dcMotor.get("shootLeft");
+        right = hardwareMap.dcMotor.get("shootRight");
     }
 
     @Override
     public void shootControlled(Gamepad gamepad) {
         if(gamepad.a) {
-            setMotorPowers(1.0);
+            fire(1.0);
         } else {
-            setMotorPowers(0.0);
+            fire(0.0);
         }
     }
 
-    private void setMotorPowers(double power) {
+    private void fire(double power) {
         left.setPower(power);
         right.setPower(power);
     }
 
     @Override
     public void shoot() throws InterruptedException {
-        setMotorPowers(1.0);
+        fire(1.0);
 
         Thread.sleep(500);
 
-        setMotorPowers(0.0);
+        fire(0.0);
     }
 
     @Override
