@@ -4,16 +4,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-<<<<<<< HEAD
 /** Created By The Very Dank Meme Lord Shaun "Dank Indian" Sarker
  * I like Memes
  * Do You Like Memes?
  * NO!!!
  */
-=======
 
 
->>>>>>> origin/ls_2016_SarkerShaun
+
 
     public class LSRobit {
     public DcMotor leftfront;
