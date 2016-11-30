@@ -1,13 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.util.Range;
-
-import java.math.BigInteger;
 
 @TeleOp(name = "Test TeleOp")
 public class TestTeleOp extends OpMode {
@@ -17,10 +11,13 @@ public class TestTeleOp extends OpMode {
     @Override
     public void init() {
         robot.init(hardwareMap);
+        robot.buttonPusher.setPosition(80/180);
+
+        robot.leftFront.setPower(0);
+        robot.rightFront.setPower(0);
+        robot.leftBack.setPower(0);
+        robot.rightBack.setPower(0);
     }
-    /*
-     Method for making it easier to make the robot run slowly
-     */
 
     public double scale(double inPower) {
         return inPower; //todo: make a real scale method
@@ -31,18 +28,22 @@ public class TestTeleOp extends OpMode {
         double x = gamepad1.right_stick_x;
         double z = 0.0;
 
-        double leftBump = gamepad1.left_trigger;
-        double rightBump = gamepad1.right_trigger;
-        if (leftBump > 0.0) {
-            z = leftBump;
-        } else if (rightBump > 0.0) {
-            z = -rightBump;
+        if (gamepad1.right_bumper) {
+            robot.buttonPusher.setPosition(10/180);
+        } else {
+            robot.buttonPusher.setPosition(80/180);
         }
 
-        robot.rightfront.setPower(scale(+ y - x + z));
-        robot.leftfront.setPower(scale(- y - x + z));
-        robot.rightback.setPower(scale(+ y + x + z));
-        robot.leftback.setPower(scale(- y + x + z));
+        if (gamepad1.left_trigger > 0.0) {
+            z = gamepad1.left_trigger;
+        } else if (gamepad1.right_trigger > 0.0) {
+            z = -gamepad1.right_trigger;
+        }
+
+        robot.rightFront.setPower(scale(+ y - x + z));
+        robot.leftFront.setPower(scale(- y - x + z));
+        robot.rightBack.setPower(scale(+ y + x + z));
+        robot.leftBack.setPower(scale(- y + x + z));
     }
 
 }
