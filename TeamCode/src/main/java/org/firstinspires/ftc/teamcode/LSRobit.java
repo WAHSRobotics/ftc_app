@@ -25,8 +25,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
     private HardwareMap hwMap;
 
-    public void init(HardwareMap ahwMap){
-        hwMap = ahwMap;
+    public void init(HardwareMap aHwMap){
+        hwMap = aHwMap;
         Arm1 = hwMap.servo.get("a1");
         leftfront = hwMap.dcMotor.get("lf");
         rightfront = hwMap.dcMotor.get("rf");

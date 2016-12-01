@@ -6,17 +6,18 @@
     @TeleOp(name = "Test TeleOp")
     public class TestTeleOp extends OpMode {
 
+
         private LSRobit robot = new LSRobit();
 
         @Override
         public void init() {
             robot.init(hardwareMap);
-            robot.arm1.setPosition(80/180);
+            robot.Arm1.setPosition(80/180);
 
-            robot.leftFront.setPower(0);
-            robot.rightFront.setPower(0);
-            robot.leftBack.setPower(0);
-            robot.rightBack.setPower(0);
+            robot.leftfront.setPower(0);
+            robot.rightfront.setPower(0);
+            robot.leftback.setPower(0);
+            robot.rightback.setPower(0);
         }
 
         public double scale(double inPower) {
@@ -29,9 +30,9 @@
             double z = 0.0;
 
             if (gamepad1.right_bumper) {
-                robot.arm1.setPosition(10/180);
+                robot.Arm1.setPosition(10/180);
             } else {
-                robot.arm1.setPosition(80/180);
+                robot.Arm1.setPosition(80/180);
             }
 
             if (gamepad1.left_trigger > 0.0) {
@@ -40,10 +41,10 @@
                 z = -gamepad1.right_trigger;
             }
 
-            robot.rightFront.setPower(scale(+ y - x + z));
-            robot.leftFront.setPower(scale(- y - x + z));
-            robot.rightBack.setPower(scale(+ y + x + z));
-            robot.leftBack.setPower(scale(- y + x + z));
+            robot.rightfront.setPower(scale(+ y - x + z));
+            robot.leftfront.setPower(scale(- y - x + z));
+            robot.rightback.setPower(scale(+ y + x + z));
+            robot.leftback.setPower(scale(- y + x + z));
         }
 
     }
