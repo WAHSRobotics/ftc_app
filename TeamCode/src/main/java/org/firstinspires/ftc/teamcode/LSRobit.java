@@ -18,12 +18,7 @@ import com.qualcomm.robotcore.hardware.Servo;
     public DcMotor rightfront;
     public DcMotor leftback;
     public DcMotor rightback;
-//    public Servo Arm1;
-//    public Servo Arm2;
-//    public Servo Arm3;
-//    public Servo Arm4;
-//    public Servo Arm5;
-//    public Servo Arm6;
+
 
 
 
