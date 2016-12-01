@@ -22,7 +22,7 @@
         public double scale(double inPower) {
             return inPower; //todo: make a real scale method
         }
-
+//memes
         public void loop() {
             double y = gamepad1.right_stick_y;
             double x = gamepad1.right_stick_x;
