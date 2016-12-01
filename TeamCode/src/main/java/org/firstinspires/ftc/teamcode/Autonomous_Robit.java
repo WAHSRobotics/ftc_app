@@ -193,6 +193,7 @@ public class Autonomous_Robit extends LinearOpMode {
                         AngleUnit.DEGREES, 90, 90, 0));
         redTarget.setLocation(redTargetLocationOnField);
         RobotLog.ii(TAG, "Red Target=%s", format(redTargetLocationOnField));
+//memes
 
        /*
         * To place the Stones Target on the Blue Audience wall:
