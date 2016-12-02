@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.hardware.Servo;
     public DcMotor rightfront;
     public DcMotor leftback;
     public DcMotor rightback;
-    public Servo Arm1;
+    public Servo arm;
 
 
 
@@ -27,7 +27,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
     public void init(HardwareMap aHwMap){
         hwMap = aHwMap;
-        Arm1 = hwMap.servo.get("a1");
+        arm = hwMap.servo.get("arm");
         leftfront = hwMap.dcMotor.get("lf");
         rightfront = hwMap.dcMotor.get("rf");
         leftback = hwMap.dcMotor.get("lb");

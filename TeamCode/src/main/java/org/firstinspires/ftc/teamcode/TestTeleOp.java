@@ -12,7 +12,7 @@
         @Override
         public void init() {
             robot.init(hardwareMap);
-            robot.Arm1.setPosition(80/180);
+            robot.arm.setPosition(80/180);
 
             robot.leftfront.setPower(0);
             robot.rightfront.setPower(0);
@@ -22,6 +22,9 @@
 
         public double scale(double inPower) {
             return inPower; //todo: make a real scale method
+
+
+
         }
 //memes
         public void loop() {
@@ -30,9 +33,9 @@
             double z = 0.0;
 
             if (gamepad1.right_bumper) {
-                robot.Arm1.setPosition(10/180);
+                robot.arm.setPosition(10/180);
             } else {
-                robot.Arm1.setPosition(80/180);
+                robot.arm.setPosition(80/180);
             }
 
             if (gamepad1.left_trigger > 0.0) {
