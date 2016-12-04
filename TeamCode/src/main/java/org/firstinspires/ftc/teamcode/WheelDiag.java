@@ -23,7 +23,7 @@ public class WheelDiag extends LinearOpMode {
 
         robot.leftfront.setPower(1.0);
         sleep(3000);
-        robot.leftfront.setPower(0);
+        robot.leftfront.setPower(0D);
 
         robot.leftback.setPower(1.0);
         sleep(3000);
