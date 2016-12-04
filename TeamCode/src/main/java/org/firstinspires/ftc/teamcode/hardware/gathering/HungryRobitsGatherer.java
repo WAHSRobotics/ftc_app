@@ -53,8 +53,11 @@ public class HungryRobitsGatherer extends Gatherer {
         leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
         leftGate.setDirection(Servo.Direction.REVERSE);
 
-        leftGate.setPosition(0.8);
-        rightGate.setPosition(0.8);
+        leftGate.setPosition(0.1);
+        rightGate.setPosition(0.1);
+
+        leftArm.setPower(0);
+        rightArm.setPower(0);
     }
 
     @Override

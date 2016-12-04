@@ -83,7 +83,7 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     private boolean motorsBusy() {
-        return frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy();
+        return frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy();
     }
 
     private void setRunMode(DcMotor.RunMode runMode) {
@@ -132,10 +132,10 @@ public class HolonomicDriveTrain extends DriveTrain {
     public void driveControlled(Gamepad controller) {
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        holonomicMove(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
+        holonomicMove(-controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
     }
 
-    private final double AUTONOMOUS_SPEED = 0.4;
+    private final double AUTONOMOUS_SPEED = 0.3;
 
     @Override
     public void stop() {
@@ -163,9 +163,18 @@ public class HolonomicDriveTrain extends DriveTrain {
         frontRight.setPower(AUTONOMOUS_SPEED);
         backLeft.setPower(AUTONOMOUS_SPEED);
         backRight.setPower(AUTONOMOUS_SPEED);
+        
+        double motorSpeed = AUTONOMOUS_SPEED;
 
-        while(motorsBusy()) {
+        while(motorsBusy()/* && (motorSpeed > (AUTONOMOUS_SPEED / 1.5))*/) {
             Thread.sleep(1);
+            
+            frontLeft.setPower(motorSpeed);
+            frontLeft.setPower(motorSpeed);
+            frontLeft.setPower(motorSpeed);
+            frontLeft.setPower(motorSpeed);
+
+//            motorSpeed -= 0.001;
         }
 
         stop();
@@ -185,7 +194,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        int position = millimetersToEncoderTicks(millimeters);
+        int position = (int) (millimetersToEncoderTicks(millimeters));
 
         frontLeft.setTargetPosition(frontLeftPower >= 0 ? position : -position);
         frontRight.setTargetPosition(frontRightPower >= 0 ? position : -position);
