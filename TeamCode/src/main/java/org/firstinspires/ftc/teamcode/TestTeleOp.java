@@ -1,9 +1,12 @@
+
     package org.firstinspires.ftc.teamcode;
 
     import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
     import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-
-    @TeleOp(name = "Test TeleOp")
+    import com.qualcomm.robotcore.util.Range;
+    import com.qualcomm.robotcore.hardware.DcMotor;
+    import com.qualcomm.robotcore.hardware.DcMotorController;
+    @TeleOp(name = "Loose Screws Actual TeleOp")
     public class TestTeleOp extends OpMode {
 
 
@@ -21,11 +24,44 @@
         }
 
         public double scale(double inPower) {
-            return inPower; //todo: make a real scale method
+                float scaledPower = 0.0f;
+
+                inPower = Range.clip(inPower, -1, 1);
+                float[] possiblePowerValues = {
+                        0.00f, 0.05f, 0.09f, 0.10f, 0.12f,
+                        0.15f, 0.18f, 0.24f, 0.30f, 0.36f,
+                        0.43f, 0.50f, 0.60f, 0.72f, 0.85f,
+                        1.00f, 1.00f
+                };
+
+                int powerIndex = (int)(inPower * 16.0);
+
+                if (powerIndex < 0) {
+                    powerIndex = -powerIndex;
+                } else if (powerIndex > 16) {
+                    powerIndex = 16;
+                }
+
+                if (inPower < 0) {
+                    scaledPower = -possiblePowerValues[powerIndex];
+                } else {
+                    scaledPower = possiblePowerValues[powerIndex];
+                }
+
+                return scaledPower;
+            }
 
 
 
-        }
+
+
+
+
+
+
+
+
+
 //memes
         public void loop() {
             double y = -gamepad1.right_stick_y;
