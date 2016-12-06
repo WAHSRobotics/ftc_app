@@ -77,7 +77,7 @@ public class Vuforia_OpMode extends LinearOpMode {
 
             driveL.setPower(-0.02);
             driveR.setPower(0.02);
-        }
+        }//memes
 
         do {
             if (wheels.getPose() != null) {
