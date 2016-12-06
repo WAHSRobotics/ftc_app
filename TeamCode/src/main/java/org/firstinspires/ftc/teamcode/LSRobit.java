@@ -20,6 +20,8 @@ public class LSRobit {
     public DcMotor rightback;
     public Servo arm;
 
+    public static final String VUFORIA_KEY = "AYrzM+7/////AAAAGflN33oLXURIiZiOHPt5MZA2iv50tePz4bz21btpbPci5G9i+R0v4r0iNxOOPL5mkqRO/EjcBv4TYHnKqEahIIt35JZdscPxAp0uHcpSONmWqRcFNglob05nEiqNkTAQKG7Ux9AhjJqZp6R+lAiCKB1/Ht9pNZ+qK+xNE1iEtL9g708JbjmdsqT+KYCA7Rup0dqdeMGieexgSQUKfWKIk3w/Sap1W83He60GW0UGnSUzM81fBu05Oqkl1QiAWbb9TpWff9/YfOJZPSCfdfErIMBuYtYgsJl5xZEtv57u6EwrqsrlwvudD1GciBrIIMmnqMeIQu9EM5PD0dI9Oi+3jn8RPEfKauoAGDRIpUlfoI+2";
+
     private HardwareMap hwMap;
 
     public void init(HardwareMap aHwMap){
