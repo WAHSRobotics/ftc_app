@@ -268,7 +268,7 @@ public class Autonomous_Robit extends LinearOpMode {
         telemetry.addData(">", "Press Play to start tracking");
         telemetry.update();
         waitForStart();
-
+//this class is useless
         /** Start tracking the data sets we care about. */
         stonesAndChips.activate();
 

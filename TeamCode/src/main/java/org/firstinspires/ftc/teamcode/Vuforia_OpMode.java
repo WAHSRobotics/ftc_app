@@ -74,7 +74,8 @@ public class Vuforia_OpMode extends LinearOpMode {
             driveL.setPower(0.02);
             driveR.setPower(-0.02);
         } else {
-
+//this might be an autonnomos
+            //probably not
             driveL.setPower(-0.02);
             driveR.setPower(0.02);
         }//memes
