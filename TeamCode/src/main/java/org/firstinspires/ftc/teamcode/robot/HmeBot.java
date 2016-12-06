@@ -11,16 +11,13 @@ import org.firstinspires.ftc.teamcode.hardware.shooting.RollerShooter;
 
 public class HmeBot extends Robot {
     private OpticalDistanceSensor leftOds, rightOds;
-    private boolean blue;
 
-    public HmeBot(OpMode opMode, boolean blue) {
-        super(opMode,
+    public HmeBot(OpMode opMode, FieldSide side) {
+        super(opMode, side,
                 new HolonomicDriveTrain(76.2, HardwareConstants.ANDYMARK_ENCODER_TICKS_PER_ROTATION),
                 new HungryRobitsGatherer(),
                 new RollerShooter()
         );
-
-        this.blue = blue;
     }
 
     @Override
@@ -42,19 +39,19 @@ public class HmeBot extends Robot {
 
     @Override
     public void runAutonomous() throws InterruptedException {
-        if(blue) {
-            driveTrain.move(990);
+        int cornerVortexAngle = 0;
 
-            driveTrain.turn(120);
-
-            driveTrain.move(1829);
-        } else {
-            driveTrain.move(990);
-
-            driveTrain.turn(210);
-
-            driveTrain.move(1829);
+        switch(fieldSide) {
+            case BLUE: cornerVortexAngle = 120;
+                break;
+            case RED: cornerVortexAngle = 210;
+                break;
         }
+
+        //Move to the cap ball to knock it off, turn towards the corner vortex, and drive up the ramp
+        driveTrain.move(990);
+        driveTrain.turn(cornerVortexAngle);
+        driveTrain.move(1829);
     }
 
     @Override
@@ -65,6 +62,9 @@ public class HmeBot extends Robot {
     private void updateTelemetry() {
         driveTrain.logTelemetry(opMode.telemetry);
         gatherer.logTelemetry(opMode.telemetry);
+
+        opMode.telemetry.addData("Left ODS", leftOds.getLightDetected() * 10000);
+        opMode.telemetry.addData("Right ODS", rightOds.getLightDetected() * 10000);
 
         opMode.telemetry.update();
     }

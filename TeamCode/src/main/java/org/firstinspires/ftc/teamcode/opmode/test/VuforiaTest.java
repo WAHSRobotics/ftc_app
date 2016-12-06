@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmode.test;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.vuforia.HINT;
 import com.vuforia.Vuforia;
 
@@ -13,6 +15,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.R;
 
+@TeleOp(name = "Image Tracking Test", group = "Tests")
+//@Disabled
 public class VuforiaTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -42,8 +46,8 @@ public class VuforiaTest extends LinearOpMode {
         beacons.activate();
 
         while(opModeIsActive()) {
-            for(VuforiaTrackable beac : beacons) {
-                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) beac.getListener()).getPose();
+            for(VuforiaTrackable beacon : beacons) {
+                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) beacon.getListener()).getPose();
             }
         }
     }

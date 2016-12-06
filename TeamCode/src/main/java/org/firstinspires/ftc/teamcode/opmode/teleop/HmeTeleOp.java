@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @TeleOp(name = "HME TeleOp", group = "HME")
 public class HmeTeleOp extends OpMode {
-    private Robot robot = new HmeBot(this, true);
+    private Robot robot = new HmeBot(this, Robot.FieldSide.BLUE);
 
     @Override
     public void init() {

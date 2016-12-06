@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.PowerScale;
@@ -146,7 +145,7 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     @Override
-    public void move(double millimeters) throws InterruptedException {
+    public void move(int millimeters) throws InterruptedException {
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -166,7 +165,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         
         double motorSpeed = AUTONOMOUS_SPEED;
 
-        while(motorsBusy()/* && (motorSpeed > (AUTONOMOUS_SPEED / 1.5))*/) {
+        while(motorsBusy() && (motorSpeed > (AUTONOMOUS_SPEED / 1.5))) {
             Thread.sleep(1);
             
             frontLeft.setPower(motorSpeed);
@@ -174,7 +173,7 @@ public class HolonomicDriveTrain extends DriveTrain {
             frontLeft.setPower(motorSpeed);
             frontLeft.setPower(motorSpeed);
 
-//            motorSpeed -= 0.001;
+            motorSpeed -= 0.001;
         }
 
         stop();
@@ -183,7 +182,7 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     @Override
-    public void move(double millimeters, double degrees) throws InterruptedException {
+    public void move(int millimeters, int degrees) throws InterruptedException {
         Vec2 point = degreesToPoint(degrees, AUTONOMOUS_SPEED);
 
         double frontLeftPower = holonomicMath(point.x, point.y, 0.0, Motor.FRONT_LEFT);

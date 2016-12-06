@@ -45,6 +45,10 @@ public class EncoderTest extends LinearOpMode {
 
         while(frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy()) {
             Thread.sleep(1);
+            telemetry.addData("Front Left Encoder", frontLeft.getCurrentPosition());
+            telemetry.addData("Front Right Encoder", frontRight.getCurrentPosition());
+            telemetry.addData("Back Left Encoder", backLeft.getCurrentPosition());
+            telemetry.addData("Back Right Encoder", backRight.getCurrentPosition());
         }
 
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

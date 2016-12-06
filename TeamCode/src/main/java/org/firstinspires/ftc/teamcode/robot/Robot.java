@@ -12,9 +12,15 @@ public abstract class Robot {
     protected DriveTrain driveTrain;
     protected Gatherer gatherer;
     protected Shooter shooter;
+    protected FieldSide fieldSide;
 
-    protected Robot(OpMode opMode, DriveTrain driveTrain, Gatherer gatherer, Shooter shooter) {
+    public enum FieldSide {
+        RED, BLUE
+    }
+
+    protected Robot(OpMode opMode, FieldSide fieldSide, DriveTrain driveTrain, Gatherer gatherer, Shooter shooter) {
         this.opMode = opMode;
+        this.fieldSide = fieldSide;
         this.driveTrain = driveTrain;
         this.gatherer = gatherer;
         this.shooter = shooter;
