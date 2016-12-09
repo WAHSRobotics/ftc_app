@@ -1,11 +1,10 @@
-
-    package org.firstinspires.ftc.teamcode;
-
+     package org.firstinspires.ftc.teamcode;
     import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
     import com.qualcomm.robotcore.eventloop.opmode.OpMode;
     import com.qualcomm.robotcore.util.Range;
     import com.qualcomm.robotcore.hardware.DcMotor;
     import com.qualcomm.robotcore.hardware.DcMotorController;
+
     @TeleOp(name = "Loose Screws Actual TeleOp")
     public class TestTeleOp extends OpMode {
 
@@ -52,41 +51,10 @@
             }
 
 
-
-
-
-
-
-
-
-
-
-
-//memes
         public void loop() {
             double y = -gamepad1.right_stick_y;
             double x = gamepad1.right_stick_x;
             double z = 0.0;
-            boolean shouldSwap = false;
-
-            /**
-             *
-             *
-             *
-             */
-
-            if(gamepad1.b) { //Change who is driving
-                shouldSwap = !shouldSwap;
-            }
-
-            if(shouldSwap) { //Driver One
-                x = gamepad1.right_stick_x;
-                y = gamepad1.right_stick_y;
-            } else { //Driver Two
-                x = gamepad2.right_stick_x;
-                y = gamepad2.right_stick_y;
-            }
-
 
             if (gamepad1.right_bumper) {
                 robot.arm.setPosition(10/180);

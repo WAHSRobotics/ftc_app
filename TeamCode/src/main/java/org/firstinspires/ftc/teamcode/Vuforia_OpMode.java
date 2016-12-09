@@ -29,12 +29,11 @@ public class Vuforia_OpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        DcMotor driveR = hardwareMap.dcMotor.get("");
-        driveR.setDirection(DcMotorSimple.Direction.REVERSE);
-        driveR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        DcMotor driveL = hardwareMap.dcMotor.get("driveL");
-        driveL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        DcMotor rightfront = hardwareMap.dcMotor.get("rf");
+        rightfront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightfront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        DcMotor leftfront = hardwareMap.dcMotor.get("lf");
+        leftfront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(R.id.cameraMonitorViewId);
         params.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         params.vuforiaLicenseKey = "AYrzM+7/////AAAAGflN33oLXURIiZiOHPt5MZA2iv50tePz4bz21btpbPci5G9i+R0v4r0iNxOOPL5mkqRO/EjcBv4TYHnKqEahIIt35JZdscPxAp0uHcpSONmWqRcFNglob05nEiqNkTAQKG7Ux9AhjJqZp6R+lAiCKB1/Ht9pNZ+qK+xNE1iEtL9g708JbjmdsqT+KYCA7Rup0dqdeMGieexgSQUKfWKIk3w/Sap1W83He60GW0UGnSUzM81fBu05Oqkl1QiAWbb9TpWff9/YfOJZPSCfdfErIMBuYtYgsJl5xZEtv57u6EwrqsrlwvudD1GciBrIIMmnqMeIQu9EM5PD0dI9Oi+3jn8RPEfKauoAGDRIpUlfoI+2";
@@ -44,8 +43,8 @@ public class Vuforia_OpMode extends LinearOpMode {
         VuforiaTrackables beacons = vuforia.loadTrackablesFromAsset("FTC_Underscore2016-2017");
         beacons.get(0).setName("Wheels");
         beacons.get(0).setName("Tools");
-        beacons.get(0).setName("Dank");
-        beacons.get(0).setName("Memes");
+        beacons.get(0).setName("Legos");
+        beacons.get(0).setName("Gears");
 
         waitForStart();
 
@@ -53,31 +52,31 @@ public class Vuforia_OpMode extends LinearOpMode {
         beacons.activate();
 
 
-        driveL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        driveR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftfront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightfront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        driveL.setPower(0.2);
-        driveR.setPower(0.2);
+        leftfront.setPower(0.2);
+        rightfront.setPower(0.2);
 
         while (opModeIsActive() && wheels.getRawPose() == null) {
             idle();
         }
 
-        driveL.setPower(0);
-        driveR.setPower(0);
+        leftfront.setPower(0);
+        rightfront.setPower(0);
 //analyze beacon here
 
 
         VectorF angles = anglesFromTarget(wheels);
         VectorF trans = navOffWall(wheels.getPose().getTranslation(), Math.toDegrees(angles.get(0)) - 90, new VectorF(500, 0, 0));
         if (trans.get(0) > 0) {
-            driveL.setPower(0.02);
-            driveR.setPower(-0.02);
+            leftfront.setPower(0.02);
+            rightfront.setPower(-0.02);
         } else {
 //this might be an autonnomos
             //probably not
-            driveL.setPower(-0.02);
-            driveR.setPower(0.02);
+            leftfront.setPower(-0.02);
+            rightfront.setPower(0.02);
         }//memes
 
         do {
@@ -87,41 +86,41 @@ public class Vuforia_OpMode extends LinearOpMode {
             idle();
         } while (opModeIsActive() && Math.abs(trans.get(0)) > 30);
 
-        driveL.setPower(0);
-        driveR.setPower(0);
+        leftfront.setPower(0);
+        rightfront.setPower(0);
 
-        driveL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        driveR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftfront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightfront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        driveL.setTargetPosition((int) (driveL.getCurrentPosition() + (Math.hypot(trans.get(0), trans.get(2) + 150 / 409.252 * 560))));
-        driveR.setTargetPosition((int) (driveR.getCurrentPosition() + (Math.hypot(trans.get(0), trans.get(2) + 150 / 409.252 * 560))));
-        driveL.setPower(0.3);
-        driveR.setPower(0.3);
+        leftfront.setTargetPosition((int) (leftfront.getCurrentPosition() + (Math.hypot(trans.get(0), trans.get(2) + 150 / 409.252 * 560))));
+        rightfront.setTargetPosition((int) ( rightfront.getCurrentPosition() + (Math.hypot(trans.get(0), trans.get(2) + 150 / 409.252 * 560))));
+        leftfront.setPower(0.3);
+        rightfront.setPower(0.3);
 
-        while (opModeIsActive() && driveL.isBusy() && driveR.isBusy()) {
+        while (opModeIsActive() && leftfront.isBusy() &&  rightfront.isBusy()) {
 
 
             idle();
         }
-        driveL.setPower(0);
-        driveR.setPower(0);
+        leftfront.setPower(0);
+        rightfront.setPower(0);
 
-        driveL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        driveR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftfront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightfront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         while(opModeIsActive() && (wheels.getPose() == null || Math.abs(wheels.getPose().getTranslation().get(0)) >10)){
 
         if(wheels !=null){
 
         if (wheels.getPose().getTranslation().get(0) >0){
-            driveL.setPower(-0.3);
-            driveR.setPower(0.3);
+            leftfront.setPower(-0.3);
+            rightfront.setPower(0.3);
 
         }
         }   else{
 
 
-            driveL.setPower(-0.3);
-            driveR.setPower(0);
+            leftfront.setPower(-0.3);
+            rightfront.setPower(0);
         }
 
 
