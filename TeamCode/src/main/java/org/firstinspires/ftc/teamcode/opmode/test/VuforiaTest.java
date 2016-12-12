@@ -14,6 +14,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.R;
 
+/**
+ * Property of Father Jeff
+ */
+
 @Autonomous(name = "Vuforia Test", group = "Tests")
 public class VuforiaTest extends LinearOpMode {
     @Override
