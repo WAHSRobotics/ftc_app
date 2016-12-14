@@ -71,7 +71,7 @@ public class AutonomousRobitMeme extends LinearOpMode {
         }
         robot.leftfront.setPower(0);
         robot.rightfront.setPower(0);
-        robot.arm.setPosition(1.0);
+
 
 
         telemetry.addData("Path", "Complete");
