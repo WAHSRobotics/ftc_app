@@ -22,7 +22,7 @@ public class AutonomousRobitMeme extends LinearOpMode {
     private ElapsedTime     runtime = new ElapsedTime();
 
     static final double     FORWARD_SPEED = 0.6;
-    static final double     TURN_SPEED    = 0.5;
+    static final double     TURN_SPEED    = 0.4;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -42,7 +42,7 @@ public class AutonomousRobitMeme extends LinearOpMode {
 
         runtime.reset();
 
-        while (opModeIsActive() && (runtime.seconds() < 3.0)) {
+        while (opModeIsActive() && (runtime.seconds() < 22.0)) {
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
             idle();
@@ -53,7 +53,8 @@ public class AutonomousRobitMeme extends LinearOpMode {
 
 
         robot.leftfront.setPower(TURN_SPEED);
-        robot.rightfront.setPower(-TURN_SPEED);
+        robot.rightback.setPower(-TURN_SPEED);
+
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 1.3)) {
             telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
@@ -69,6 +70,7 @@ public class AutonomousRobitMeme extends LinearOpMode {
             telemetry.update();
             idle();
         }
+
         robot.leftfront.setPower(0);
         robot.rightfront.setPower(0);
 

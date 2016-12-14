@@ -5,7 +5,7 @@
     import com.qualcomm.robotcore.hardware.DcMotor;
     import com.qualcomm.robotcore.hardware.DcMotorController;
 
-    @TeleOp(name = "Loose Screws Actual TeleOp")
+    @TeleOp(name = "LSActualTeleOp")
     public class TestTeleOp extends OpMode {
 
 

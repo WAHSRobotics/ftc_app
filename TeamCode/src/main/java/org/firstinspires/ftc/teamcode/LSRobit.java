@@ -30,16 +30,28 @@ public class LSRobit {
     public void init(HardwareMap aHwMap){
         hwMap = aHwMap;
         //arm = hwMap.servo.get("arm");
+
         leftfront = hwMap.dcMotor.get("lf");
+
+
         rightfront = hwMap.dcMotor.get("rf");
+
         leftback = hwMap.dcMotor.get("lb");
+
         rightback = hwMap.dcMotor.get("rb");
+
         gyro = (ModernRoboticsI2cGyro) hwMap.gyroSensor.get("gyro");
+
         odsSensor = hwMap.opticalDistanceSensor.get("ods");
+
         //memes
+
         leftfront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         rightfront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         leftback.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         rightback.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
@@ -52,8 +64,6 @@ public class LSRobit {
         leftfront.setPower(- y - x + z);
         rightback.setPower(+ y + x + z);
         leftback.setPower(- y + x + z);
-
-
     }
 
     private double scalePower(double power) {
@@ -98,8 +108,7 @@ public class LSRobit {
         public void RotationDrive(double degrees, double speed){
         //gyro
         double heading = gyro.getHeading();
-
-
+            //this is the regeistration for the gyro
 
 
 

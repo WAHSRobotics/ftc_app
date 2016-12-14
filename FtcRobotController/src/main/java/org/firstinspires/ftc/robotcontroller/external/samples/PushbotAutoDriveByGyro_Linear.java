@@ -182,11 +182,13 @@ public class PushbotAutoDriveByGyro_Linear extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
+
             moveCounts = (int)(distance * COUNTS_PER_INCH);
             newLeftTarget = robot.leftMotor.getCurrentPosition() + moveCounts;
             newRightTarget = robot.rightMotor.getCurrentPosition() + moveCounts;
 
             // Set Target and Turn On RUN_TO_POSITION
+
             robot.leftMotor.setTargetPosition(newLeftTarget);
             robot.rightMotor.setTargetPosition(newRightTarget);
 
@@ -194,19 +196,23 @@ public class PushbotAutoDriveByGyro_Linear extends LinearOpMode {
             robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // start motion.
+
             speed = Range.clip(Math.abs(speed), 0.0, 1.0);
             robot.leftMotor.setPower(speed);
             robot.rightMotor.setPower(speed);
 
             // keep looping while we are still active, and BOTH motors are running.
+
             while (opModeIsActive() &&
                    (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
 
                 // adjust relative speed based on heading error.
+
                 error = getError(angle);
                 steer = getSteer(error, P_DRIVE_COEFF);
 
                 // if driving in reverse, the motor correction also needs to be reversed
+
                 if (distance < 0)
                     steer *= -1.0;
 
