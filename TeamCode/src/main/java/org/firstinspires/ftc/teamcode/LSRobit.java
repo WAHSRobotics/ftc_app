@@ -21,20 +21,20 @@ public class LSRobit {
     public DcMotor rightfront;
     public DcMotor leftback;
     public DcMotor rightback;
-    public Servo arm;
-    public GyroSensor gyro;
+    //public Servo arm;
+    public ModernRoboticsI2cGyro gyro;
     public OpticalDistanceSensor odsSensor;
 
     private HardwareMap hwMap;
 
     public void init(HardwareMap aHwMap){
         hwMap = aHwMap;
-        arm = hwMap.servo.get("arm");
+        //arm = hwMap.servo.get("arm");
         leftfront = hwMap.dcMotor.get("lf");
         rightfront = hwMap.dcMotor.get("rf");
         leftback = hwMap.dcMotor.get("lb");
         rightback = hwMap.dcMotor.get("rb");
-        gyro = hwMap.gyroSensor.get("gyro");
+        gyro = (ModernRoboticsI2cGyro) hwMap.gyroSensor.get("gyro");
         odsSensor = hwMap.opticalDistanceSensor.get("ods");
         //memes
         leftfront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -47,6 +47,7 @@ public class LSRobit {
         x = scalePower(x);
         y = scalePower(y);
         z = scalePower(z);
+
         rightfront.setPower(+ y - x + z);
         leftfront.setPower(- y - x + z);
         rightback.setPower(+ y + x + z);

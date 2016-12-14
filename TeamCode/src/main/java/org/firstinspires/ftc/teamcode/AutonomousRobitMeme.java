@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 
@@ -18,7 +17,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 public class AutonomousRobitMeme extends LinearOpMode {
 
-    /* Declare OpMode members. */
+
     LSRobit robot   = new LSRobit();
     private ElapsedTime     runtime = new ElapsedTime();
 
@@ -52,7 +51,7 @@ public class AutonomousRobitMeme extends LinearOpMode {
 
         }
 
-        // Step 2:  Spin right for 1.3 seconds
+
         robot.leftfront.setPower(TURN_SPEED);
         robot.rightfront.setPower(-TURN_SPEED);
         runtime.reset();
@@ -62,7 +61,6 @@ public class AutonomousRobitMeme extends LinearOpMode {
             idle();
         }
 
-        // Step 3:  Drive Backwards for 1 Second
         robot.leftback.setPower(-FORWARD_SPEED);
         robot.rightback.setPower(-FORWARD_SPEED);
         runtime.reset();
@@ -71,8 +69,6 @@ public class AutonomousRobitMeme extends LinearOpMode {
             telemetry.update();
             idle();
         }
-
-        // Step 4:  Stop and close the claw.
         robot.leftfront.setPower(0);
         robot.rightfront.setPower(0);
         robot.arm.setPosition(1.0);
