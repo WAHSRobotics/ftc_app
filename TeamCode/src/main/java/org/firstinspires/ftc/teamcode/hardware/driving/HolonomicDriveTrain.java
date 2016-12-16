@@ -77,8 +77,8 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     private int millimetersToEncoderTicks(double millimeters) {
-        double rotations = millimeters / (mmWheelDiameter * Math.PI);
-        return (int) ((rotations * encoderTicksPerRotation) / Math.sqrt(Math.PI)); //Spook
+        double rotations = millimeters / (mmWheelDiameter * Math.PI);               //Find the amount of rotations required to move the specified distance
+        return (int) (((rotations * encoderTicksPerRotation) / Math.sqrt(Math.PI)) * 1.298013245);  //Convert rotations to encoder ticks so the motors move desired distance
     }
 
     private boolean motorsBusy() {
@@ -94,10 +94,10 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void init(HardwareMap hardwareMap) {
-        frontLeft = hardwareMap.dcMotor.get("frontLeft");
-        frontRight = hardwareMap.dcMotor.get("frontRight");
-        backLeft = hardwareMap.dcMotor.get("backLeft");
-        backRight = hardwareMap.dcMotor.get("backRight");
+        frontLeft = hardwareMap.dcMotor.get("red");
+        frontRight = hardwareMap.dcMotor.get("green");
+        backLeft = hardwareMap.dcMotor.get("blue");
+        backRight = hardwareMap.dcMotor.get("black");
 
         gyroSensor = hardwareMap.gyroSensor.get("gyro");
 
@@ -134,7 +134,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         holonomicMove(-controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
     }
 
-    private final double AUTONOMOUS_SPEED = 0.3;
+    private final double AUTONOMOUS_SPEED = 0.25;
 
     @Override
     public void stop() {
@@ -142,6 +142,13 @@ public class HolonomicDriveTrain extends DriveTrain {
         frontRight.setPower(0.0);
         backLeft.setPower(0.0);
         backRight.setPower(0.0);
+    }
+
+    private boolean encodersBeyondLimit() {
+        return frontLeft.getCurrentPosition() >= frontLeft.getTargetPosition() ||
+               frontRight.getCurrentPosition() >= frontLeft.getTargetPosition() ||
+               backLeft.getCurrentPosition() >= frontLeft.getTargetPosition() ||
+               backRight.getCurrentPosition() >= frontLeft.getTargetPosition();
     }
 
     @Override
@@ -162,18 +169,9 @@ public class HolonomicDriveTrain extends DriveTrain {
         frontRight.setPower(AUTONOMOUS_SPEED);
         backLeft.setPower(AUTONOMOUS_SPEED);
         backRight.setPower(AUTONOMOUS_SPEED);
-        
-        double motorSpeed = AUTONOMOUS_SPEED;
 
-        while(motorsBusy() && (motorSpeed > (AUTONOMOUS_SPEED / 1.5))) {
+        while(motorsBusy() && !encodersBeyondLimit()) {
             Thread.sleep(1);
-            
-            frontLeft.setPower(motorSpeed);
-            frontLeft.setPower(motorSpeed);
-            frontLeft.setPower(motorSpeed);
-            frontLeft.setPower(motorSpeed);
-
-            motorSpeed -= 0.001;
         }
 
         stop();
@@ -193,7 +191,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        int position = (int) (millimetersToEncoderTicks(millimeters));
+        int position = millimetersToEncoderTicks(millimeters);
 
         frontLeft.setTargetPosition(frontLeftPower >= 0 ? position : -position);
         frontRight.setTargetPosition(frontRightPower >= 0 ? position : -position);
@@ -220,7 +218,9 @@ public class HolonomicDriveTrain extends DriveTrain {
     public void turn(int degrees) throws InterruptedException {
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        gyroSensor.calibrate();
+        do {
+            gyroSensor.calibrate();
+        } while(!gyroSensor.isCalibrating());
 
         while(gyroSensor.isCalibrating()) {
             Thread.sleep(1);
