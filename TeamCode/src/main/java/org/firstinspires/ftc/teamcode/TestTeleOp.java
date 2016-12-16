@@ -1,9 +1,17 @@
-     package org.firstinspires.ftc.teamcode;
+    package org.firstinspires.ftc.teamcode;
+
     import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
     import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
     import com.qualcomm.robotcore.util.Range;
+
     import com.qualcomm.robotcore.hardware.DcMotor;
+
     import com.qualcomm.robotcore.hardware.DcMotorController;
+
+
+
 
     @TeleOp(name = "LSActualTeleOp")
     public class TestTeleOp extends OpMode {
@@ -22,7 +30,7 @@
             robot.rightback.setPower(0);
         }
 
-            public double scale(double inPower) {
+                public double scale(double inPower) {
                 float scaledPower = 0.0f;
 
                 inPower = Range.clip(inPower, -1, 1);
@@ -51,7 +59,7 @@
             }
 
 
-        public void loop() {
+            public void loop() {
             double y = -gamepad1.right_stick_y;
             double x = gamepad1.right_stick_x;
             double z = 0.0;
@@ -69,6 +77,12 @@
                 z = -gamepad1.right_trigger;
             }
 
+            /* When going forward
+            * LeftFront Goes 
+            * RightFront Goes
+            * LeftBack Goes
+            * RightBack Goes
+            * */
             robot.rightfront.setPower(scale(+ y - x + z));
             robot.leftfront.setPower(scale(- y - x + z));
             robot.rightback.setPower(scale(+ y + x + z));

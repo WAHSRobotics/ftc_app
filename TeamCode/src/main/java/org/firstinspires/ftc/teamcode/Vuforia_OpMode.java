@@ -26,14 +26,30 @@ import java.util.ArrayList;
 import java.util.List;
 @Autonomous
 public class Vuforia_OpMode extends LinearOpMode {
+    private LSRobit robot = new LSRobit();
 
     @Override
+
     public void runOpMode() throws InterruptedException {
+
         DcMotor rightfront = hardwareMap.dcMotor.get("rf");
+
         rightfront.setDirection(DcMotorSimple.Direction.REVERSE);
+
         rightfront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         DcMotor leftfront = hardwareMap.dcMotor.get("lf");
+
+        DcMotor rightback = hardwareMap.dcMotor.get("rb");
+
+        DcMotor leftback = hardwareMap.dcMotor.get("lb");
+
+        leftback.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        rightback.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         leftfront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(R.id.cameraMonitorViewId);
         params.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         params.vuforiaLicenseKey = "AYrzM+7/////AAAAGflN33oLXURIiZiOHPt5MZA2iv50tePz4bz21btpbPci5G9i+R0v4r0iNxOOPL5mkqRO/EjcBv4TYHnKqEahIIt35JZdscPxAp0uHcpSONmWqRcFNglob05nEiqNkTAQKG7Ux9AhjJqZp6R+lAiCKB1/Ht9pNZ+qK+xNE1iEtL9g708JbjmdsqT+KYCA7Rup0dqdeMGieexgSQUKfWKIk3w/Sap1W83He60GW0UGnSUzM81fBu05Oqkl1QiAWbb9TpWff9/YfOJZPSCfdfErIMBuYtYgsJl5xZEtv57u6EwrqsrlwvudD1GciBrIIMmnqMeIQu9EM5PD0dI9Oi+3jn8RPEfKauoAGDRIpUlfoI+2";
@@ -57,6 +73,8 @@ public class Vuforia_OpMode extends LinearOpMode {
 
         leftfront.setPower(0.2);
         rightfront.setPower(0.2);
+        rightback.setPower(0.2);
+        leftback.setPower(0.2);
 
         while (opModeIsActive() && wheels.getRawPose() == null) {
             idle();
@@ -64,6 +82,12 @@ public class Vuforia_OpMode extends LinearOpMode {
 
         leftfront.setPower(0);
         rightfront.setPower(0);
+        rightback.setPower(0);
+        leftback.setPower(0);
+
+
+
+
 //analyze beacon here
 
 
@@ -91,12 +115,20 @@ public class Vuforia_OpMode extends LinearOpMode {
 
         leftfront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightfront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftback.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightback.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         leftfront.setTargetPosition((int) (leftfront.getCurrentPosition() + (Math.hypot(trans.get(0), trans.get(2) + 150 / 409.252 * 560))));
         rightfront.setTargetPosition((int) ( rightfront.getCurrentPosition() + (Math.hypot(trans.get(0), trans.get(2) + 150 / 409.252 * 560))));
+        leftback.setTargetPosition((int) (leftback.getCurrentPosition() + (Math.hypot(trans.get(0), trans.get(2) + 150 / 409.252 * 560))));
+        rightback.setTargetPosition((int) ( rightback.getCurrentPosition() + (Math.hypot(trans.get(0), trans.get(2) + 150 / 409.252 * 560))));
+
+
         leftfront.setPower(0.3);
         rightfront.setPower(0.3);
-
+        rightback.setPower(0.3);
+        leftback.setPower(0.3);
+        
         while (opModeIsActive() && leftfront.isBusy() &&  rightfront.isBusy()) {
 
 
