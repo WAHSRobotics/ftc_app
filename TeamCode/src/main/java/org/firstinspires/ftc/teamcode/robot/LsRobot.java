@@ -12,6 +12,12 @@ public class LsRobot extends Robot {
                 new HolonomicDriveTrain(101.6, HardwareConstants.ANDYMARK_ENCODER_TICKS_PER_ROTATION),
                 null,
                 null);
+
+
+
+
+
+
     }
 
     @Override
@@ -26,6 +32,12 @@ public class LsRobot extends Robot {
 
     @Override
     public void runAutonomous() throws InterruptedException {
-        driveTrain.move(5000);
+        driveTrain.move(610, 90);
+
+        driveTrain.move(610);
+
+        driveTrain.move(610, 90);
+
+        driveTrain.move(700);
     }
 }

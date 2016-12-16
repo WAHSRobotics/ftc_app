@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware.driving;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -31,12 +32,10 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     private Vec2 degreesToPoint(double degrees, double power) {
-        double radius = sqrt(2 * pow(power, 2));
+        double angle = toRadians(degrees - 90); //TODO: Change this
 
-        double angle = toRadians(degrees);
-
-        double x = radius * cos(angle);
-        double y = radius * sin(angle);
+        double x = power * cos(angle);
+        double y = power * sin(angle);
 
         x = setSignificantPlaces(x, 2);
         y = setSignificantPlaces(y, 2);
@@ -94,10 +93,15 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void init(HardwareMap hardwareMap) {
-        frontLeft = hardwareMap.dcMotor.get("red");
-        frontRight = hardwareMap.dcMotor.get("green");
-        backLeft = hardwareMap.dcMotor.get("blue");
-        backRight = hardwareMap.dcMotor.get("black");
+        frontLeft = hardwareMap.dcMotor.get("blue");
+        frontRight = hardwareMap.dcMotor.get("black");
+        backLeft = hardwareMap.dcMotor.get("red");
+        backRight = hardwareMap.dcMotor.get("green");
+
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         gyroSensor = hardwareMap.gyroSensor.get("gyro");
 
@@ -145,10 +149,10 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     private boolean encodersBeyondLimit() {
-        return frontLeft.getCurrentPosition() >= frontLeft.getTargetPosition() ||
-               frontRight.getCurrentPosition() >= frontLeft.getTargetPosition() ||
-               backLeft.getCurrentPosition() >= frontLeft.getTargetPosition() ||
-               backRight.getCurrentPosition() >= frontLeft.getTargetPosition();
+        return Math.abs(frontLeft.getCurrentPosition()) >= Math.abs(frontLeft.getTargetPosition()) ||
+               Math.abs(frontRight.getCurrentPosition()) >= Math.abs(frontRight.getTargetPosition()) ||
+               Math.abs(backLeft.getCurrentPosition()) >= Math.abs(backLeft.getTargetPosition()) ||
+               Math.abs(backRight.getCurrentPosition()) >= Math.abs(backRight.getTargetPosition());
     }
 
     @Override
@@ -205,7 +209,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
 
-        while(motorsBusy()) {
+        while(motorsBusy() && !encodersBeyondLimit()) {
             Thread.sleep(1);
         }
 
@@ -237,7 +241,7 @@ public class HolonomicDriveTrain extends DriveTrain {
             backRight.setPower(AUTONOMOUS_SPEED);
 
             Thread.sleep(1);
-        } while(currentHeading < degrees);
+        } while(currentHeading < (degrees - 4));
 
         stop();
     }
