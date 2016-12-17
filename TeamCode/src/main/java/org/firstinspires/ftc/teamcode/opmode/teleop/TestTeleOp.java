@@ -32,6 +32,7 @@ public class TestTeleOp extends OpMode {
                 0.15f, 0.18f, 0.24f, 0.30f, 0.36f,
                 0.43f, 0.50f, 0.60f, 0.72f, 0.85f,
                 1.00f, 1.00f
+
         };
 
         int powerIndex = (int)(inPower * 16.0);
@@ -56,8 +57,15 @@ public class TestTeleOp extends OpMode {
         double y = -gamepad1.right_stick_y;
         double x = gamepad1.right_stick_x;
         double z = 0.0;
+        boolean Meme = gamepad1.right_bumper;
 
-            /*if (gamepad1.right_bumper) {
+
+        if(Meme = true){
+            robot.catapult.setPower((-1.0));
+        }
+
+
+        /*if (gamepad1.right_bumper) {
                 robot.arm.setPosition(10/180);
             } else {
                 robot.arm.setPosition(80/180);

@@ -19,6 +19,7 @@ public class LSRobit {
     public DcMotor rightfront;
     public DcMotor leftback;
     public DcMotor rightback;
+    public DcMotor catapult;
     //public Servo arm;
     public ModernRoboticsI2cGyro gyro;
     public OpticalDistanceSensor odsSensor;
@@ -38,7 +39,7 @@ public class LSRobit {
         gyro = (ModernRoboticsI2cGyro) hwMap.gyroSensor.get("gyro");
 
         odsSensor = hwMap.opticalDistanceSensor.get("ods");
-
+        catapult = hwMap.dcMotor.get("white");
         //memes
 
         leftfront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -48,6 +49,9 @@ public class LSRobit {
         leftback.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         rightback.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
+
     }
 
     public void drive(double x, double y, double z){
