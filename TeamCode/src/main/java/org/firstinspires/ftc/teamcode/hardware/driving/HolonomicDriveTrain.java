@@ -76,8 +76,8 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     private int millimetersToEncoderTicks(double millimeters) {
-        double rotations = millimeters / (mmWheelDiameter * Math.PI);               //Find the amount of rotations required to move the specified distance
-        return (int) (((rotations * encoderTicksPerRotation) / Math.sqrt(Math.PI)) * 1.298013245);  //Convert rotations to encoder ticks so the motors move desired distance
+        double rotations = millimeters / (mmWheelDiameter * Math.PI);               //Find the amount of rotations required to moveIndefinitely the specified distance
+        return (int) (((rotations * encoderTicksPerRotation) / Math.sqrt(Math.PI)) * 1.298013245);  //Convert rotations to encoder ticks so the motors moveIndefinitely desired distance
     }
 
     private boolean motorsBusy() {
@@ -146,6 +146,26 @@ public class HolonomicDriveTrain extends DriveTrain {
         frontRight.setPower(0.0);
         backLeft.setPower(0.0);
         backRight.setPower(0.0);
+    }
+
+    @Override
+    public void moveIndefinitely() throws InterruptedException {
+        holonomicMove(0.0, AUTONOMOUS_SPEED, 0.0);
+    }
+
+    @Override
+    public void moveIndefinitely(int degrees) throws InterruptedException {
+        Vec2 point = degreesToPoint(degrees, AUTONOMOUS_SPEED);
+
+        double frontLeftPower = holonomicMath(point.x, point.y, 0.0, Motor.FRONT_LEFT);
+        double frontRightPower = holonomicMath(point.x, point.y, 0.0, Motor.FRONT_RIGHT);
+        double backLeftPower = holonomicMath(point.x, point.y, 0.0, Motor.BACK_LEFT);
+        double backRightPower = holonomicMath(point.x, point.y, 0.0, Motor.BACK_RIGHT);
+
+        frontLeft.setPower(frontLeftPower);
+        frontRight.setPower(frontRightPower);
+        backLeft.setPower(backLeftPower);
+        backRight.setPower(backRightPower);
     }
 
     private boolean encodersBeyondLimit() {

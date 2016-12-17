@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.robot.LsRobot;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
-@Autonomous(name = "LS Autonomous")
+@Autonomous(name = "LS Autonomous Red")
 public class LsAutonomousRed extends LinearOpMode {
     private Robot robot = new LsRobot(this, Robot.FieldSide.RED);
 
