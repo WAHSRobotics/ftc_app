@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team9202hme.robot;
+package org.firstinspires.ftc.team9202hme.program;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -9,11 +9,11 @@ import org.firstinspires.ftc.team9202hme.hardware.driving.HolonomicDriveTrain;
 import org.firstinspires.ftc.team9202hme.hardware.gathering.HungryRobitsGatherer;
 import org.firstinspires.ftc.team9202hme.hardware.shooting.RollerShooter;
 
-public class HmeBot extends Robot {
+public class HmeTeleOpProgram extends TeleOpProgram {
     private OpticalDistanceSensor leftOds, rightOds;
 
-    public HmeBot(OpMode opMode, FieldSide side) {
-        super(opMode, side,
+    public HmeTeleOpProgram(OpMode opMode) {
+        super(opMode,
                 new HolonomicDriveTrain(76.2, HardwareConstants.ANDYMARK_ENCODER_TICKS_PER_ROTATION),
                 new HungryRobitsGatherer(),
                 new RollerShooter()
@@ -35,11 +35,6 @@ public class HmeBot extends Robot {
         gatherer.gatherControlled(opMode.gamepad1);
 
         updateTelemetry();
-    }
-
-    @Override
-    public void runAutonomous() throws InterruptedException {
-
     }
 
     @Override

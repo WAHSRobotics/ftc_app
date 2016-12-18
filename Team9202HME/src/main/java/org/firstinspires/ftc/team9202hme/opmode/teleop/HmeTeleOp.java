@@ -4,12 +4,12 @@ package org.firstinspires.ftc.team9202hme.opmode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.team9202hme.robot.HmeBot;
-import org.firstinspires.ftc.team9202hme.robot.Robot;
+import org.firstinspires.ftc.team9202hme.program.HmeTeleOpProgram;
+import org.firstinspires.ftc.team9202hme.program.TeleOpProgram;
 
 @TeleOp(name = "HME TeleOp", group = "HME")
 public class HmeTeleOp extends OpMode {
-    private Robot robot = new HmeBot(this, Robot.FieldSide.BLUE);
+    private TeleOpProgram robot = new HmeTeleOpProgram(this, TeleOpProgram.FieldSide.BLUE);
 
     @Override
     public void init() {

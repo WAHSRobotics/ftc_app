@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team9202hme.robot;
+package org.firstinspires.ftc.team9202hme.program;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -7,20 +7,14 @@ import org.firstinspires.ftc.team9202hme.hardware.driving.DriveTrain;
 import org.firstinspires.ftc.team9202hme.hardware.gathering.Gatherer;
 import org.firstinspires.ftc.team9202hme.hardware.shooting.Shooter;
 
-public abstract class Robot {
+public abstract class TeleOpProgram {
     protected OpMode opMode;
     protected DriveTrain driveTrain;
     protected Gatherer gatherer;
     protected Shooter shooter;
-    protected FieldSide fieldSide;
 
-    public enum FieldSide {
-        RED, BLUE
-    }
-
-    protected Robot(OpMode opMode, FieldSide fieldSide, DriveTrain driveTrain, Gatherer gatherer, Shooter shooter) {
+    protected TeleOpProgram(OpMode opMode, DriveTrain driveTrain, Gatherer gatherer, Shooter shooter) {
         this.opMode = opMode;
-        this.fieldSide = fieldSide;
         this.driveTrain = driveTrain;
         this.gatherer = gatherer;
         this.shooter = shooter;
@@ -33,8 +27,6 @@ public abstract class Robot {
     }
 
     public abstract void loop();
-
-    public abstract void runAutonomous() throws InterruptedException;
 
     public void stop() {
 
