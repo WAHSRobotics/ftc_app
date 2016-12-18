@@ -14,7 +14,7 @@ import static org.firstinspires.ftc.teamcode.robot.Robot.FieldSide.BLUE;
 
 public class LsRobot extends Robot {
     private ColorSensor colorSensor;
-final int DISTANCE_TO_BUTTON = 12;
+
 
     public LsRobot(LinearOpMode opMode, FieldSide fieldSide) {
         super(opMode, fieldSide,
@@ -37,44 +37,52 @@ final int DISTANCE_TO_BUTTON = 12;
 
     @Override
     public void runAutonomous() throws InterruptedException {
+        colorSensor.enableLed(false);
 
         driveTrain.move(610, 90);
         driveTrain.move(610);
         driveTrain.move(610, 90);
-        driveTrain.move(700);
+        driveTrain.move(850);
 
-        while (opMode.opModeIsActive()) {
-            switch (fieldSide) {
-                case RED:
-                    while (!(colorSensor.red() - colorSensor.blue() >= 1)) {
-                        driveTrain.moveIndefinitely(90);
+        final int DISTANCE_TO_BUTTON = 163;
 
+        switch (fieldSide) {
+            case RED:
+                do {
+                    driveTrain.moveIndefinitely(90);
+                    opMode.telemetry.addData("Autonomous", "Looking for beacon...");
+                    opMode.telemetry.addData("Red", colorSensor.red());
+                    opMode.telemetry.addData("Blue", colorSensor.blue());
+                    opMode.telemetry.update();
+                    Thread.sleep(5);
+                } while (!(colorSensor.red() - colorSensor.blue() >= 1));
 
-                    }
+                driveTrain.move(50, 90);
+                driveTrain.move(DISTANCE_TO_BUTTON);
 
-                    driveTrain.move(DISTANCE_TO_BUTTON);
-                    driveTrain.move(DISTANCE_TO_BUTTON, 180);
-
-
-                    break;
-
-                case BLUE:
-                    while (!(colorSensor.blue() - colorSensor.red() >= 1)) {
-                        driveTrain.moveIndefinitely(90);
-
-
-                    }
-
-                    driveTrain.move(DISTANCE_TO_BUTTON);
-                    driveTrain.move(DISTANCE_TO_BUTTON, 180);
+                driveTrain.move(DISTANCE_TO_BUTTON, 180);
 
 
-                    break;
-            }
+                break;
 
-            }
+            case BLUE:
+                while (!(colorSensor.blue() - colorSensor.red() >= 1)) {
+                    driveTrain.moveIndefinitely(90);
+                    opMode.telemetry.addData("Autonomous", "Looking for beacon");
+                    opMode.telemetry.update();
+                    Thread.sleep(5);
+
+                }
+
+                driveTrain.move(30,90);
+                driveTrain.move(DISTANCE_TO_BUTTON);
+                driveTrain.move(DISTANCE_TO_BUTTON, 180);
+
+
+                break;
         }
     }
+}
 // if(colorSensor.red() <= 1 && colorSensor.blue() <= 1) {
 //                        driveTrain.moveIndefinitely(90);
 //                    } else {

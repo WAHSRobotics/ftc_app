@@ -57,12 +57,19 @@ public class TestTeleOp extends OpMode {
         double y = -gamepad1.right_stick_y;
         double x = gamepad1.right_stick_x;
         double z = 0.0;
-        boolean Meme = gamepad1.right_bumper;
+        boolean meme = gamepad1.right_bumper;
+        boolean dank = gamepad1.left_bumper;
 
-
-        if(Meme = true){
-            robot.catapult.setPower((-1.0));
+        if(meme == true){
+            robot.catapult.setPower(-1.0);
         }
+        if(dank == true){
+
+            robot.catapult.setPower(1.0);
+
+
+        }
+
 
 
         /*if (gamepad1.right_bumper) {

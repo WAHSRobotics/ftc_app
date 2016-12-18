@@ -14,6 +14,7 @@ public class ColorSensorTest extends OpMode {
     @Override
     public void init() {
         colorSensor = hardwareMap.colorSensor.get("color");
+        colorSensor.enableLed(false);
     }
 
     @Override
@@ -21,16 +22,5 @@ public class ColorSensorTest extends OpMode {
         telemetry.addData("Red", colorSensor.red());
         telemetry.addData("Green", colorSensor.green());
         telemetry.addData("Blue", colorSensor.blue());
-
-        boolean isRed = false, isBlue = false;
-
-        if(colorSensor.red() - colorSensor.blue() > 2) {
-            isRed = true;
-        } else if(colorSensor.blue() - colorSensor.red() > 2) {
-            isBlue = true;
-        }
-
-        telemetry.addData("Red Beacon", isRed);
-        telemetry.addData("Blue Beacon", isBlue);
     }
 }
