@@ -39,19 +39,7 @@ public class HmeBot extends Robot {
 
     @Override
     public void runAutonomous() throws InterruptedException {
-        int cornerVortexAngle = 0;
 
-        switch(fieldSide) {
-            case BLUE: cornerVortexAngle = 120;
-                break;
-            case RED: cornerVortexAngle = 210;
-                break;
-        }
-
-        //Move to the cap ball to knock it off, turn towards the corner vortex, and drive up the ramp
-        driveTrain.move(990);
-        driveTrain.turn(cornerVortexAngle);
-        driveTrain.move(1829);
     }
 
     @Override

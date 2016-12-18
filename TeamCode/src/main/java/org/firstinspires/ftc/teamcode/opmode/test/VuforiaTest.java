@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmode.test;
 
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.vuforia.HINT;
 import com.vuforia.Vuforia;
@@ -19,6 +21,7 @@ import org.firstinspires.ftc.teamcode.R;
  */
 
 @Autonomous(name = "Vuforia Test", group = "Tests")
+//@Disabled
 public class VuforiaTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

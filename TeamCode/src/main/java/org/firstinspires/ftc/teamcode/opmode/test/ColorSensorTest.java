@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmode.test;
 
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
@@ -14,6 +14,8 @@ public class ColorSensorTest extends OpMode {
     @Override
     public void init() {
         colorSensor = hardwareMap.colorSensor.get("color");
+
+        colorSensor.enableLed(false);
     }
 
     @Override
@@ -21,16 +23,8 @@ public class ColorSensorTest extends OpMode {
         telemetry.addData("Red", colorSensor.red());
         telemetry.addData("Green", colorSensor.green());
         telemetry.addData("Blue", colorSensor.blue());
+        telemetry.addData("Alpha", colorSensor.alpha());
 
-        boolean isRed = false, isBlue = false;
-
-        if(colorSensor.red() - colorSensor.blue() > 2) {
-            isRed = true;
-        } else if(colorSensor.blue() - colorSensor.red() > 2) {
-            isBlue = true;
-        }
-
-        telemetry.addData("Red Beacon", isRed);
-        telemetry.addData("Blue Beacon", isBlue);
+        telemetry.addData("Red-Blue Difference", colorSensor.red() - colorSensor.blue());
     }
 }

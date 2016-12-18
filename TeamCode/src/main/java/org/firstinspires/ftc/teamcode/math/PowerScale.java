@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.teamcode.util;
+package org.firstinspires.ftc.teamcode.math;
+
 
 import com.qualcomm.robotcore.util.Range;
-
-import static org.firstinspires.ftc.teamcode.util.MathUtil.setSignificantPlaces;
 
 public class PowerScale {
     private double minimumPower;
@@ -54,10 +53,6 @@ public class PowerScale {
         double scaledPower = (this.maximumPower - this.minimumPower) * Math.pow(power,
                 Math.pow(this.scaleInterval * this.maximumPower, power)) + this.minimumPower;
 
-
-        //Round scaledPower to 2 significant features
-        scaledPower = setSignificantPlaces(scaledPower, 2);
-
         //Make sure that my math isn't terrible, and that it didn't somehow exceed maximum power
         scaledPower = Range.clip(scaledPower, 0.0, 1.0);
 
@@ -68,29 +63,5 @@ public class PowerScale {
 
         //Turn power back into negative to keep the specified direction
         return negative ? -scaledPower : scaledPower;
-    }
-
-    public double getScaleInterval() {
-        return scaleInterval;
-    }
-
-    public void setScaleInterval(double scaleInterval) {
-        this.scaleInterval = scaleInterval;
-    }
-
-    public double getMinimumPower() {
-        return minimumPower;
-    }
-
-    public void setMinimumPower(double minimumPower) {
-        this.minimumPower = minimumPower;
-    }
-
-    public double getMaximumPower() {
-        return maximumPower;
-    }
-
-    public void setMaximumPower(double maximumPower) {
-        this.maximumPower = maximumPower;
     }
 }
