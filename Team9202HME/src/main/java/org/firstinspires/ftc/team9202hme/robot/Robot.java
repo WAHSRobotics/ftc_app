@@ -1,0 +1,54 @@
+package org.firstinspires.ftc.team9202hme.robot;
+
+
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
+import org.firstinspires.ftc.team9202hme.hardware.driving.DriveTrain;
+import org.firstinspires.ftc.team9202hme.hardware.gathering.Gatherer;
+import org.firstinspires.ftc.team9202hme.hardware.shooting.Shooter;
+
+public abstract class Robot {
+    protected OpMode opMode;
+    protected DriveTrain driveTrain;
+    protected Gatherer gatherer;
+    protected Shooter shooter;
+    protected FieldSide fieldSide;
+
+    public enum FieldSide {
+        RED, BLUE
+    }
+
+    protected Robot(OpMode opMode, FieldSide fieldSide, DriveTrain driveTrain, Gatherer gatherer, Shooter shooter) {
+        this.opMode = opMode;
+        this.fieldSide = fieldSide;
+        this.driveTrain = driveTrain;
+        this.gatherer = gatherer;
+        this.shooter = shooter;
+    }
+
+    public abstract void init();
+
+    public void start() {
+
+    }
+
+    public abstract void loop();
+
+    public abstract void runAutonomous() throws InterruptedException;
+
+    public void stop() {
+
+    }
+
+    public DriveTrain getDriveTrain() {
+        return driveTrain;
+    }
+
+    public Gatherer getGatherer() {
+        return gatherer;
+    }
+
+    public Shooter getShooter() {
+        return shooter;
+    }
+}
