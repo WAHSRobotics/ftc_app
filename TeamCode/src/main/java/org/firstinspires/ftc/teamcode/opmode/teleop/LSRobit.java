@@ -23,7 +23,7 @@ public class LSRobit {
     //public Servo arm;
     public ModernRoboticsI2cGyro gyro;
     public OpticalDistanceSensor odsSensor;
-
+//memes
     public void init(HardwareMap hwMap){
         //arm = hwMap.servo.get("arm");
 
