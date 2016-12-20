@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.teleop;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -21,7 +22,7 @@ public class LSRobit {
     public DcMotor rightback;
     public DcMotor catapult;
     //public Servo arm;
-    public ModernRoboticsI2cGyro gyro;
+    public GyroSensor gyro;
     public OpticalDistanceSensor odsSensor;
 //memes
     public void init(HardwareMap hwMap){

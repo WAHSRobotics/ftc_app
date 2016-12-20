@@ -57,27 +57,8 @@ public class TestTeleOp extends OpMode {
         double y = -gamepad1.right_stick_y;
         double x = gamepad1.right_stick_x;
         double z = 0.0;
-        boolean meme = gamepad1.right_bumper;
-        boolean dank = gamepad1.left_bumper;
-
-        if(meme == true){
-            robot.catapult.setPower(-1.0);
-        }
-        if(dank == true){
-
-            robot.catapult.setPower(1.0);
 
 
-        }
-
-
-
-        /*if (gamepad1.right_bumper) {
-                robot.arm.setPosition(10/180);
-            } else {
-                robot.arm.setPosition(80/180);
-            }
-            */
 
         if (gamepad1.left_trigger > 0.0) {
             z = gamepad1.left_trigger;
@@ -90,6 +71,27 @@ public class TestTeleOp extends OpMode {
         robot.rightback.setPower(scale(+ y + x + z));
         robot.leftback.setPower(scale(- y + x + z));
     } //Dude, Where's my Teleop
+
+    //        if(meme == true){
+//            robot.catapult.setPower(-1.0);
+//        }
+//        if(dank == true){
+//
+//            robot.catapult.setPower(1.0);
+//
+//
+//        }
+
+    //boolean meme = gamepad1.right_bumper;
+    //boolean dank = gamepad1.left_bumper;
+
+
+        /*if (gamepad1.right_bumper) {
+                robot.arm.setPosition(10/180);
+            } else {
+                robot.arm.setPosition(80/180);
+            }
+            */
 
 
 
