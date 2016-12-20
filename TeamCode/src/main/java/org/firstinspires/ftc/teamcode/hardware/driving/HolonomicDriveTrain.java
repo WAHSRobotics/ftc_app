@@ -20,7 +20,7 @@ import static org.firstinspires.ftc.teamcode.util.MathUtil.setSignificantPlaces;
 public class HolonomicDriveTrain extends DriveTrain {
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private GyroSensor gyroSensor;
-
+    private DcMotor fire, pusher, roll;
     private PowerScale powerScale = new PowerScale(0.02, 0.80, 6);
 
     private final double mmWheelDiameter;
@@ -97,6 +97,9 @@ public class HolonomicDriveTrain extends DriveTrain {
         frontRight = hardwareMap.dcMotor.get("black");
         backLeft = hardwareMap.dcMotor.get("red");
         backRight = hardwareMap.dcMotor.get("green");
+        fire = hardwareMap.dcMotor.get("white");
+        pusher = hardwareMap.dcMotor.get("yellow");
+        roll = hardwareMap.dcMotor.get("purple");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);

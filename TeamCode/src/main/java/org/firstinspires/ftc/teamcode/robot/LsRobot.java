@@ -49,7 +49,7 @@ public class LsRobot extends Robot {
         switch (fieldSide) {
             case RED:
                 do {
-                    driveTrain.moveIndefinitely(90);
+                    driveTrain.move(10000,90);
                     opMode.telemetry.addData("Autonomous", "Looking for beacon...");
                     opMode.telemetry.addData("Red", colorSensor.red());
                     opMode.telemetry.addData("Blue", colorSensor.blue());
