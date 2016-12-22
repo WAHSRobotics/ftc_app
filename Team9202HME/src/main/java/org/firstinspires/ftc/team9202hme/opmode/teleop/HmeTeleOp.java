@@ -9,7 +9,7 @@ import org.firstinspires.ftc.team9202hme.program.TeleOpProgram;
 
 @TeleOp(name = "HME TeleOp", group = "HME")
 public class HmeTeleOp extends OpMode {
-    private TeleOpProgram robot = new HmeTeleOpProgram(this, TeleOpProgram.FieldSide.BLUE);
+    private TeleOpProgram robot = new HmeTeleOpProgram(this);
 
     @Override
     public void init() {

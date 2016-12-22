@@ -61,7 +61,7 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     private int millimetersToEncoderTicks(double millimeters) {
         double rotations = millimeters / (mmWheelDiameter * Math.PI);
-        return (int) (rotations * encoderTicksPerRotation);
+        return (int) ((rotations * encoderTicksPerRotation) / Math.sqrt(Math.PI));
     }
 
     private boolean motorsBusy() {
@@ -111,7 +111,7 @@ public class HolonomicDriveTrain extends DriveTrain {
     public void driveControlled(Gamepad controller) {
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        holonomicMove(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
+        holonomicMove(-controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
     }
 
     @Override
@@ -122,6 +122,15 @@ public class HolonomicDriveTrain extends DriveTrain {
         backRight.setPower(0.0);
     }
 
+    public void moveIndefinitely(double power, double degrees) {
+        double angle = toRadians(degrees - 90);
+
+        double x = power * cos(angle);
+        double y = power * sin(angle);
+
+        holonomicMove(x, y, 0.0);
+    }
+
     @Override
     public void move(double power, double millimeters) throws InterruptedException {
         move(power, millimeters, 0.0);
@@ -129,7 +138,7 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void move(double power, double millimeters, double degrees) throws InterruptedException {
-        double angle = toRadians(degrees + 90);
+        double angle = toRadians(degrees - 90);
 
         double x = power * cos(angle);
         double y = power * sin(angle);
@@ -142,10 +151,10 @@ public class HolonomicDriveTrain extends DriveTrain {
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        int frontLeftPos = (int) (millimetersToEncoderTicks(millimeters) * frontLeftPower);
-        int frontRightPos = (int) (millimetersToEncoderTicks(millimeters) * frontRightPower);
-        int backLeftPos = (int) (millimetersToEncoderTicks(millimeters) * backLeftPower);
-        int backRightPos = (int) (millimetersToEncoderTicks(millimeters) * backRightPower);
+        int frontLeftPos = (int) (millimetersToEncoderTicks(millimeters));
+        int frontRightPos = (int) (millimetersToEncoderTicks(millimeters));
+        int backLeftPos = (int) (millimetersToEncoderTicks(millimeters));
+        int backRightPos = (int) (millimetersToEncoderTicks(millimeters));
 
         frontLeft.setTargetPosition(frontLeftPower >= 0 ? frontLeftPos : -frontLeftPos);
         frontRight.setTargetPosition(frontRightPower >= 0 ? frontRightPos : -frontRightPos);
@@ -181,18 +190,29 @@ public class HolonomicDriveTrain extends DriveTrain {
             Thread.sleep(5);
         }
 
-        int currentHeading;
+        double powerMultiplier;
+        boolean negative;
 
-        do {
-            currentHeading = gyroSensor.getHeading();
+        if(degrees >= 0) {
+            negative = false;
+            powerMultiplier = 1;
+        } else {
+            negative = true;
+            powerMultiplier = -1;
+        }
 
-            frontLeft.setPower(power);
-            frontRight.setPower(power);
-            backLeft.setPower(power);
-            backRight.setPower(power);
+        int currentHeading = gyroSensor.getHeading();
+
+        while(currentHeading < degrees) {
+            currentHeading = negative ? 359 - gyroSensor.getHeading() : gyroSensor.getHeading();
+
+            frontLeft.setPower(power * powerMultiplier);
+            frontRight.setPower(power * powerMultiplier);
+            backLeft.setPower(power * powerMultiplier);
+            backRight.setPower(power * powerMultiplier);
 
             Thread.sleep(1);
-        } while(currentHeading < degrees);
+        }
 
         stop();
     }
