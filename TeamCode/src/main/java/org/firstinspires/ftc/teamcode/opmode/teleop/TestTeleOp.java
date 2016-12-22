@@ -15,15 +15,19 @@ public class TestTeleOp extends OpMode {
     @Override
     public void init() {
         robot.init(hardwareMap);
+
         //robot.arm.setPosition(80/180);
 
-        robot.leftfront.setPower(0);
+        robot.leftfront.setPower(0.0);
 
-        robot.rightfront.setPower(0);
+        robot.rightfront.setPower(0.0);
 
-        robot.leftback.setPower(0);
+        robot.leftback.setPower(0.0);
 
-        robot.rightback.setPower(0);
+        robot.rightback.setPower(0.0);
+
+        robot.catapult.setPower(0.0);
+
 
     }
 
