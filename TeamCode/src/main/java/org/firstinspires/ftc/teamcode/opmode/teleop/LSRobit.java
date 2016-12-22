@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.util.Range;
 
 
 public class LSRobit {
-
+//what a meme
     public DcMotor leftfront;
     public DcMotor rightfront;
     public DcMotor leftback;
@@ -40,6 +40,7 @@ public class LSRobit {
         gyro = (ModernRoboticsI2cGyro) hwMap.gyroSensor.get("gyro");
 
         odsSensor = hwMap.opticalDistanceSensor.get("ods");
+
         catapult = hwMap.dcMotor.get("white");
         //memes
 

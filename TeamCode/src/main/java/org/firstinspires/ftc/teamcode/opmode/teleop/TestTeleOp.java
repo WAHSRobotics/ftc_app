@@ -18,9 +18,13 @@ public class TestTeleOp extends OpMode {
         //robot.arm.setPosition(80/180);
 
         robot.leftfront.setPower(0);
+
         robot.rightfront.setPower(0);
+
         robot.leftback.setPower(0);
+
         robot.rightback.setPower(0);
+
     }
 
     public double scale(double inPower) {
@@ -54,44 +58,27 @@ public class TestTeleOp extends OpMode {
 
 
     public void loop() {
-        double y = -gamepad1.right_stick_y;
-        double x = gamepad1.right_stick_x;
+        double y = -gamepad1.left_stick_y;
+        double x = gamepad1.left_stick_x;
         double z = 0.0;
 
 
 
-        if (gamepad1.left_trigger > 0.0) {
-            z = gamepad1.left_trigger;
-        } else if (gamepad1.right_trigger > 0.0) {
-            z = -gamepad1.right_trigger;
+        if (gamepad1.right_stick_y > 0.0) {
+            z = gamepad1.right_stick_y;
+        } else if (gamepad1.right_stick_x > 0.0) {
+            z = -gamepad1.right_stick_x;
         }
 
+        robot.catapult.setPower(gamepad1.right_trigger);
         robot.rightfront.setPower(scale(+ y - x + z));
         robot.leftfront.setPower(scale(- y - x + z));
         robot.rightback.setPower(scale(+ y + x + z));
         robot.leftback.setPower(scale(- y + x + z));
-    } //Dude, Where's my Teleop
 
-    //        if(meme == true){
-//            robot.catapult.setPower(-1.0);
-//        }
-//        if(dank == true){
-//
-//            robot.catapult.setPower(1.0);
-//
-//
-//        }
-
-    //boolean meme = gamepad1.right_bumper;
-    //boolean dank = gamepad1.left_bumper;
+    }
 
 
-        /*if (gamepad1.right_bumper) {
-                robot.arm.setPosition(10/180);
-            } else {
-                robot.arm.setPosition(80/180);
-            }
-            */
 
 
 
