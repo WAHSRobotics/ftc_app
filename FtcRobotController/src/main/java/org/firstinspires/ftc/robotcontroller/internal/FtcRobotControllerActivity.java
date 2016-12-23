@@ -395,7 +395,7 @@ public class FtcRobotControllerActivity extends Activity {
   public boolean onOptionsItemSelected(MenuItem item) {
     int id = item.getItemId();
 
-    if (id == R.id.action_programming_mode) {
+    /*if (id == R.id.action_programming_mode) {
       if (cfgFileMgr.getActiveConfig().isNoConfig()) {
         // Tell the user they must configure the robot before starting programming mode.
         AppUtil.getInstance().showToast(
@@ -407,7 +407,7 @@ public class FtcRobotControllerActivity extends Activity {
         startActivity(programmingModeIntent);
       }
       return true;
-    } else if (id == R.id.action_inspection_mode) {
+    } else*/ if (id == R.id.action_inspection_mode) {
       Intent inspectionModeIntent = new Intent(RcInspectionActivity.rcLaunchIntent);
       startActivity(inspectionModeIntent);
       return true;

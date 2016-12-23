@@ -41,7 +41,7 @@ public class VuforiaTest extends LinearOpMode {
 
         // instantiate Vuforia
         VuforiaLocalizer vuforia = ClassFactory.createVuforiaLocalizer(params);
-        Vuforia.setHint(HINT.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, 1);
+        Vuforia.setHint(HINT.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, 4);
 
         // Load Beacon images (provided by FTC)
         VuforiaTrackables beacons = vuforia.loadTrackablesFromAsset("FTC_2016-17");
@@ -55,47 +55,25 @@ public class VuforiaTest extends LinearOpMode {
         beacons.activate();
 
         while(opModeIsActive()) {
-            VuforiaTrackable beacon = beacons.get(2);
+            for (VuforiaTrackable beacon : beacons) {
+                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) beacon.getListener()).getPose();
 
-            OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) beacon.getListener()).getPose();
+                if(pose != null) {
+                    VectorF translation = pose.getTranslation();
 
-            if(pose != null) {
-                VectorF translation = pose.getTranslation();
+                    telemetry.addData(beacon.getName() + "Translation", translation);
 
-                telemetry.addData(beacon.getName() + "-Translation", translation);
+                    double degreesToTurnYZ = Math.toDegrees(Math.atan2(translation.get(1), translation.get(2)));
+                    double degreesToTurnXY = Math.toDegrees(Math.atan2(translation.get(0), translation.get(1)));
+                    double degreesToTurnZX = Math.toDegrees(Math.atan2(translation.get(2), translation.get(0)));
 
-                // return degrees your robot must turn to be facing the beacon
-                // 1,2 is for vertically oriented phone (1 = y axis, 2 = x axis)
-                // 0,2 is for landscape oriented phone
-                double degreesToTurnYZ = Math.toDegrees(Math.atan2(translation.get(1), translation.get(2)));
-                double degreesToTurnXY = Math.toDegrees(Math.atan2(translation.get(0), translation.get(1)));
-                double degreesToTurnZX = Math.toDegrees(Math.atan2(translation.get(2), translation.get(0)));
-
-                telemetry.addData(beacon.getName() + "-Degrees YZ", degreesToTurnYZ);
-                telemetry.addData(beacon.getName() + "-Degrees XY", degreesToTurnXY);
-                telemetry.addData(beacon.getName() + "-Degrees XZ", degreesToTurnZX);
+                    telemetry.addData(beacon.getName() + "Degrees YZ", degreesToTurnYZ);
+                    telemetry.addData(beacon.getName() + "Degrees XY", degreesToTurnXY);
+                    telemetry.addData(beacon.getName() + "Degrees ZX", degreesToTurnZX);
+                }
             }
 
             telemetry.update();
         }
-
-//        while (opModeIsActive()) {
-//            for (VuforiaTrackable beacon : beacons) {
-//                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) beacon.getListener()).getPose();
-//
-//                if (pose != null) {
-//                    VectorF translation = pose.getTranslation();
-//
-//                    telemetry.addData(beacon.getName() + "-Translation", translation);
-//
-//                    // return degrees your robot must turn to be facing the beacon
-//                    // 1,2 is for vertically oriented phone (1 = y axis, 2 = x axis)
-//                    // 0,2 is for landscape oriented phone
-//                    double degreesToTurn = Math.toDegrees(Math.atan2(translation.get(1), translation.get(2)));
-//                    telemetry.addData(beacon.getName() + "-Degrees", degreesToTurn);
-//                }
-//            }
-//            telemetry.update();
-//        }
     }
 }
