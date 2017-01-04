@@ -14,7 +14,7 @@ public class HmeTeleOpProgram extends TeleOpProgram {
 
     public HmeTeleOpProgram(OpMode opMode) {
         super(opMode,
-                new HolonomicDriveTrain(76.2, HardwareConstants.ANDYMARK_ENCODER_TICKS_PER_ROTATION),
+                new HolonomicDriveTrain(HardwareConstants.MM_OMNI_WHEEL_DIAMETER, HardwareConstants.ANDYMARK_ENCODER_TICKS_PER_ROTATION),
 //                new HungryRobitsGatherer(),
                 null,
                 new RollerShooter()

@@ -4,6 +4,8 @@ package org.firstinspires.ftc.team9202hme.math.vector;
 import static java.lang.Math.*;
 
 public class Vector4 extends AbstractVector<Vector4> {
+    public static final Vector4 ZERO = new Vector4();
+
     public double x, y, z, w;
 
     public Vector4() {
@@ -56,6 +58,11 @@ public class Vector4 extends AbstractVector<Vector4> {
 
     @Override
     protected String toText() {
-        return "(" + x + ", " + y + ", " + z + ", " + w + ")";
+        return "(\n" +
+                "\tX: " + x + ",\n" +
+                "\tY: " + y + ",\n" +
+                "\tZ: " + z + ",\n" +
+                "\tW: " + w +
+                "\n)";
     }
 }

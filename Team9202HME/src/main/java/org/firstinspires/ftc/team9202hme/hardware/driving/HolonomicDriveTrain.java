@@ -9,9 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team9202hme.math.PowerScale;
 
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static java.lang.Math.toRadians;
+import static java.lang.Math.*;
 
 public class HolonomicDriveTrain extends DriveTrain {
     private DcMotor frontLeft, frontRight, backLeft, backRight;
@@ -60,7 +58,7 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     private int millimetersToEncoderTicks(double millimeters) {
-        double rotations = millimeters / (mmWheelDiameter * Math.PI);
+        double rotations = millimeters / (mmWheelDiameter * PI);
         return (int) (rotations * encoderTicksPerRotation);
     }
 
@@ -111,7 +109,7 @@ public class HolonomicDriveTrain extends DriveTrain {
     public void driveControlled(Gamepad controller) {
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        holonomicMove(-controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
+        holonomicMove(-controller.left_stick_x, -controller.left_stick_y, controller.right_stick_x); //Gamepad is giving us inverted y values
     }
 
     @Override
@@ -124,7 +122,7 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void move(double power, double degrees) {
-        double angle = toRadians(degrees - 90);
+        double angle = toRadians(degrees + 90);
 
         double x = power * cos(angle);
         double y = power * sin(angle);
@@ -134,7 +132,7 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void move(double power, double degrees, double millimeters) throws InterruptedException {
-        double angle = toRadians(degrees - 90);
+        double angle = toRadians(degrees + 90);
 
         double x = power * cos(angle);
         double y = power * sin(angle);
@@ -147,10 +145,10 @@ public class HolonomicDriveTrain extends DriveTrain {
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        int frontLeftPos = (int) (millimetersToEncoderTicks(millimeters) / Math.sqrt(Math.PI));
-        int frontRightPos = (int) (millimetersToEncoderTicks(millimeters) / Math.sqrt(Math.PI));
-        int backLeftPos = (int) (millimetersToEncoderTicks(millimeters) / Math.sqrt(Math.PI));
-        int backRightPos = (int) (millimetersToEncoderTicks(millimeters) / Math.sqrt(Math.PI));
+        int frontLeftPos = (int) (millimetersToEncoderTicks(millimeters) / sqrt(PI));
+        int frontRightPos = (int) (millimetersToEncoderTicks(millimeters) / sqrt(PI));
+        int backLeftPos = (int) (millimetersToEncoderTicks(millimeters) / sqrt(PI));
+        int backRightPos = (int) (millimetersToEncoderTicks(millimeters) / sqrt(PI));
 
         frontLeft.setTargetPosition(frontLeftPower >= 0 ? frontLeftPos : -frontLeftPos);
         frontRight.setTargetPosition(frontRightPower >= 0 ? frontRightPos : -frontRightPos);
@@ -221,9 +219,35 @@ public class HolonomicDriveTrain extends DriveTrain {
             } else {
                 currentHeading = negative ? 359 - gyroSensor.getHeading() : gyroSensor.getHeading();
             }
-
-        } while(currentHeading < Math.abs(degrees));
+        } while(currentHeading < abs(degrees));
 
         stop();
+
+        Thread.sleep(100);
+
+        do {
+            currentHeading = negative ? 359 - gyroSensor.getHeading() : gyroSensor.getHeading();
+
+            frontLeft.setPower(power * -powerMultiplier);
+            frontRight.setPower(power * -powerMultiplier);
+            backLeft.setPower(power * -powerMultiplier);
+            backRight.setPower(power * -powerMultiplier);
+
+            powerMultiplier *= 0.95;
+
+            Thread.sleep(1);
+        } while(currentHeading > abs(degrees));
+
+        stop();
+    }
+
+    @Override
+    public void moveAndTurn(double movePower, double degrees, double turnPower) {
+        double angle = toRadians(degrees + 90);
+
+        double x = movePower * cos(angle);
+        double y = movePower * sin(angle);
+
+        holonomicMove(x, y, turnPower);
     }
 }
