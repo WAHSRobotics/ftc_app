@@ -1,4 +1,3 @@
-
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -6,31 +5,18 @@ import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
-@TeleOp(name = "LS TeleOp")
+@TeleOp(name = "LSTeleOp")
 public class TestTeleOp extends OpMode {
-
-
     private LSRobit robot = new LSRobit();
-
     @Override
     public void init() {
         robot.init(hardwareMap);
-
-        //robot.arm.setPosition(80/180);
-
         robot.leftfront.setPower(0.0);
-
         robot.rightfront.setPower(0.0);
-
         robot.leftback.setPower(0.0);
-
         robot.rightback.setPower(0.0);
-
         robot.catapult.setPower(0.0);
-
-
     }
-
     public double scale(double inPower) {
         float scaledPower = 0.0f;
 
@@ -49,37 +35,29 @@ public class TestTeleOp extends OpMode {
             powerIndex = -powerIndex;
         } else if (powerIndex > 16) {
             powerIndex = 16;
-        }
-
-        if (inPower < 0) {
+        }if (inPower < 0) {
             scaledPower = -possiblePowerValues[powerIndex];
         } else {
             scaledPower = possiblePowerValues[powerIndex];
         }
-
         return scaledPower;
     }
-
-
     public void loop() {
         double y = -gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
         double z = 0.0;
-
-
-
         if (gamepad1.right_stick_y > 0.0) {
             z = gamepad1.right_stick_y;
         } else if (gamepad1.right_stick_x > 0.0) {
             z = -gamepad1.right_stick_x;
+        } else if (gamepad1.right_stick_x < 0.0){
+            z = gamepad1.right_stick_x;
         }
-
         robot.catapult.setPower(gamepad1.right_trigger);
         robot.rightfront.setPower(scale(+ y - x + z));
         robot.leftfront.setPower(scale(- y - x + z));
         robot.rightback.setPower(scale(+ y + x + z));
         robot.leftback.setPower(scale(- y + x + z));
-
     }
 
 

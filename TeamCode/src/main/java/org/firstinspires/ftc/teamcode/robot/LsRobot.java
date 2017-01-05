@@ -8,11 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.Range;
-
-
 import org.firstinspires.ftc.teamcode.hardware.HardwareConstants;
 import org.firstinspires.ftc.teamcode.hardware.driving.HolonomicDriveTrain;
-
 import static org.firstinspires.ftc.teamcode.robot.Robot.FieldSide.BLUE;
 
 public class LsRobot extends Robot {
@@ -42,15 +39,22 @@ public class LsRobot extends Robot {
     public void runAutonomous() throws InterruptedException {
         colorSensor.enableLed(false);
 
-        driveTrain.move(610, 90);
-        driveTrain.move(610);
-        driveTrain.move(610, 90);
-        driveTrain.move(850);
-        
+
+
         final int DISTANCE_TO_BUTTON = 163;
 
         switch (fieldSide) {
             case RED:
+
+                driveTrain.move(610, 90);
+                driveTrain.move(610);
+                driveTrain.move(610, 90);
+                driveTrain.move(850);
+
+
+
+
+
                 do {
                     driveTrain.move(10000,90);
                     opMode.telemetry.addData("Autonomous", "Looking for beacon...");
@@ -86,20 +90,3 @@ public class LsRobot extends Robot {
         }
     }
 }
-// if(colorSensor.red() <= 1 && colorSensor.blue() <= 1) {
-//                        driveTrain.moveIndefinitely(90);
-//                    } else {
-//                        driveTrain.stop();
-//                        //Measure Distance
-//                        if(colorSensor.red() - colorSensor.blue() >= 1) {
-//                            driveTrain.move(DISTANCE_TO_BUTTON);
-//                            driveTrain.move(12, 180);
-//                            driveTrain.moveIndefinitely(90);
-//
-//                            if(colorSensor.blue() - colorSensor.red() >= 1){
-//                                driveTrain.move(191, 270);
-//                                driveTrain.move(12);
-//                                driveTrain.move(12, 180);
-//                                driveTrain.move(1000, 90);
-//
-//                            }

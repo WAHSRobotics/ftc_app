@@ -21,7 +21,7 @@ public class LSRobit {
     public DcMotor leftback;
     public DcMotor rightback;
     public DcMotor catapult;
-    //public Servo arm;
+
     public GyroSensor gyro;
     public OpticalDistanceSensor odsSensor;
 //memes
