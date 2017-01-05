@@ -141,7 +141,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         holonomicMove(-controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
     }
 
-    private final double AUTONOMOUS_SPEED = 0.2;
+    private final double AUTONOMOUS_SPEED = 0.9;
 
     @Override
     public void stop() {

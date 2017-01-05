@@ -1,0 +1,10 @@
+Essentially this is what the robot is going to do
+
+Step 1: Initialize Autonomous
+Step 2: Robot Moves Forward And Turns To An Angle That Will Be Measured To Hit The CapBall
+Step 3: After That The Robot Will Turn Around 104 Degrees And Head For The Beacons
+Step 4: Using The Color Sensor The Robot Will Hit The Beacon
+Step 5: The Robot Will Continue To Move Sideways To The Left (Blue) Or To The Right (Red)
+Step 6: Once It Senses The Next Color It Will Punch The Beacon
+Step 7: It Will Pull Out And If Enough Time Is Granted, The Robot Will Go To A Specified Spot And Fire
+Step 8: Go To TeleOp

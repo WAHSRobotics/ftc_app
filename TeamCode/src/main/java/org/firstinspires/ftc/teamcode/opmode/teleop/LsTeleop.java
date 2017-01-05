@@ -1,19 +1,12 @@
-
 package org.firstinspires.ftc.teamcode.opmode.teleop;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.teamcode.opmode.teleop.LSRobit;
-
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
 @TeleOp(name = "LSTeleOp")
-public class TestTeleOp extends OpMode {
+public class LsTeleop extends OpMode {
     private LSRobit robot = new LSRobit();
     @Override
     public void init() {
@@ -56,13 +49,12 @@ public class TestTeleOp extends OpMode {
         double a = gamepad1.right_stick_x;
         double b = gamepad1.right_stick_y;
 
-
-        if (gamepad1.right_stick_y > 0.0) {
-            z = gamepad1.right_stick_y;
-        } else if (gamepad1.right_stick_x > 0.0) {
-            z = -gamepad1.right_stick_x;
-        } else if (gamepad1.right_stick_x < 0.0){
-            z = gamepad1.right_stick_x;
+        if (b > 0.0) {
+            z = b;
+        } else if (a > 0.0) {
+            z = -a;
+        } else if (a < 0.0){
+            z = a;
         }
 
         robot.catapult.setPower(gamepad1.right_trigger);
@@ -83,5 +75,3 @@ public class TestTeleOp extends OpMode {
 
 
 }
-
-
