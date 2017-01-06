@@ -33,13 +33,13 @@ public class HolonomicDriveTrain extends DriveTrain {
         double power = 0.0;
 
         switch(motor) {
-            case FRONT_LEFT: power = - y - x + rotation;
+            case FRONT_LEFT: power = + y + x + rotation;
                 break;
-            case FRONT_RIGHT: power = + y - x + rotation;
+            case FRONT_RIGHT: power = - y + x + rotation;
                 break;
-            case BACK_LEFT: power = - y + x + rotation;
+            case BACK_LEFT: power = + y - x + rotation;
                 break;
-            case BACK_RIGHT: power = + y + x + rotation;
+            case BACK_RIGHT: power = - y - x + rotation;
                 break;
         }
 
@@ -109,7 +109,7 @@ public class HolonomicDriveTrain extends DriveTrain {
     public void driveControlled(Gamepad controller) {
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        holonomicMove(-controller.left_stick_x, -controller.left_stick_y, controller.right_stick_x); //Gamepad is giving us inverted y values
+        holonomicMove(controller.left_stick_x, -controller.left_stick_y, controller.right_stick_x); //Gamepad is giving us inverted y values
     }
 
     @Override
@@ -122,7 +122,7 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void move(double power, double degrees) {
-        double angle = toRadians(degrees + 90);
+        double angle = toRadians(degrees - 90);
 
         double x = power * cos(angle);
         double y = power * sin(angle);
@@ -132,7 +132,7 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void move(double power, double degrees, double millimeters) throws InterruptedException {
-        double angle = toRadians(degrees + 90);
+        double angle = toRadians(degrees - 90);
 
         double x = power * cos(angle);
         double y = power * sin(angle);
@@ -243,7 +243,7 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void moveAndTurn(double movePower, double degrees, double turnPower) {
-        double angle = toRadians(degrees + 90);
+        double angle = toRadians(degrees - 90);
 
         double x = movePower * cos(angle);
         double y = movePower * sin(angle);
