@@ -1,6 +1,4 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
-
-
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.GyroSensor;

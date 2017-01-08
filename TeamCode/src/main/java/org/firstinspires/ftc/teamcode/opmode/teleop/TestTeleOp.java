@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
-@TeleOp(name = "LSTeleOp")
+@TeleOp(name = "TestTeleOp")
 public class TestTeleOp extends OpMode {
     private LSRobit robot = new LSRobit();
     @Override

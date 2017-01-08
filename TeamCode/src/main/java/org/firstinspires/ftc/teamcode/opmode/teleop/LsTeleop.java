@@ -17,6 +17,8 @@ public class LsTeleop extends OpMode {
         robot.rightback.setPower(0.0);
         robot.catapult.setPower(0.0);
     }
+
+
     public double scale(double inPower) {
         float scaledPower = 0.0f;
 
@@ -45,17 +47,7 @@ public class LsTeleop extends OpMode {
     public void loop() {
         double y = -gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
-        double z = 0.0;
-        double a = gamepad1.right_stick_x;
-        double b = gamepad1.right_stick_y;
-
-        if (b > 0.0) {
-            z = b;
-        } else if (a > 0.0) {
-            z = -a;
-        } else if (a < 0.0){
-            z = a;
-        }
+        double z = gamepad1.right_stick_x;
 
         robot.catapult.setPower(gamepad1.right_trigger);
         robot.rightfront.setPower(scale(+ y - x + z));
