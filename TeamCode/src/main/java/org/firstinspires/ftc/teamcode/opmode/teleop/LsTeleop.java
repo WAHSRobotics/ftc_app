@@ -15,7 +15,10 @@ public class LsTeleop extends OpMode {
         robot.rightfront.setPower(0.0);
         robot.leftback.setPower(0.0);
         robot.rightback.setPower(0.0);
-        robot.catapult.setPower(0.0);
+        robot.Spin1.setPower(0.0);
+        robot.Spin2.setPower(0.0);
+        robot.Spin3.setPower(0.0);
+
     }
 
 
@@ -49,14 +52,45 @@ public class LsTeleop extends OpMode {
         double x = gamepad1.left_stick_x;
         double z = gamepad1.right_stick_x;
 
-        robot.catapult.setPower(gamepad1.right_trigger);
+
+        if (gamepad1.right_bumper) {
+            robot.Spin1.setPower(1.0);
+        } else if (gamepad1.b){
+            robot.Spin1.setPower(-1);
+        }else
+        {
+
+        robot.Spin1.setPower(0.0);
+        }
+
+        if (gamepad1.a ){
+
+            robot.Spin2.setPower(-1.0);
+
+
+        }else if(gamepad1.left_bumper){
+
+                robot.Spin2.setPower(1);
+        }
+        else{
+            robot.Spin2.setPower(0.0);
+
+        }
+
+        robot.Spin3.setPower(gamepad1.right_trigger);
+        robot.Spin3.setPower(-gamepad1.right_trigger);
         robot.rightfront.setPower(scale(+ y - x + z));
         robot.leftfront.setPower(scale(- y - x + z));
         robot.rightback.setPower(scale(+ y + x + z));
         robot.leftback.setPower(scale(- y + x + z));
     }
-
-
+    /*boolean changed = false; //Outside of loop()
+    if(gamepad1.a && !changed) {
+        if(servo.getPosition() == 0) servo.setPosition(1);
+        else servo.setPosition(0);
+        changed = true;
+    } else if(!gamepad1.a) changed = false;
+*/
 
 
 

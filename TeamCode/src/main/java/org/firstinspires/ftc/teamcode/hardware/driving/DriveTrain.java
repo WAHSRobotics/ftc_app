@@ -17,5 +17,9 @@ public abstract class DriveTrain extends HardwareComponent {
 
     public abstract void move(int millimeters, int degrees) throws InterruptedException;
 
-    public abstract void turn(int degrees) throws InterruptedException;
+    public abstract void turn(int degrees, double power) throws InterruptedException;
+
+    public abstract void leftPowerInc(double amount) throws InterruptedException;
+
+    public abstract void rightPowerInc(double amount) throws InterruptedException;
 }

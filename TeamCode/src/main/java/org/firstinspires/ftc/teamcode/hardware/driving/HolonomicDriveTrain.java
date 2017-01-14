@@ -10,17 +10,15 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.PowerScale;
 import org.firstinspires.ftc.teamcode.util.Vec2;
 
+import static java.lang.Math.abs;
 import static java.lang.Math.cos;
-import static java.lang.Math.pow;
 import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
 import static java.lang.Math.toRadians;
 import static org.firstinspires.ftc.teamcode.util.MathUtil.setSignificantPlaces;
 
 public class HolonomicDriveTrain extends DriveTrain {
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private GyroSensor gyroSensor;
-    private DcMotor fire, pusher, roll;
     private PowerScale powerScale = new PowerScale(0.02, 0.80, 6);
 
     private final double mmWheelDiameter;
@@ -91,15 +89,16 @@ public class HolonomicDriveTrain extends DriveTrain {
         backRight.setMode(runMode);
     }
 
+
+
+
     @Override
     public void init(HardwareMap hardwareMap) {
-        frontLeft = hardwareMap.dcMotor.get("blue");
-        frontRight = hardwareMap.dcMotor.get("black");
-        backLeft = hardwareMap.dcMotor.get("red");
-        backRight = hardwareMap.dcMotor.get("green");
-        fire = hardwareMap.dcMotor.get("white");
-        pusher = hardwareMap.dcMotor.get("yellow");
-        roll = hardwareMap.dcMotor.get("purple");
+        frontLeft = hardwareMap.dcMotor.get("red");
+        frontRight = hardwareMap.dcMotor.get("green");
+        backLeft = hardwareMap.dcMotor.get("blue");
+        backRight = hardwareMap.dcMotor.get("black");
+
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -141,7 +140,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         holonomicMove(-controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
     }
 
-    private final double AUTONOMOUS_SPEED = 0.9;
+    private final double AUTONOMOUS_SPEED = 0.7;
 
     @Override
     public void stop() {
@@ -172,11 +171,13 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     private boolean encodersBeyondLimit() {
-        return Math.abs(frontLeft.getCurrentPosition()) >= Math.abs(frontLeft.getTargetPosition()) ||
-               Math.abs(frontRight.getCurrentPosition()) >= Math.abs(frontRight.getTargetPosition()) ||
-               Math.abs(backLeft.getCurrentPosition()) >= Math.abs(backLeft.getTargetPosition()) ||
-               Math.abs(backRight.getCurrentPosition()) >= Math.abs(backRight.getTargetPosition());
+        return abs(frontLeft.getCurrentPosition()) >= abs(frontLeft.getTargetPosition()) ||
+               abs(frontRight.getCurrentPosition()) >= abs(frontRight.getTargetPosition()) ||
+               abs(backLeft.getCurrentPosition()) >= abs(backLeft.getTargetPosition()) ||
+               abs(backRight.getCurrentPosition()) >= abs(backRight.getTargetPosition());
     }
+
+
 
     @Override
     public void move(int millimeters) throws InterruptedException {
@@ -242,29 +243,79 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     @Override
-    public void turn(int degrees) throws InterruptedException {
+    public void leftPowerInc(double amount) throws InterruptedException{
+
+        frontLeft.setPower(AUTONOMOUS_SPEED + amount);
+        backLeft.setPower(AUTONOMOUS_SPEED + amount);
+    }
+
+    @Override
+    public void rightPowerInc(double amount) throws InterruptedException{
+        frontRight.setPower(AUTONOMOUS_SPEED + amount);
+        backRight.setPower(AUTONOMOUS_SPEED + amount);
+    }
+
+    @Override
+    public void turn(int degrees, double power) throws InterruptedException {
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        gyroSensor.resetZAxisIntegrator();
+
+        Thread.sleep(5);
 
         do {
             gyroSensor.calibrate();
+            Thread.sleep(5);
         } while(!gyroSensor.isCalibrating());
 
         while(gyroSensor.isCalibrating()) {
-            Thread.sleep(1);
+            Thread.sleep(5);
+        }
+
+        double powerMultiplier;
+        boolean negative;
+
+        if(degrees >= 0) {
+            negative = false;
+            powerMultiplier = 1;
+        } else {
+            negative = true;
+            powerMultiplier = -1;
         }
 
         int currentHeading;
 
         do {
-            currentHeading = gyroSensor.getHeading();
-
-            frontLeft.setPower(AUTONOMOUS_SPEED);
-            frontRight.setPower(AUTONOMOUS_SPEED);
-            backLeft.setPower(AUTONOMOUS_SPEED);
-            backRight.setPower(AUTONOMOUS_SPEED);
+            frontLeft.setPower(power * powerMultiplier);
+            frontRight.setPower(power * powerMultiplier);
+            backLeft.setPower(power * powerMultiplier);
+            backRight.setPower(power * powerMultiplier);
 
             Thread.sleep(1);
-        } while(currentHeading < (degrees - 4));
+
+            if(gyroSensor.getHeading() == 0) {
+                currentHeading = 0;
+            } else {
+                currentHeading = negative ? 359 - gyroSensor.getHeading() : gyroSensor.getHeading();
+            }
+        } while(currentHeading < abs(degrees));
+
+        stop();
+
+        Thread.sleep(100);
+
+        do {
+            currentHeading = negative ? 359 - gyroSensor.getHeading() : gyroSensor.getHeading();
+
+            frontLeft.setPower(power * -powerMultiplier);
+            frontRight.setPower(power * -powerMultiplier);
+            backLeft.setPower(power * -powerMultiplier);
+            backRight.setPower(power * -powerMultiplier);
+
+            powerMultiplier *= 0.95;
+
+            Thread.sleep(1);
+        } while(currentHeading > abs(degrees));
 
         stop();
     }

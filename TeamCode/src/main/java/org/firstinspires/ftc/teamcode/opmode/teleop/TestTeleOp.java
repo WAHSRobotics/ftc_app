@@ -22,7 +22,7 @@ public class TestTeleOp extends OpMode {
         robot.rightfront.setPower(0.0);
         robot.leftback.setPower(0.0);
         robot.rightback.setPower(0.0);
-        robot.catapult.setPower(0.0);
+
     }
     public double scale(double inPower) {
         float scaledPower = 0.0f;
@@ -65,7 +65,7 @@ public class TestTeleOp extends OpMode {
             z = gamepad1.right_stick_x;
         }
 
-        robot.catapult.setPower(gamepad1.right_trigger);
+        robot.Spin3.setPower(gamepad1.right_trigger);
         robot.rightfront.setPower(scale(+ y - x + z));
         robot.leftfront.setPower(scale(- y - x + z));
         robot.rightback.setPower(scale(+ y + x + z));
