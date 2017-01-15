@@ -15,29 +15,11 @@ public abstract class AutonomousProgram {
 
     protected LinearOpMode opMode;
     protected FieldSide fieldSide;
-    protected DriveTrain driveTrain;
-    protected Gatherer gatherer;
-    protected Shooter shooter;
 
-    protected AutonomousProgram(LinearOpMode opMode, FieldSide fieldSide, DriveTrain driveTrain, Gatherer gatherer, Shooter shooter) {
+    protected AutonomousProgram(LinearOpMode opMode, FieldSide fieldSide) {
         this.opMode = opMode;
         this.fieldSide = fieldSide;
-        this.driveTrain = driveTrain;
-        this.gatherer = gatherer;
-        this.shooter = shooter;
     }
 
     public abstract void run() throws InterruptedException;
-
-    public DriveTrain getDriveTrain() {
-        return driveTrain;
-    }
-
-    public Gatherer getGatherer() {
-        return gatherer;
-    }
-
-    public Shooter getShooter() {
-        return shooter;
-    }
 }

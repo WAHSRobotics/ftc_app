@@ -9,13 +9,13 @@ import org.firstinspires.ftc.team9202hme.hardware.driving.HolonomicDriveTrain;
 
 
 @TeleOp(name = "Straightness Test", group = "Tests")
-//@Disabled
+@Disabled
 public class StraightnessTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         final double TIME = 10.0;
 
-        HolonomicDriveTrain driveTrain = new HolonomicDriveTrain(76.2, HardwareConstants.ANDYMARK_ENCODER_TICKS_PER_ROTATION);
+        HolonomicDriveTrain driveTrain = new HolonomicDriveTrain(76.2, HardwareConstants.ENCODER_TICKS_PER_ROTATION);
         driveTrain.init(hardwareMap);
 
         waitForStart();

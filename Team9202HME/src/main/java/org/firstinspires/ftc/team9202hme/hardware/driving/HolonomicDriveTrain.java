@@ -15,7 +15,7 @@ public class HolonomicDriveTrain extends DriveTrain {
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private GyroSensor gyroSensor;
 
-    private PowerScale powerScale = new PowerScale(0.02, 0.80, 6);
+    private PowerScale powerScale = new PowerScale(0.05, 0.9, 7);
 
     private final double mmWheelDiameter;
     private final int encoderTicksPerRotation;
@@ -109,7 +109,7 @@ public class HolonomicDriveTrain extends DriveTrain {
     public void driveControlled(Gamepad controller) {
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        holonomicMove(controller.left_stick_x, -controller.left_stick_y, controller.right_stick_x); //Gamepad is giving us inverted y values
+        holonomicMove(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void move(double power, double degrees) {
-        double angle = toRadians(degrees - 90);
+        double angle = toRadians(degrees + 90);
 
         double x = power * cos(angle);
         double y = power * sin(angle);
@@ -132,7 +132,7 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void move(double power, double degrees, double millimeters) throws InterruptedException {
-        double angle = toRadians(degrees - 90);
+        double angle = toRadians(degrees + 90);
 
         double x = power * cos(angle);
         double y = power * sin(angle);
@@ -243,7 +243,7 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void moveAndTurn(double movePower, double degrees, double turnPower) {
-        double angle = toRadians(degrees - 90);
+        double angle = toRadians(degrees + 90);
 
         double x = movePower * cos(angle);
         double y = movePower * sin(angle);

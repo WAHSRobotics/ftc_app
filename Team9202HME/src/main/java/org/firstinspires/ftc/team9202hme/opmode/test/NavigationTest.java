@@ -11,7 +11,7 @@ import org.firstinspires.ftc.team9202hme.navigation.PhoneOrientation;
 @TeleOp(name = "Navigation Test", group = "Tests")
 //@Disabled
 public class NavigationTest extends OpMode {
-    private Navigator navigator = new Navigator(CameraSide.BACK, PhoneOrientation.CHARGER_SIDE_UP, 1, true);
+    private Navigator navigator = new Navigator(CameraSide.BACK, PhoneOrientation.CHARGER_SIDE_UP, 4, true);
 
     @Override
     public void init() {
@@ -20,8 +20,12 @@ public class NavigationTest extends OpMode {
 
     @Override
     public void loop() {
-        telemetry.addData("Translation", navigator.getRelativeTargetTranslation(ImageTarget.TOOLS));
-        telemetry.addData("Rotation", navigator.getRelativeTargetRotation(ImageTarget.TOOLS));
+        for(ImageTarget target : ImageTarget.values()) {
+            telemetry.addData("Navigator Data for Image Target", target.name());
+            telemetry.addData("Visible", navigator.canSeeTarget(target));
+            telemetry.addData("Translation", navigator.getRelativeTargetTranslation(target));
+            telemetry.addData("Rotation", navigator.getRelativeTargetRotation(target));
+        }
 
         telemetry.update();
     }

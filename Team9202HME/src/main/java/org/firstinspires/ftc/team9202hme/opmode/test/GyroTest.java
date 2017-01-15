@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 
 @TeleOp(name = "Gyro Sensor Test", group = "Tests")
-//@Disabled
+@Disabled
 public class GyroTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

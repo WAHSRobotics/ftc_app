@@ -9,15 +9,9 @@ import org.firstinspires.ftc.team9202hme.hardware.shooting.Shooter;
 
 public abstract class TeleOpProgram {
     protected OpMode opMode;
-    protected DriveTrain driveTrain;
-    protected Gatherer gatherer;
-    protected Shooter shooter;
 
-    protected TeleOpProgram(OpMode opMode, DriveTrain driveTrain, Gatherer gatherer, Shooter shooter) {
+    protected TeleOpProgram(OpMode opMode) {
         this.opMode = opMode;
-        this.driveTrain = driveTrain;
-        this.gatherer = gatherer;
-        this.shooter = shooter;
     }
 
     public abstract void init();
@@ -30,17 +24,5 @@ public abstract class TeleOpProgram {
 
     public void stop() {
 
-    }
-
-    public DriveTrain getDriveTrain() {
-        return driveTrain;
-    }
-
-    public Gatherer getGatherer() {
-        return gatherer;
-    }
-
-    public Shooter getShooter() {
-        return shooter;
     }
 }

@@ -4,7 +4,7 @@ package org.firstinspires.ftc.team9202hme.opmode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.team9202hme.program.HmeTeleOpProgram;
+import org.firstinspires.ftc.team9202hme.program.teleop.HmeTeleOpProgram;
 import org.firstinspires.ftc.team9202hme.program.TeleOpProgram;
 
 @TeleOp(name = "HME TeleOp", group = "HME")

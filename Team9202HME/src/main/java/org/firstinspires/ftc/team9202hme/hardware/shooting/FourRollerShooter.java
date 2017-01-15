@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class RollerShooter extends Shooter {
+public class FourRollerShooter extends Shooter {
     private DcMotor left, right;
 
     @Override

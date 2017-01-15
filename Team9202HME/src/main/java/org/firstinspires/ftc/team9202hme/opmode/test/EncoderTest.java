@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "Encoder Test", group = "Tests")
-//@Disabled
+@Disabled
 public class EncoderTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
