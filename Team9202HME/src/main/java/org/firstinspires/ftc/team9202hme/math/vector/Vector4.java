@@ -3,15 +3,37 @@ package org.firstinspires.ftc.team9202hme.math.vector;
 
 import static java.lang.Math.*;
 
+/**
+ * A vector containing four components
+ *
+ * @author Nathaniel Glover
+ */
 public class Vector4 extends AbstractVector<Vector4> {
+    /**
+     * A constant for an empty vector
+     */
     public static final Vector4 ZERO = new Vector4();
 
+    /**
+     * A component of this vector
+     */
     public double x, y, z, w;
 
+    /**
+     * Constructs an empty vector
+     */
     public Vector4() {
         this(0, 0, 0, 0);
     }
 
+    /**
+     * Constructs a vector with the desired components
+     *
+     * @param x The first component
+     * @param y The second component
+     * @param z The third component
+     * @param w The fourth component
+     */
     public Vector4(double x, double y, double z, double w) {
         this.x = x;
         this.y = y;

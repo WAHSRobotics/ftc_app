@@ -5,12 +5,21 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team9202hme.math.PowerScale;
 
 import static java.lang.Math.*;
 
+/**
+ * Drive train made for robots using the holonomic drive
+ * configuration. This class assumes that the wheels are
+ * in "X" configuration, where wheels are at 45 degree
+ * angles on the corners of the robot
+ *
+ * @author Nathaniel Glover
+ */
 public class HolonomicDriveTrain extends DriveTrain {
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private GyroSensor gyroSensor;
@@ -20,6 +29,17 @@ public class HolonomicDriveTrain extends DriveTrain {
     private final double mmWheelDiameter;
     private final int encoderTicksPerRotation;
 
+    /**
+     * Gives HolonomicDriveTrain the values it needs
+     * to calculate how to properly apply motor powers
+     * when moving and turning at set distances
+     *
+     * @param mmWheelDiameter The diameter of the robot's
+     *                        wheels, in millimeters
+     * @param encoderTicksPerRotation The number of ticks given off by each motor's
+     *                                encoder each rotation. If you are using Andymark
+     *                                Neverest 40's, then this value is 1120
+     */
     public HolonomicDriveTrain(double mmWheelDiameter, int encoderTicksPerRotation) {
         this.mmWheelDiameter = mmWheelDiameter;
         this.encoderTicksPerRotation = encoderTicksPerRotation;
@@ -121,21 +141,21 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     @Override
-    public void move(double power, double degrees) {
-        double angle = toRadians(degrees + 90);
+    public void move(double power, double angle) {
+        double theta = toRadians(angle + 90);
 
-        double x = power * cos(angle);
-        double y = power * sin(angle);
+        double x = power * cos(theta);
+        double y = power * sin(theta);
 
         holonomicMove(x, y, 0.0);
     }
 
     @Override
-    public void move(double power, double degrees, double millimeters) throws InterruptedException {
-        double angle = toRadians(degrees + 90);
+    public void move(double power, double angle, double distance) throws InterruptedException {
+        double theta = toRadians(angle + 90);
 
-        double x = power * cos(angle);
-        double y = power * sin(angle);
+        double x = power * cos(theta);
+        double y = power * sin(theta);
 
         double frontLeftPower = holonomicMath(x, y, 0.0, Motor.FRONT_LEFT);
         double frontRightPower = holonomicMath(x, y, 0.0, Motor.FRONT_RIGHT);
@@ -145,10 +165,10 @@ public class HolonomicDriveTrain extends DriveTrain {
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        int frontLeftPos = (int) (millimetersToEncoderTicks(millimeters) / sqrt(PI));
-        int frontRightPos = (int) (millimetersToEncoderTicks(millimeters) / sqrt(PI));
-        int backLeftPos = (int) (millimetersToEncoderTicks(millimeters) / sqrt(PI));
-        int backRightPos = (int) (millimetersToEncoderTicks(millimeters) / sqrt(PI));
+        int frontLeftPos = (int) (millimetersToEncoderTicks(distance) / sqrt(PI));
+        int frontRightPos = (int) (millimetersToEncoderTicks(distance) / sqrt(PI));
+        int backLeftPos = (int) (millimetersToEncoderTicks(distance) / sqrt(PI));
+        int backRightPos = (int) (millimetersToEncoderTicks(distance) / sqrt(PI));
 
         frontLeft.setTargetPosition(frontLeftPower >= 0 ? frontLeftPos : -frontLeftPos);
         frontRight.setTargetPosition(frontRightPower >= 0 ? frontRightPos : -frontRightPos);
@@ -177,7 +197,9 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     @Override
-    public void turn(double power, double degrees) throws InterruptedException {
+    public void turn(double power, double angle) throws InterruptedException {
+        angle = Range.clip(angle, 0, 359);
+
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         gyroSensor.resetZAxisIntegrator();
@@ -196,7 +218,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         double powerMultiplier;
         boolean negative;
 
-        if(degrees >= 0) {
+        if(angle >= 0) {
             negative = false;
             powerMultiplier = 1;
         } else {
@@ -219,7 +241,7 @@ public class HolonomicDriveTrain extends DriveTrain {
             } else {
                 currentHeading = negative ? 359 - gyroSensor.getHeading() : gyroSensor.getHeading();
             }
-        } while(currentHeading < abs(degrees));
+        } while(currentHeading < abs(angle));
 
         stop();
 
@@ -236,17 +258,17 @@ public class HolonomicDriveTrain extends DriveTrain {
             powerMultiplier *= 0.95;
 
             Thread.sleep(1);
-        } while(currentHeading > abs(degrees));
+        } while(currentHeading > abs(angle));
 
         stop();
     }
 
     @Override
-    public void moveAndTurn(double movePower, double degrees, double turnPower) {
-        double angle = toRadians(degrees + 90);
+    public void moveAndTurn(double movePower, double angle, double turnPower) {
+        double theta = toRadians(angle + 90);
 
-        double x = movePower * cos(angle);
-        double y = movePower * sin(angle);
+        double x = movePower * cos(theta);
+        double y = movePower * sin(theta);
 
         holonomicMove(x, y, turnPower);
     }

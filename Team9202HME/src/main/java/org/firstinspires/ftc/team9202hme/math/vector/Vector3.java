@@ -3,15 +3,36 @@ package org.firstinspires.ftc.team9202hme.math.vector;
 
 import static java.lang.Math.*;
 
+/**
+ * A vector containing three components
+ *
+ * @author Nathaniel Glover
+ */
 public class Vector3 extends AbstractVector<Vector3> {
+    /**
+     * A constant for an empty vector
+     */
     public static final Vector3 ZERO = new Vector3();
 
+    /**
+     * A component of this vector
+     */
     public double x, y, z;
 
+    /**
+     * Constructs an empty vector
+     */
     public Vector3() {
         this(0, 0, 0);
     }
 
+    /**
+     * Constructs a vector with the desired components
+     *
+     * @param x The first component
+     * @param y The second component
+     * @param z The third component
+     */
     public Vector3(double x, double y, double z) {
         this.x = x;
         this.y = y;
@@ -23,6 +44,14 @@ public class Vector3 extends AbstractVector<Vector3> {
         return (x * multiplier.x) + (y * multiplier.y) + (z * multiplier.z);
     }
 
+    /**
+     * Returns the cross product of this vector and another.
+     * Note that cross product is only defined for 3-component
+     * vectors
+     *
+     * @param multiplier The vector with which this one will be multiplied
+     * @return The cross product of the two vectors
+     */
     public Vector3 cross(Vector3 multiplier) {
         return new Vector3(
                 (y * multiplier.z) - (z * multiplier.y),

@@ -13,13 +13,31 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.team9202hme.R;
 import org.firstinspires.ftc.team9202hme.math.vector.Vector3;
+import org.firstinspires.ftc.team9202hme.program.AutonomousProgram;
+import org.firstinspires.ftc.team9202hme.program.TeleOpProgram;
 
+/**
+ * A collection of functions for locating images in
+ * 3D space, using the robot controller phone's camera
+ *
+ * @author Nathaniel Glover
+ */
 public class Navigator {
     private VuforiaLocalizer.Parameters vuforiaSettings;
     private VuforiaTrackables targets;
     private CameraSide cameraSide;
     private PhoneOrientation orientation;
 
+    /**
+     * Creates the Navigator with necessary parameters
+     *
+     * @param cameraSide The camera that will be used to locate images
+     * @param orientation The orientation of the phone on the robot
+     * @param maxSimultaneousImageTargets The maximum number of image targets that can be tracked at one time
+     * @param showCameraFeedbackOnPhone Whether or not what the camera is seeing should be displayed on the
+     *                                  robot controller phone. This is good for debugging, but eats through
+     *                                  the phone battery
+     */
     public Navigator(CameraSide cameraSide, PhoneOrientation orientation, int maxSimultaneousImageTargets, boolean showCameraFeedbackOnPhone) {
         this.cameraSide = cameraSide;
         this.orientation = orientation;
@@ -55,6 +73,11 @@ public class Navigator {
         return (VuforiaTrackableDefaultListener) target.getListener();
     }
 
+    /**
+     * Initializes the Navigator. This should be called during either
+     * {@link TeleOpProgram#init()} or {@link AutonomousProgram#run()} and
+     * is necessary for the Navigator class to function properly
+     */
     public void init() {
         VuforiaLocalizer vuforia = ClassFactory.createVuforiaLocalizer(vuforiaSettings);
 
@@ -67,10 +90,26 @@ public class Navigator {
         targets.activate();
     }
 
+    /**
+     * Checks if an image is visible
+     *
+     * @param target The image to look for
+     * @return Whether or not it is visible
+     */
     public boolean canSeeTarget(ImageTarget target) {
         return getTargetListener(target).getPose() != null;
     }
 
+    /**
+     * Returns the position, using right-hand rule, of the image in 3D space
+     *
+     * @param target The image to locate
+     * @return The translation of the image in 3D space, relative to the phone, where x
+     *         is the distance from the origin on the x axis, y is the distance from the
+     *         origin on the y axis, and z is the distance from the origin on the z axis.
+     *         These values are all given in millimeters, and use the right-hand rule to
+     *         determine the meaning of positive and negative values
+     */
     public Vector3 getRelativeTargetTranslation(ImageTarget target) {
         VuforiaTrackableDefaultListener listener = getTargetListener(target);
         OpenGLMatrix pose = listener.getPose();
@@ -105,10 +144,18 @@ public class Navigator {
         } else return Vector3.ZERO;
     }
 
-    public Vector3 getRelativeTargetRotation(ImageTarget image) { //TODO: Implement this function for ALL phone orientations
-        VuforiaTrackableDefaultListener target = getTargetListener(image);
+    /**
+     * Returns the rotation, of the image in 3D space
+     *
+     * @param target The image to locate
+     * @return The rotation of the image in 3D space, relative to the phone, using
+     *         Euler angles, where x is pitch, y is yaw, and z is roll, and all are
+     *         in degrees, where a clockwise rotation is positive
+     */
+    public Vector3 getRelativeTargetRotation(ImageTarget target) { //TODO: Implement this function for ALL phone orientations
+        VuforiaTrackableDefaultListener listener = getTargetListener(target);
 
-        OpenGLMatrix rawPose = target.getRawPose();
+        OpenGLMatrix rawPose = listener.getRawPose();
 
         if(rawPose != null) {
             float[] data = rawPose.getData();
@@ -184,10 +231,20 @@ public class Navigator {
         } else return Vector3.ZERO;
     }
 
+    /**
+     * Getter for cameraSide
+     *
+     * @return The camera being used to locate images
+     */
     public CameraSide getCameraSide() {
         return cameraSide;
     }
 
+    /**
+     * Getter for orientation
+     *
+     * @return The orientation of the phone on the robot
+     */
     public PhoneOrientation getOrientation() {
         return orientation;
     }

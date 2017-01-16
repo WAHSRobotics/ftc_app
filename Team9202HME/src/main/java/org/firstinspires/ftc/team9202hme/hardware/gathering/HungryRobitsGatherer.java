@@ -9,27 +9,33 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+/**
+ * Gatherer made for robots using the "Hungry Hungry Robits"
+ * gathering mechanism, designed by James Krasner
+ *
+ * @author Sage Wibberley
+ */
 public class HungryRobitsGatherer extends Gatherer {
     private CRServo leftArm, rightArm;
     private Servo leftGate, rightGate;
 
     @Override
-    public void gatherControlled(Gamepad gamepad) {
-        if(gamepad.right_trigger >= 0.2) {
-            leftArm.setPower(gamepad.right_trigger);
-            rightArm.setPower(gamepad.right_trigger);
-        } else if(gamepad.left_trigger >= 0.2) {
-            leftArm.setPower(-gamepad.left_trigger);
-            rightArm.setPower(-gamepad.left_trigger);
+    public void gatherControlled(Gamepad controller) {
+        if(controller.right_trigger >= 0.2) {
+            leftArm.setPower(controller.right_trigger);
+            rightArm.setPower(controller.right_trigger);
+        } else if(controller.left_trigger >= 0.2) {
+            leftArm.setPower(-controller.left_trigger);
+            rightArm.setPower(-controller.left_trigger);
         } else {
             leftArm.setPower(0);
             rightArm.setPower(0);
         }
 
-        if(gamepad.left_bumper) {
+        if(controller.left_bumper) {
             leftGate.setPosition(1.0);
             rightGate.setPosition(1.0);
-        } else if(gamepad.right_bumper) {
+        } else if(controller.right_bumper) {
             leftGate.setPosition(0.0);
             rightGate.setPosition(0.0);
         } else {

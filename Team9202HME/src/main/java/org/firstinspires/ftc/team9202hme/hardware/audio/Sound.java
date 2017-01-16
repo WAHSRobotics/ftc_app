@@ -3,6 +3,17 @@ package org.firstinspires.ftc.team9202hme.hardware.audio;
 
 import org.firstinspires.ftc.team9202hme.R;
 
+/**
+ * Holds the Android resource information for
+ * sound files
+ * <p>
+ * The class itself is not intended for use
+ * in production code, just the static final instances already
+ * provided. Those can be given to the {@link Speaker} class
+ * so that they can be played
+ *
+ * @author Nathaniel Glover
+ */
 public class Sound {
     public static final Sound YOU_TOOK_THE_PEEPO = new Sound(R.raw.you_took_the_peepo);
 //    public static final Sound NASA_PEEPO = new Sound(0);

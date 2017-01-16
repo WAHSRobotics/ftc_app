@@ -3,9 +3,6 @@ package org.firstinspires.ftc.team9202hme.program.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.team9202hme.R;
-import org.firstinspires.ftc.team9202hme.hardware.HardwareConstants;
-import org.firstinspires.ftc.team9202hme.hardware.driving.DriveTrain;
 import org.firstinspires.ftc.team9202hme.hardware.driving.HolonomicDriveTrain;
 import org.firstinspires.ftc.team9202hme.math.vector.Vector3;
 import org.firstinspires.ftc.team9202hme.navigation.ImageTarget;
@@ -21,7 +18,7 @@ public class ImageAlignmentTest extends AutonomousProgram {
 
     @Override
     public void run() throws InterruptedException {
-        HolonomicDriveTrain driveTrain = new HolonomicDriveTrain(HardwareConstants.MM_OMNI_WHEEL_DIAMETER, HardwareConstants.ENCODER_TICKS_PER_ROTATION);
+        HolonomicDriveTrain driveTrain = new HolonomicDriveTrain(76.2, 1120);
         Navigator navigator = new Navigator(CameraSide.BACK, PhoneOrientation.CHARGER_SIDE_UP, 1, false);
 
         driveTrain.init(opMode.hardwareMap);
@@ -39,9 +36,6 @@ public class ImageAlignmentTest extends AutonomousProgram {
         double movePower = 0, moveAngle = 0, turnPower = 0;
 
         int state = 0;
-        /**
-         * 0 == Center robot on image and simultaneously align with wall
-         */
 
         while(opMode.opModeIsActive()) {
             if(navigator.canSeeTarget(target)) {

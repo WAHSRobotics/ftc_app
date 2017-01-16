@@ -1,0 +1,14 @@
+org.firstinspires.ftc.team9202hme.hardware
+org.firstinspires.ftc.team9202hme.hardware.audio
+org.firstinspires.ftc.team9202hme.hardware.driving
+org.firstinspires.ftc.team9202hme.hardware.gathering
+org.firstinspires.ftc.team9202hme.hardware.shooting
+org.firstinspires.ftc.team9202hme.math
+org.firstinspires.ftc.team9202hme.math.vector
+org.firstinspires.ftc.team9202hme.navigation
+org.firstinspires.ftc.team9202hme.opmode.autonomous
+org.firstinspires.ftc.team9202hme.opmode.teleop
+org.firstinspires.ftc.team9202hme.opmode.test
+org.firstinspires.ftc.team9202hme.program
+org.firstinspires.ftc.team9202hme.program.autonomous
+org.firstinspires.ftc.team9202hme.program.teleop

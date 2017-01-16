@@ -3,6 +3,19 @@ package org.firstinspires.ftc.team9202hme.math;
 
 import com.qualcomm.robotcore.util.Range;
 
+/**
+ * A class for scaling motor power so that driving
+ * is smoother
+ * <p>
+ * It currently uses the function
+ * y = (u - l) (x^(su)^x) + l, where y is the output
+ * power, x is the input power, u is the max power,
+ * l is the minimum power, and s is the scale interval.
+ * The scale interval determines how much the motor power will
+ * be affected by the scale. It's default value is 5.0
+ *
+ * @author Nathaniel Glover
+ */
 public class PowerScale {
     private double minimumPower;
     private double maximumPower;
@@ -26,18 +39,50 @@ public class PowerScale {
         this.scaleInterval = scaleInterval;
     }
 
+    /**
+     * Constructs a PowerScale with default values
+     */
     public PowerScale() {
-        init(0.05, 1.0, 5.0);
+        init(0.0, 1.0, 5.0);
     }
 
+    /**
+     * Constructs a PowerScale with desired minimum and maximum powers
+     *
+     * @param min The minimum power, ranging from 0.0 to 1.0
+     * @param max The maximum power, ranging from 0.0 to 1.0, and
+     *            should be greater than minimum power
+     */
     public PowerScale(double min, double max) {
         init(min, max, 5.0);
     }
 
+    /**
+     * Constructs a PowerScale with desired minimum and maximum powers,
+     * and desired scale interval
+     *
+     * @param min The minimum power, ranging from 0.0 to 1.0
+     * @param max The maximum power, ranging from 0.0 to 1.0, and
+     *            should be greater than minimum power
+     * @param scaleInterval Determines how much the {@link PowerScale#scalePower(double)}
+     *                      will affect the input power. It be greater than 1, and anything
+     *                      over 10 is not recommended for smooth driving
+     */
     public PowerScale(double min, double max, double scaleInterval) {
         init(min, max, scaleInterval);
     }
 
+    /**
+     * Scales the input power based on the function
+     * y = (u - l) (x^(su)^x) + l, where y is the output
+     * power, x is the input power, u is the max power,
+     * l is the minimum power, and s is the scale interval.
+     * The scale interval determines how much the motor power will
+     * be affected by the scale. It's default value is 5.0
+     *
+     * @param power The power to be scaled
+     * @return The power after it has been scaled
+     */
     public double scalePower(double power) {
         boolean negative = false;
 

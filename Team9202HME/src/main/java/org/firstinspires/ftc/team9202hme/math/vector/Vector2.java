@@ -3,15 +3,35 @@ package org.firstinspires.ftc.team9202hme.math.vector;
 
 import static java.lang.Math.*;
 
+/**
+ * A vector containing two components
+ *
+ * @author Nathaniel Glover
+ */
 public class Vector2 extends AbstractVector<Vector2> {
+    /**
+     * A constant for an empty vector
+     */
     public static final Vector2 ZERO = new Vector2();
 
+    /**
+     * A component of this vector
+     */
     public double x, y;
 
+    /**
+     * Constructs an empty vector
+     */
     public Vector2() {
         this(0, 0);
     }
 
+    /**
+     * Constructs a vector with the desired components
+     *
+     * @param x The first component
+     * @param y The second component
+     */
     public Vector2(double x, double y) {
         this.x = x;
         this.y = y;
