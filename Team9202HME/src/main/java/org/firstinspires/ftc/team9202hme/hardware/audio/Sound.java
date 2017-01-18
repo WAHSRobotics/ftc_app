@@ -1,42 +1,74 @@
 package org.firstinspires.ftc.team9202hme.hardware.audio;
 
 
-import org.firstinspires.ftc.team9202hme.R;
+import android.media.MediaPlayer;
+
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 /**
- * Holds the Android resource information for
- * sound files
- * <p>
- * The class itself is not intended for use
- * in production code, just the static final instances already
- * provided. Those can be given to the {@link Speaker} class
- * so that they can be played
+ *
  *
  * @author Nathaniel Glover
  */
 public class Sound {
-    public static final Sound YOU_TOOK_THE_PEEPO = new Sound(R.raw.you_took_the_peepo);
-//    public static final Sound NASA_PEEPO = new Sound(0);
-//    public static final Sound THERES_PEAS_IN_THERE = new Sound(0);
-//    public static final Sound GET_AWAY_FROM_MY_CROISSANT = new Sound(0);
-//    public static final Sound THASSA_PARKING = new Sound(0);
-//    public static final Sound THERES_A_CASSERPIRRER_IN_YER_KIBBLE = new Sound(0);
-//    public static final Sound NICE_CARRIRPIRRER = new Sound(0);
-//    public static final Sound MOK_DZZZ_FUR_PSHWHSHSHSHWHSFSHFHSH = new Sound(0);
-//    public static final Sound YOU_DONT_BITE_A_BALLOON = new Sound(0);
-//    public static final Sound THASSA_SPIDER_ERB = new Sound(0);
-//    public static final Sound THASSA_ROCK = new Sound(0);
-//    public static final Sound MY_NANA_IN_DA_POOL_IN_THE_STREET = new Sound(0);
-//
-//    public static final Sound NANALAN_THEME_SONG = new Sound(0);
+    private MediaPlayer mediaPlayer;
+    private Thread soundThread;
+    private boolean isLoaded = false;
 
-    private int resourceId;
+    public void load(HardwareMap hardwareMap, int resourceId) {
+        mediaPlayer = MediaPlayer.create(hardwareMap.appContext, resourceId);
 
-    private Sound(int resourceId) {
-        this.resourceId = resourceId;
+        soundThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(mediaPlayer.isPlaying()) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        isLoaded = true;
     }
 
-    int getResourceId() {
-        return resourceId;
+    public void play() {
+        mediaPlayer.start();
+
+        soundThread.start();
+    }
+
+    public boolean isPlaying() {
+        return mediaPlayer.isPlaying();
+    }
+
+    public void setLooping(boolean looping) {
+        mediaPlayer.setLooping(looping);
+    }
+
+    public boolean isLooping() {
+        return mediaPlayer.isLooping();
+    }
+
+    public void setVolume(float leftVolume, float rightVolume) {
+        mediaPlayer.setVolume(leftVolume, rightVolume);
+    }
+
+    public void pause() throws InterruptedException {
+        mediaPlayer.pause();
+
+        soundThread.join();
+    }
+
+    public void stop() throws InterruptedException {
+        mediaPlayer.stop();
+
+        soundThread.join();
+    }
+
+    public boolean isLoaded() {
+        return isLoaded;
     }
 }
