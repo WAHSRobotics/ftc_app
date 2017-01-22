@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "Encoder Test", group = "Tests")
-@Disabled
+//@Disabled
 public class EncoderTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -44,12 +44,18 @@ public class EncoderTest extends LinearOpMode {
         backLeft.setPower(0.5);
         backRight.setPower(0.5);
 
-        while(frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy()) {
+        while((frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy())
+                && !(frontLeft.getCurrentPosition() >= frontLeft.getTargetPosition() &&
+                frontRight.getCurrentPosition() >= frontRight.getTargetPosition() &&
+                backLeft.getCurrentPosition() >= backLeft.getTargetPosition() &&
+                backRight.getCurrentPosition() >= backRight.getTargetPosition())) {
             Thread.sleep(1);
             telemetry.addData("Front Left Encoder", frontLeft.getCurrentPosition());
             telemetry.addData("Front Right Encoder", frontRight.getCurrentPosition());
             telemetry.addData("Back Left Encoder", backLeft.getCurrentPosition());
             telemetry.addData("Back Right Encoder", backRight.getCurrentPosition());
+
+            telemetry.update();
         }
 
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

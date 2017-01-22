@@ -198,7 +198,7 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void turn(double power, double angle) throws InterruptedException {
-        angle = Range.clip(angle, 0, 359);
+        angle = Range.clip(angle, -359, 359);
 
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -242,23 +242,6 @@ public class HolonomicDriveTrain extends DriveTrain {
                 currentHeading = negative ? 359 - gyroSensor.getHeading() : gyroSensor.getHeading();
             }
         } while(currentHeading < abs(angle));
-
-        stop();
-
-        Thread.sleep(100);
-
-        do {
-            currentHeading = negative ? 359 - gyroSensor.getHeading() : gyroSensor.getHeading();
-
-            frontLeft.setPower(power * -powerMultiplier);
-            frontRight.setPower(power * -powerMultiplier);
-            backLeft.setPower(power * -powerMultiplier);
-            backRight.setPower(power * -powerMultiplier);
-
-            powerMultiplier *= 0.95;
-
-            Thread.sleep(1);
-        } while(currentHeading > abs(angle));
 
         stop();
     }
