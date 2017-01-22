@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team9202hme.math.PowerScale;
+import org.firstinspires.ftc.team9202hme.math.vector.Vector2;
 
 import static java.lang.Math.*;
 
@@ -16,7 +17,10 @@ import static java.lang.Math.*;
  * Drive train made for robots using the holonomic drive
  * configuration. This class assumes that the wheels are
  * in "X" configuration, where wheels are at 45 degree
- * angles on the corners of the robot
+ * angles on the corners of the robot. It also assumes
+ * that every wheel is the same diameter, and each
+ * corresponding motor has the same number of encoder
+ * ticks per rotation
  *
  * @author Nathaniel Glover
  */
@@ -28,6 +32,16 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     private final double mmWheelDiameter;
     private final int encoderTicksPerRotation;
+
+    /**
+     * The minimum power at which the robot can turn without stalling
+     */
+    private final double MINIMUM_TURN_POWER = 0.15;
+
+    /**
+     * The minimum power at which the robot can move without stalling
+     */
+    private final double MINIMUM_MOVE_POWER = 0.2;
 
     /**
      * Gives HolonomicDriveTrain the values it needs
@@ -45,35 +59,52 @@ public class HolonomicDriveTrain extends DriveTrain {
         this.encoderTicksPerRotation = encoderTicksPerRotation;
     }
 
+    /**
+     * Enumeration of the four possible motors that this DriveTrain will work with
+     */
     private enum Motor {
         FRONT_LEFT, FRONT_RIGHT, BACK_LEFT, BACK_RIGHT
     }
 
-    private double holonomicMath(double x, double y, double rotation, Motor motor) {
+    /**
+     * Calculates the motor power necessary to move the
+     * robot at the desired angle, which is specified by
+     * a simple direction vector, while also turning the
+     * robot at the desired motor power
+     *
+     * @param direction
+     * @param turnPower
+     * @param motor
+     * @return
+     */
+    private double holonomicMath(Vector2 direction, double turnPower, Motor motor) {
+        double y = direction.y;
+        double x = direction.x;
+
         double power = 0.0;
 
         switch(motor) {
-            case FRONT_LEFT: power = + y + x + rotation;
+            case FRONT_LEFT: power = + y + x + turnPower;
                 break;
-            case FRONT_RIGHT: power = - y + x + rotation;
+            case FRONT_RIGHT: power = - y + x + turnPower;
                 break;
-            case BACK_LEFT: power = + y - x + rotation;
+            case BACK_LEFT: power = + y - x + turnPower;
                 break;
-            case BACK_RIGHT: power = - y - x + rotation;
+            case BACK_RIGHT: power = - y - x + turnPower;
                 break;
         }
 
         return power;
     }
 
-    private void holonomicMove(double x, double y, double rotation) {
-        if(x == 0.0 && y == 0.0 && rotation == 0.0) {
+    private void holonomicMove(Vector2 direction, double turnPower) {
+        if(direction.x == 0.0 && direction.y == 0.0 && turnPower == 0.0) {
             stop();
         } else {
-            frontLeft.setPower(powerScale.scalePower(holonomicMath(x, y, rotation, Motor.FRONT_LEFT)));
-            frontRight.setPower(powerScale.scalePower(holonomicMath(x, y, rotation, Motor.FRONT_RIGHT)));
-            backLeft.setPower(powerScale.scalePower(holonomicMath(x, y, rotation, Motor.BACK_LEFT)));
-            backRight.setPower(powerScale.scalePower(holonomicMath(x, y, rotation, Motor.BACK_RIGHT)));
+            frontLeft.setPower(powerScale.scalePower(holonomicMath(direction, turnPower, Motor.FRONT_LEFT)));
+            frontRight.setPower(powerScale.scalePower(holonomicMath(direction, turnPower, Motor.FRONT_RIGHT)));
+            backLeft.setPower(powerScale.scalePower(holonomicMath(direction, turnPower, Motor.BACK_LEFT)));
+            backRight.setPower(powerScale.scalePower(holonomicMath(direction, turnPower, Motor.BACK_RIGHT)));
         }
     }
 
@@ -129,7 +160,7 @@ public class HolonomicDriveTrain extends DriveTrain {
     public void driveControlled(Gamepad controller) {
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        holonomicMove(controller.left_stick_x, controller.left_stick_y, controller.right_stick_x);
+        holonomicMove(new Vector2(controller.left_stick_x, controller.left_stick_y), controller.right_stick_x);
     }
 
     @Override
@@ -144,23 +175,19 @@ public class HolonomicDriveTrain extends DriveTrain {
     public void move(double power, double angle) {
         double theta = toRadians(angle + 90);
 
-        double x = power * cos(theta);
-        double y = power * sin(theta);
-
-        holonomicMove(x, y, 0.0);
+        holonomicMove(new Vector2(power * cos(theta), power * sin(theta)), 0.0);
     }
 
     @Override
     public void move(double power, double angle, double distance) throws InterruptedException {
         double theta = toRadians(angle + 90);
 
-        double x = power * cos(theta);
-        double y = power * sin(theta);
+        Vector2 direction = new Vector2(power * cos(theta), power * sin(theta));
 
-        double frontLeftPower = holonomicMath(x, y, 0.0, Motor.FRONT_LEFT);
-        double frontRightPower = holonomicMath(x, y, 0.0, Motor.FRONT_RIGHT);
-        double backLeftPower = holonomicMath(x, y, 0.0, Motor.BACK_LEFT);
-        double backRightPower = holonomicMath(x, y, 0.0, Motor.BACK_RIGHT);
+        double frontLeftPower = holonomicMath(direction, 0.0, Motor.FRONT_LEFT);
+        double frontRightPower = holonomicMath(direction, 0.0, Motor.FRONT_RIGHT);
+        double backLeftPower = holonomicMath(direction, 0.0, Motor.BACK_LEFT);
+        double backRightPower = holonomicMath(direction, 0.0, Motor.BACK_RIGHT);
 
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -193,12 +220,16 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void turn(double power) {
-        holonomicMove(0.0, 0.0, power);
+        holonomicMove(new Vector2(0, 0), power);
     }
 
     @Override
     public void turn(double power, double angle) throws InterruptedException {
-        angle = Range.clip(angle, -359, 359);
+        if(angle < -359) {
+            angle += 360;
+        } else if(angle > 359) {
+            angle -= 360;
+        }
 
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -206,42 +237,43 @@ public class HolonomicDriveTrain extends DriveTrain {
 
         Thread.sleep(5);
 
-        do {
+        while(!gyroSensor.isCalibrating()) {
             gyroSensor.calibrate();
             Thread.sleep(5);
-        } while(!gyroSensor.isCalibrating());
+        }
 
         while(gyroSensor.isCalibrating()) {
             Thread.sleep(5);
         }
 
-        double powerMultiplier;
         boolean negative;
 
         if(angle >= 0) {
             negative = false;
-            powerMultiplier = 1;
+            power *= 1;
         } else {
             negative = true;
-            powerMultiplier = -1;
+            power *= -1;
         }
 
-        int currentHeading;
+        int currentHeading = 0;
 
-        do {
-            frontLeft.setPower(power * powerMultiplier);
-            frontRight.setPower(power * powerMultiplier);
-            backLeft.setPower(power * powerMultiplier);
-            backRight.setPower(power * powerMultiplier);
-
-            Thread.sleep(1);
-
+        while(currentHeading < abs(angle)) {
             if(gyroSensor.getHeading() == 0) {
                 currentHeading = 0;
             } else {
                 currentHeading = negative ? 359 - gyroSensor.getHeading() : gyroSensor.getHeading();
             }
-        } while(currentHeading < abs(angle));
+
+            double finalPower = (-((abs(power) - MINIMUM_TURN_POWER) / abs(angle)) * currentHeading) + abs(power);
+
+            frontLeft.setPower(finalPower);
+            frontRight.setPower(finalPower);
+            backLeft.setPower(finalPower);
+            backRight.setPower(finalPower);
+
+            Thread.sleep(1);
+        }
 
         stop();
     }
@@ -250,9 +282,8 @@ public class HolonomicDriveTrain extends DriveTrain {
     public void moveAndTurn(double movePower, double angle, double turnPower) {
         double theta = toRadians(angle + 90);
 
-        double x = movePower * cos(theta);
-        double y = movePower * sin(theta);
+        Vector2 direction = new Vector2(movePower * cos(theta), movePower * sin(theta));
 
-        holonomicMove(x, y, turnPower);
+        holonomicMove(direction, turnPower);
     }
 }
