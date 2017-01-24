@@ -2,14 +2,9 @@ package org.firstinspires.ftc.teamcode.robot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.GyroSensor;
-
 import org.firstinspires.ftc.teamcode.hardware.HardwareConstants;
 import org.firstinspires.ftc.teamcode.hardware.driving.HolonomicDriveTrain;
-
 public class LsRobot extends Robot {
-
-
-
     private ColorSensor colorSensor;
     private GyroSensor gyroSensor;
 
@@ -23,6 +18,7 @@ public class LsRobot extends Robot {
         driveTrain.init(opMode.hardwareMap);
 
         colorSensor = opMode.hardwareMap.colorSensor.get("color");
+        gyroSensor = opMode.hardwareMap.gyroSensor.get("gyro");
     }
 
     @Override
@@ -30,83 +26,36 @@ public class LsRobot extends Robot {
 
     }
 
-
-
     @Override
     public void runAutonomous() throws InterruptedException {
+        //Disable color sensor LED so the light reflecting off of the beacon's surface doesn't interfere with color sensor
         colorSensor.enableLed(false);
+
+        //Calibrate gyro, and pause the thread while it is calibrating (takes about 3-4 seconds)
         gyroSensor.calibrate();
-        final int DISTANCE_TO_BUTTON = 163;
-        switch (fieldSide) {
-            case RED:
-        while(opMode.opModeIsActive()){
-
         while(gyroSensor.isCalibrating()){
-
-                Thread.sleep(1);
+            Thread.sleep(5);
         }
-            driveTrain.move(1000,90);
 
-            if ((30 >= gyroSensor.getHeading()) || (gyroSensor.getHeading() < 8)){
-                driveTrain.rightPowerInc(.2);
-            }
-            else if((gyroSensor.getHeading()) <359 || (gyroSensor.getHeading())>329 ){
+        //Move forward off of the wall
+        driveTrain.move(500, 0);
 
-                driveTrain.leftPowerInc(.2);
-            }
-
-
-
-
-
-
-
-
-
-        }
-               ;
-
-
-
-
-
-
-//                while(!(colorSensor.red() - colorSensor.blue() >= 1)){
-//                    driveTrain.moveIndefinitely(270);
-//                }
-//
-//                while ((colorSensor.red() - colorSensor.blue() >= 1)){
-//
-//                    driveTrain.move(DISTANCE_TO_BUTTON);
-//                    driveTrain.move(20,270);
-//                    driveTrain.move(DISTANCE_TO_BUTTON);
-//                    driveTrain.move(20,270);
-
-
-
-
-
-                //}
-
-
-
+        switch (fieldSide) {
+            //If on red side...
+            case RED:
+                //Move left to the ramp, turn towards it, and drive up it
+                driveTrain.move(1000, 90);
+                driveTrain.turn(-135, 0.5);
+                driveTrain.move(500,0);
 
                 break;
-
+            //If on blue side...
             case BLUE:
+                //Move right to the ramp, turn towards it, and drive up it
+                driveTrain.move(1000, 270);
+                driveTrain.turn(135, 0.5);
+                driveTrain.move(500,270);
 
-                while (!(colorSensor.blue() - colorSensor.red() >= 1)) {
-                    driveTrain.moveIndefinitely(90);
-                    opMode.telemetry.addData("Autonomous", "Looking for beacon");
-                    opMode.telemetry.update();
-                    Thread.sleep(5);
-                }
-                while(colorSensor.blue() - colorSensor.red() >= 1){
-
-                    driveTrain.move(30,90);
-                    driveTrain.move(DISTANCE_TO_BUTTON);
-                    driveTrain.move(DISTANCE_TO_BUTTON, 180);
-                }
                 break;
         }
     }

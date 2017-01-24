@@ -5,9 +5,11 @@ import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
+import org.firstinspires.ftc.teamcode.opmode.teleop.GGRobit;
+
 @TeleOp(name = "LSTeleOp")
-public class LsTeleop extends OpMode {
-    private LSRobit robot = new LSRobit();
+public class GGTeleop extends OpMode {
+    private GGRobit robot = new GGRobit();
     @Override
     public void init() {
         robot.init(hardwareMap);
@@ -15,9 +17,6 @@ public class LsTeleop extends OpMode {
         robot.rightfront.setPower(0.0);
         robot.leftback.setPower(0.0);
         robot.rightback.setPower(0.0);
-        robot.Spin1.setPower(0.0);
-        robot.Spin2.setPower(0.0);
-        robot.Spin3.setPower(0.0);
     }
 
 
@@ -48,39 +47,10 @@ public class LsTeleop extends OpMode {
         return scaledPower;
     }
     public void loop() {
-        double y = -gamepad1.left_stick_y;
-        double x = gamepad1.left_stick_x;
-        double z = gamepad1.right_stick_x;
 
-// if (gamepad1.right_bumper) {
-//            robot.Spin1.setPower(1.0);
-//        } else if (gamepad1.b){
-//            robot.Spin1.setPower(-1);
-//        }else
-//        {
-//        robot.Spin1.setPower(0.0);
-//        }
-//
-//        if (gamepad1.a ){
-//            robot.Spin2.setPower(-1.0);
-//        }else if(gamepad1.left_bumper){
-//                robot.Spin2.setPower(1);
-//        }
-//        else{
-//            robot.Spin2.setPower(0.0);
-//        }
-//
-//        if(gamepad1.left_trigger > 0){
-//            robot.Spin3.setPower(gamepad1.left_trigger);
-//        } else if (gamepad1.right_trigger > 0){
-//
-//            robot.Spin3.setPower(-gamepad1.right_trigger);
-//
-//        }
-
-        robot.rightfront.setPower(scale(+ y - x + z));
-        robot.leftfront.setPower(scale(- y - x + z));
-        robot.rightback.setPower(scale(+ y + x + z));
-        robot.leftback.setPower(scale(- y + x + z));
+        robot.rightfront.setPower(scale(gamepad1.left_stick_y));
+        robot.leftfront.setPower(scale(gamepad1.right_stick_y));
+        robot.rightback.setPower(scale(gamepad1.right_stick_y));
+        robot.leftback.setPower(scale(gamepad1.left_stick_y));
     }
 }

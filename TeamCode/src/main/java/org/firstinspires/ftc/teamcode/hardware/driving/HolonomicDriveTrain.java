@@ -20,17 +20,15 @@ public class HolonomicDriveTrain extends DriveTrain {
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private GyroSensor gyroSensor;
     private PowerScale powerScale = new PowerScale(0.02, 0.80, 6);
-
     private final double mmWheelDiameter;
     private final int encoderTicksPerRotation;
-
     public HolonomicDriveTrain(double mmWheelDiameter, int encoderTicksPerRotation) {
         this.mmWheelDiameter = mmWheelDiameter;
         this.encoderTicksPerRotation = encoderTicksPerRotation;
     }
 
     private Vec2 degreesToPoint(double degrees, double power) {
-        double angle = toRadians(degrees - 90); //TODO: Change this
+        double angle = toRadians(degrees); //TODO: Change this
 
         double x = power * cos(angle);
         double y = power * sin(angle);
@@ -79,7 +77,7 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     private boolean motorsBusy() {
-        return frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy();
+        return frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy();
     }
 
     private void setRunMode(DcMotor.RunMode runMode) {
@@ -154,10 +152,9 @@ public class HolonomicDriveTrain extends DriveTrain {
     public void moveIndefinitely() throws InterruptedException {
         holonomicMove(0.0, AUTONOMOUS_SPEED, 0.0);
     }
-
     @Override
     public void moveIndefinitely(int degrees) throws InterruptedException {
-        Vec2 point = degreesToPoint(degrees, AUTONOMOUS_SPEED);
+        Vec2 point = degreesToPoint(degrees - 90, AUTONOMOUS_SPEED);
 
         double frontLeftPower = holonomicMath(point.x, point.y, 0.0, Motor.FRONT_LEFT);
         double frontRightPower = holonomicMath(point.x, point.y, 0.0, Motor.FRONT_RIGHT);
@@ -209,7 +206,7 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void move(int millimeters, int degrees) throws InterruptedException {
-        Vec2 point = degreesToPoint(degrees, AUTONOMOUS_SPEED);
+        Vec2 point = degreesToPoint(degrees - 90, AUTONOMOUS_SPEED);
 
         double frontLeftPower = holonomicMath(point.x, point.y, 0.0, Motor.FRONT_LEFT);
         double frontRightPower = holonomicMath(point.x, point.y, 0.0, Motor.FRONT_RIGHT);

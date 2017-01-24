@@ -6,12 +6,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-
-
-
-
-
-
 public class LSRobit {
 //what a meme
     public DcMotor leftfront;
@@ -25,8 +19,6 @@ public class LSRobit {
     public OpticalDistanceSensor odsSensor;
 //memes
     public void init(HardwareMap hwMap){
-        //arm = hwMap.servo.get("arm");
-
         leftfront = hwMap.dcMotor.get("red");
         rightfront = hwMap.dcMotor.get("green");
         leftback = hwMap.dcMotor.get("blue");
@@ -34,23 +26,12 @@ public class LSRobit {
         Spin2 = hwMap.dcMotor.get("silver");
         Spin1 = hwMap.dcMotor.get("white");
         Spin3 = hwMap.dcMotor.get("gold");
-
         gyro = (ModernRoboticsI2cGyro) hwMap.gyroSensor.get("gyro");
-
         odsSensor = hwMap.opticalDistanceSensor.get("ods");
-
-        //memes
-
         leftfront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         rightfront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         leftback.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         rightback.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-
-
     }
 
     public void drive(double x, double y, double z){
@@ -63,7 +44,6 @@ public class LSRobit {
         rightback.setPower(+ y + x + z);
         leftback.setPower(- y + x + z);
     }
-
     private double scalePower(double power) {
         double scaledPower = 0.0f;
 
@@ -95,23 +75,15 @@ public class LSRobit {
     public void driveByTime(double x, double y, double z, int milliseconds){
         ElapsedTime runtime = new ElapsedTime();
         runtime.reset();
-
         while( runtime.seconds()< milliseconds){
             drive(x,y,z);
-
         }
-
     }
-
     public void RotationDrive(double degrees, double speed){
         //gyro
         double heading = gyro.getHeading();
         //this is the regeistration for the gyro
-
-
-
-
-    }
+        }
 
 
 

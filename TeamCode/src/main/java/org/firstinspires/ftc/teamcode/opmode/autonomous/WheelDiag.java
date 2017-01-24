@@ -3,12 +3,14 @@ package org.firstinspires.ftc.teamcode.opmode.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.opmode.teleop.GGRobit;
 import org.firstinspires.ftc.teamcode.opmode.teleop.LSRobit;
 
 
 @Autonomous (name = "WheelTest")
 public class WheelDiag extends LinearOpMode {
     private LSRobit robot = new LSRobit();
+    //private GGRobit robot = new GGRobit();
     @Override
 //memes
     public void runOpMode() throws InterruptedException {
