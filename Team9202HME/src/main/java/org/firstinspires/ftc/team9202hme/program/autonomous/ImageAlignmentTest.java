@@ -12,6 +12,8 @@ import org.firstinspires.ftc.team9202hme.navigation.CameraSide;
 import org.firstinspires.ftc.team9202hme.navigation.PhoneOrientation;
 import org.firstinspires.ftc.team9202hme.program.AutonomousProgram;
 
+import static java.lang.Math.*;
+
 public class ImageAlignmentTest extends AutonomousProgram {
     public ImageAlignmentTest(LinearOpMode opMode, FieldSide fieldSide) {
         super(opMode, fieldSide);
@@ -36,15 +38,5 @@ public class ImageAlignmentTest extends AutonomousProgram {
             Thread.sleep(1);
             visible = navigator.canSeeTarget(target);
         }
-
-        Vector3 translation = navigator.getRelativeTargetTranslation(target);
-        Vector3 rotation = navigator.getRelativeTargetRotation(target);
-
-        telemetry.addData("Translation", translation);
-        telemetry.addData("Rotation", rotation);
-
-        telemetry.update();
-
-        driveTrain.turn(0.3, rotation.y);
     }
 }

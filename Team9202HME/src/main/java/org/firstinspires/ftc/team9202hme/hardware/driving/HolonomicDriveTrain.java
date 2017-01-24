@@ -72,10 +72,12 @@ public class HolonomicDriveTrain extends DriveTrain {
      * a simple direction vector, while also turning the
      * robot at the desired motor power
      *
-     * @param direction
-     * @param turnPower
-     * @param motor
-     * @return
+     * @param direction The direction at which the robot will move, should be
+     *                  a unit vector
+     * @param turnPower The power with which the robot will turn
+     * @param motor The motor to calculate power for
+     *
+     * @return The motor power necessary for moving in holonomic drive configuration
      */
     private double holonomicMath(Vector2 direction, double turnPower, Motor motor) {
         double y = direction.y;
@@ -160,7 +162,11 @@ public class HolonomicDriveTrain extends DriveTrain {
     public void driveControlled(Gamepad controller) {
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        holonomicMove(new Vector2(controller.left_stick_x, controller.left_stick_y), controller.right_stick_x);
+        if(controller.left_trigger < .5) {
+            holonomicMove(new Vector2(controller.left_stick_x, controller.left_stick_y), controller.right_stick_x);
+        } else {
+            holonomicMove(new Vector2(-controller.left_stick_x, -controller.left_stick_y), controller.right_stick_x);
+        }
     }
 
     @Override

@@ -4,4 +4,4 @@
  *
  * @author Nathaniel Glover
  */
-package org.firstinspires.ftc.team9202hme.hardware.audio;
+package org.firstinspires.ftc.team9202hme.audio;
