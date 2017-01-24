@@ -13,12 +13,12 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 
  //this is a work in progress
-@Autonomous(name="Semi-Auto", group="Memestatus")
+@Autonomous(name="GGAuto", group="Memestatus")
 
 public class AutonomousRobitMeme extends LinearOpMode {
 
 
-    LSRobit robot   = new LSRobit();
+    GGRobit robot   = new GGRobit();
     private ElapsedTime     runtime = new ElapsedTime();
 
     static final double     FORWARD_SPEED = 0.6;
@@ -35,9 +35,7 @@ public class AutonomousRobitMeme extends LinearOpMode {
 
 
         waitForStart();
-        robot.driveByTime(0.5,0.0,0.0,9000);
 
-        robot.driveByTime(0.0,0.0,0.5,0);
 
 
         runtime.reset();
