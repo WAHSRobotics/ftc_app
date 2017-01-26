@@ -25,8 +25,8 @@ public class ElevatorGatherer extends Gatherer {
             lift.setPower(0);
         }
 
-        if(controller.right_bumper) {
-            spinner.setPower(1);
+        if(controller.right_trigger > 0.1) {
+            spinner.setPower(controller.right_trigger);
         } else {
             spinner.setPower(0);
         }

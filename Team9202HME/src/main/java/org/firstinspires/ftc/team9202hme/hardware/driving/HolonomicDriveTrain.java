@@ -36,12 +36,12 @@ public class HolonomicDriveTrain extends DriveTrain {
     /**
      * The minimum power at which the robot can turn without stalling
      */
-    private final double MINIMUM_TURN_POWER = 0.15;
+    private final double MINIMUM_TURN_POWER = 0.075;
 
     /**
      * The minimum power at which the robot can move without stalling
      */
-    private final double MINIMUM_MOVE_POWER = 0.2;
+    private final double MINIMUM_MOVE_POWER = 0.25;
 
     /**
      * Gives HolonomicDriveTrain the values it needs
@@ -231,12 +231,6 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void turn(double power, double angle) throws InterruptedException {
-        if(angle < -359) {
-            angle += 360;
-        } else if(angle > 359) {
-            angle -= 360;
-        }
-
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         gyroSensor.resetZAxisIntegrator();
@@ -271,12 +265,16 @@ public class HolonomicDriveTrain extends DriveTrain {
                 currentHeading = negative ? 359 - gyroSensor.getHeading() : gyroSensor.getHeading();
             }
 
-            double finalPower = (-((abs(power) - MINIMUM_TURN_POWER) / abs(angle)) * currentHeading) + abs(power);
+//            double finalPower = (2 * (-(power - MINIMUM_TURN_POWER) / abs(angle)) * currentHeading) + power;
+//
+//            if(finalPower <= MINIMUM_TURN_POWER) {
+//                finalPower = MINIMUM_TURN_POWER;
+//            }
 
-            frontLeft.setPower(finalPower);
-            frontRight.setPower(finalPower);
-            backLeft.setPower(finalPower);
-            backRight.setPower(finalPower);
+            frontLeft.setPower(power);
+            frontRight.setPower(power);
+            backLeft.setPower(power);
+            backRight.setPower(power);
 
             Thread.sleep(1);
         }

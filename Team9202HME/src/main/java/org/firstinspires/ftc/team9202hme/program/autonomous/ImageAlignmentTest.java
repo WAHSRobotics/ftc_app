@@ -28,15 +28,35 @@ public class ImageAlignmentTest extends AutonomousProgram {
         navigator.init();
 
         final ImageTarget target = ImageTarget.GEARS;
-        final Telemetry telemetry = opMode.telemetry;
 
         opMode.waitForStart();
 
-        boolean visible = navigator.canSeeTarget(target);
+        final double RANGE = 20;
+        final double SPEED = 0.2;
 
-        while(!visible) {
-            Thread.sleep(1);
-            visible = navigator.canSeeTarget(target);
+        while(opMode.opModeIsActive()) {
+            Vector3 rotation = navigator.getRelativeTargetRotation(target);
+            Vector3 translation = navigator.getRelativeTargetTranslation(target);
+
+            opMode.telemetry.addData("Rotation", rotation);
+            opMode.telemetry.addData("Translation", translation);
+            opMode.telemetry.update();
+
+//            if(rotation.y > RANGE) {
+//                driveTrain.turn(SPEED);
+//            } else if(rotation.y < -RANGE) {
+//                driveTrain.turn(-SPEED);
+//            } else {
+//                driveTrain.stop();
+//            }
+
+            if(translation.x > RANGE){
+                driveTrain.move(SPEED, 90);
+            } else if(translation.x < -RANGE){
+                driveTrain.move(SPEED, 270);
+            } else {
+                driveTrain.stop();
+            }
         }
     }
 }
