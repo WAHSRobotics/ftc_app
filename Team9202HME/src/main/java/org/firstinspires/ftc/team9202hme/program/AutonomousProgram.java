@@ -28,7 +28,7 @@ public abstract class AutonomousProgram {
      * The LinearOpMode that will be running this program. Used for accessing
      * things like HardwareMap, Gamepad, and Telemetry
      */
-    protected LinearOpMode opMode;
+    final protected LinearOpMode opMode;
     /**
      * The side of the field that the robot will be on when this program is run
      */
