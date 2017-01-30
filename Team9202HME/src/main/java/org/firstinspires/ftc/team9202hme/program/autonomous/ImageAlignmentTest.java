@@ -37,14 +37,15 @@ public class ImageAlignmentTest extends AutonomousProgram {
         final double RANGE = 30;
         final double ANGLE_RANGE = 5;
 
-        final double SPEED = 0.2;
+        final double MOVE_SPEED = 0.3;
+        final double TURN_SPEED = 0.2;
 
         double movePower = 0, turnPower = 0, angle = 0;
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                final ImageTarget target = ImageTarget.GEARS;   //remember to change this dumb ass
+                final ImageTarget target = ImageTarget.GEARS;
 
                 final Navigator navigator = new Navigator(CameraSide.BACK, PhoneOrientation.CHARGER_SIDE_UP, 1, true);
                 navigator.init();
@@ -65,17 +66,17 @@ public class ImageAlignmentTest extends AutonomousProgram {
 
         while(opMode.opModeIsActive()) {
             if(rotation[0].y > ANGLE_RANGE) {
-                movePower = SPEED;
+                movePower = MOVE_SPEED;
                 angle = 270;
             } else if(rotation[0].y < -ANGLE_RANGE) {
-                movePower = SPEED;
+                movePower = MOVE_SPEED;
                 angle = 90;
             }
 
             if(translation[0].x > RANGE) {
-                turnPower = SPEED;
+                turnPower = TURN_SPEED;
             } else if(translation[0].x < -RANGE){
-                turnPower = -SPEED;
+                turnPower = -TURN_SPEED;
             }
 
             if((translation[0].x < RANGE && translation[0].x > -RANGE) && (rotation[0].y < ANGLE_RANGE && rotation[0].y > -ANGLE_RANGE)) {
