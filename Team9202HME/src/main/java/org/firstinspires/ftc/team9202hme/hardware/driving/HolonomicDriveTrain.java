@@ -179,14 +179,14 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void move(double power, double angle) {
-        double theta = toRadians(angle + 90);
+        double theta = toRadians(angle - 90);
 
         holonomicMove(new Vector2(power * cos(theta), power * sin(theta)), 0.0);
     }
 
     @Override
     public void move(double power, double angle, double distance) throws InterruptedException {
-        double theta = toRadians(angle + 90);
+        double theta = toRadians(angle - 90);
 
         Vector2 direction = new Vector2(power * cos(theta), power * sin(theta));
 
@@ -265,12 +265,6 @@ public class HolonomicDriveTrain extends DriveTrain {
                 currentHeading = negative ? 359 - gyroSensor.getHeading() : gyroSensor.getHeading();
             }
 
-//            double finalPower = (2 * (-(power - MINIMUM_TURN_POWER) / abs(angle)) * currentHeading) + power;
-//
-//            if(finalPower <= MINIMUM_TURN_POWER) {
-//                finalPower = MINIMUM_TURN_POWER;
-//            }
-
             frontLeft.setPower(power);
             frontRight.setPower(power);
             backLeft.setPower(power);
@@ -284,7 +278,7 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public void moveAndTurn(double movePower, double angle, double turnPower) {
-        double theta = toRadians(angle + 90);
+        double theta = toRadians(angle - 90);
 
         Vector2 direction = new Vector2(movePower * cos(theta), movePower * sin(theta));
 

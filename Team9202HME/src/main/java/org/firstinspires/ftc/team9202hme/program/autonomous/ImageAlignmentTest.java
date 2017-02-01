@@ -30,46 +30,81 @@ public class ImageAlignmentTest extends AutonomousProgram {
 
         opMode.waitForStart();
 
-        final ImageTarget target = ImageTarget.GEARS;
+        final ImageTarget TARGET = ImageTarget.GEARS;
 
-        final double RANGE = 30;
-        final double ANGLE_RANGE = 5;
+        final double MOVE_RANGE = 20;
+        final double DISTANCE_RANGE = 100;
+        final double ANGLE_RANGE = 3;
 
         final double MOVE_SPEED = 0.3;
         final double TURN_SPEED = 0.2;
 
         double movePower = 0, turnPower = 0, angle = 0;
+        int state = 0;
 
         while(opMode.opModeIsActive()) {
-            Vector3 rotation = navigator.getRelativeTargetRotation(target);
-            Vector3 translation = navigator.getRelativeTargetTranslation(target);
+            boolean canSeeTarget = navigator.canSeeTarget(TARGET);
 
-            opMode.telemetry.addData("Rotation", rotation);
-            opMode.telemetry.addData("Translation", translation);
+            Vector3 rotation = navigator.getRelativeTargetRotation(TARGET);
+            Vector3 translation = navigator.getRelativeTargetTranslation(TARGET);
+            translation.z = abs(translation.z);
+
+            if(canSeeTarget) {
+                opMode.telemetry.addData("Rotation", rotation);
+                opMode.telemetry.addData("Translation", translation);
+            } else {
+                opMode.telemetry.addLine("Image is not visible");
+            }
 
             opMode.telemetry.update();
-            
-            if(rotation.y > ANGLE_RANGE) {
-                movePower = MOVE_SPEED;
-                angle = 270;
-            } else if(rotation.y < -ANGLE_RANGE) {
-                movePower = MOVE_SPEED;
-                angle = 90;
-            }
 
-            if(translation.x > RANGE) {
-                turnPower = TURN_SPEED;
-            } else if(translation.x < -RANGE){
-                turnPower = -TURN_SPEED;
-            }
+            //State 0: Align and center on image
+            //State 1: Get close enough to the image for the color sensor to do its stuff
+            //State 2: Move based on values of the color sensor
 
-            if((translation.x < RANGE && translation.x > -RANGE) && (rotation.y < ANGLE_RANGE && rotation.y > -ANGLE_RANGE)) {
-                movePower = 0;
-                angle = 0;
-                turnPower = 0;
-            }
+            if(canSeeTarget) {
+                switch(state) {
+                    case 0:
+                        if(rotation.y > ANGLE_RANGE) {
+                            movePower = MOVE_SPEED;
+                            angle = 90;
+                        } else if(rotation.y < -ANGLE_RANGE) {
+                            movePower = MOVE_SPEED;
+                            angle = 270;
+                        }
 
-            driveTrain.moveAndTurn(movePower, angle, turnPower);
+                        if(translation.x > MOVE_RANGE) {
+                            turnPower = TURN_SPEED;
+                        } else if(translation.x < -MOVE_RANGE) {
+                            turnPower = -TURN_SPEED;
+                        }
+
+                        if((translation.x < MOVE_RANGE && translation.x > -MOVE_RANGE) && (rotation.y < ANGLE_RANGE && rotation.y > -ANGLE_RANGE)) {
+                            driveTrain.stop();
+                            state++;
+                        }
+
+                        driveTrain.moveAndTurn(movePower, angle, turnPower);
+                        break;
+                    case 1:
+                        if(translation.z > DISTANCE_RANGE + MOVE_RANGE) {
+                            driveTrain.move(MOVE_SPEED, 180);
+                        } else if(translation.z < DISTANCE_RANGE - MOVE_RANGE) {
+                            driveTrain.move(MOVE_RANGE, 0);
+                        } else {
+                            driveTrain.stop();
+                            state++;
+                        }
+                        break;
+                    case 2:
+                        driveTrain.stop();
+                        opMode.requestOpModeStop();
+                        break;
+                }
+            } else {
+                driveTrain.stop();
+                opMode.requestOpModeStop();
+            }
         }
     }
 }
