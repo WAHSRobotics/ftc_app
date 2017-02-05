@@ -18,7 +18,7 @@ public class RollerShooter extends Shooter {
 
     @Override
     public void shootControlled(Gamepad controller) {
-        if(controller.left_bumper){
+        if(controller.right_trigger > 0.1){
             left.setPower(1);
             right.setPower(1);
         } else {

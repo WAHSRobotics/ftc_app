@@ -19,16 +19,16 @@ public class ElevatorGatherer extends Gatherer {
 
     @Override
     public void gatherControlled(Gamepad controller) {
-        if(controller.left_bumper) {
-            lift.setPower(1);
+        if(controller.left_trigger > 0.1) {
+            spinner.setPower(1);
         } else {
-            lift.setPower(0);
+            spinner.setPower(0);
         }
 
         if(controller.right_trigger > 0.1) {
-            spinner.setPower(controller.right_trigger);
+            lift.setPower(1);
         } else {
-            spinner.setPower(0);
+            lift.setPower(0);
         }
     }
 
@@ -41,7 +41,6 @@ public class ElevatorGatherer extends Gatherer {
     public void init(HardwareMap hardwareMap) {
         lift = hardwareMap.dcMotor.get("lift");
         spinner = hardwareMap.dcMotor.get("spinner");
-
     }
 
     @Override
