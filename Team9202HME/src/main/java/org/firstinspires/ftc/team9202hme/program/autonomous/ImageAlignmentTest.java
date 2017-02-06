@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.team9202hme.R;
+import org.firstinspires.ftc.team9202hme.audio.Sound;
 import org.firstinspires.ftc.team9202hme.hardware.driving.HolonomicDriveTrain;
 import org.firstinspires.ftc.team9202hme.math.vector.Vector3;
 import org.firstinspires.ftc.team9202hme.navigation.ImageTarget;
@@ -29,6 +31,10 @@ public class ImageAlignmentTest extends AutonomousProgram {
         navigator.init();
 
         opMode.waitForStart();
+
+        Sound sound = new Sound();
+        sound.load(opMode.hardwareMap, R.raw.you_took_the_peepo);
+        sound.setVolume(1.0f, 1.0f);
 
         final ImageTarget TARGET = ImageTarget.GEARS;
 
@@ -88,9 +94,21 @@ public class ImageAlignmentTest extends AutonomousProgram {
                         break;
                     case 1:
                         if(translation.z > DISTANCE_RANGE + MOVE_RANGE) {
-                            driveTrain.move(MOVE_SPEED, 180);
+                            if (rotation.y > ANGLE_RANGE){
+                                driveTrain.moveAndTurn(MOVE_SPEED, 180, -TURN_SPEED);
+                            } else if (rotation.y < - ANGLE_RANGE){
+                                driveTrain.moveAndTurn(MOVE_SPEED, 180, TURN_SPEED);
+                            } else {
+                                driveTrain.move(MOVE_SPEED, 180);
+                            }
                         } else if(translation.z < DISTANCE_RANGE - MOVE_RANGE) {
-                            driveTrain.move(MOVE_RANGE, 0);
+                            if (rotation.y > ANGLE_RANGE){
+                                driveTrain.moveAndTurn(MOVE_SPEED, 0, -TURN_SPEED);
+                            } else if (rotation.y < ANGLE_RANGE){
+                                driveTrain.moveAndTurn(MOVE_SPEED, 0, TURN_SPEED);
+                            } else {
+                                driveTrain.move(MOVE_RANGE, 0);
+                            }
                         } else {
                             driveTrain.stop();
                             state++;
@@ -99,11 +117,9 @@ public class ImageAlignmentTest extends AutonomousProgram {
                     case 2:
                         driveTrain.stop();
                         opMode.requestOpModeStop();
+                        sound.play();
                         break;
                 }
-            } else {
-                driveTrain.stop();
-                opMode.requestOpModeStop();
             }
         }
     }
