@@ -158,14 +158,26 @@ public class HolonomicDriveTrain extends DriveTrain {
         telemetry.addData("Gyro H", gyroSensor.getHeading());
     }
 
+    private double time = 0;
+    private boolean toggle = false;
+
     @Override
     public void driveControlled(Gamepad controller) {
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        if(controller.left_trigger < .5) {
-            holonomicMove(new Vector2(controller.left_stick_x, controller.left_stick_y), controller.right_stick_x);
-        } else {
+        final double COOLDOWN = 0.1f;
+
+        if(controller.y) {
+            if((System.nanoTime() - time) / 1000000000.0f >= COOLDOWN) {
+                toggle = !toggle;
+                time = System.nanoTime();
+            }
+        }
+
+        if(toggle) {
             holonomicMove(new Vector2(-controller.left_stick_x, -controller.left_stick_y), controller.right_stick_x);
+        } else {
+            holonomicMove(new Vector2(controller.left_stick_x, controller.left_stick_y), controller.right_stick_x);
         }
     }
 
