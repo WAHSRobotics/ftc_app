@@ -32,6 +32,8 @@ public class ImageAlignmentTest extends AutonomousProgram {
 
         opMode.waitForStart();
 
+        //work pls
+
         Sound sound = new Sound();
         sound.load(opMode.hardwareMap, R.raw.you_took_the_peepo);
         sound.setVolume(1.0f, 1.0f);
