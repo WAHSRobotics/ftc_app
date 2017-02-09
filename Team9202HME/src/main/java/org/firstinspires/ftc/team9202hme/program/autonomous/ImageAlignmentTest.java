@@ -66,7 +66,7 @@ public class ImageAlignmentTest extends AutonomousProgram {
 
             //State 0: Align and center on image
             //State 1: Get close enough to the image for the color sensor to do its stuff
-            //State 2: Move based on values of the color sensor
+            //State 2: Stop the program (later this will be for color sensor)
 
             if(canSeeTarget) {
                 switch(state) {
@@ -94,25 +94,26 @@ public class ImageAlignmentTest extends AutonomousProgram {
                         break;
                     case 1:
                         if(translation.z > DISTANCE_RANGE + MOVE_RANGE) {
-                            if (rotation.y > ANGLE_RANGE){
-                                driveTrain.moveAndTurn(MOVE_SPEED, 180, -TURN_SPEED);
-                            } else if (rotation.y < - ANGLE_RANGE){
-                                driveTrain.moveAndTurn(MOVE_SPEED, 180, TURN_SPEED);
-                            } else {
-                                driveTrain.move(MOVE_SPEED, 180);
-                            }
+                            movePower = MOVE_SPEED;
+                            angle = 180;
                         } else if(translation.z < DISTANCE_RANGE - MOVE_RANGE) {
-                            if (rotation.y > ANGLE_RANGE){
-                                driveTrain.moveAndTurn(MOVE_SPEED, 0, -TURN_SPEED);
-                            } else if (rotation.y < ANGLE_RANGE){
-                                driveTrain.moveAndTurn(MOVE_SPEED, 0, TURN_SPEED);
-                            } else {
-                                driveTrain.move(MOVE_RANGE, 0);
-                            }
-                        } else {
+                            movePower = MOVE_SPEED;
+                            angle = 0;
+                        }
+
+                        if(rotation.y > ANGLE_RANGE) {
+                            turnPower = 0.1;
+                        } else if(rotation.y < -ANGLE_RANGE) {
+                            turnPower = -0.1;
+                        }
+
+                        if((translation.z > DISTANCE_RANGE + MOVE_RANGE) && (translation.z < DISTANCE_RANGE - MOVE_RANGE)
+                                && (rotation.y < ANGLE_RANGE && rotation.y > -ANGLE_RANGE)) {
                             driveTrain.stop();
                             state++;
                         }
+
+                        driveTrain.moveAndTurn(movePower, angle + rotation.y, turnPower);
                         break;
                     case 2:
                         driveTrain.stop();

@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.SensorMRRangeSenso
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp(name = "Ultrasonic Distance Sensor Test", group = "Tests")
-//@Disabled
+@Disabled
 public class UltrasonicDistanceSensorTest extends OpMode {
     private ModernRoboticsI2cRangeSensor rangeSensor1, rangeSensor2;
 
