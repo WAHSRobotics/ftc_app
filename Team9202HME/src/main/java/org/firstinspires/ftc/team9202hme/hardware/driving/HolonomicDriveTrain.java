@@ -273,6 +273,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         while(currentHeading < abs(angle)) {
             if(gyroSensor.getHeading() == 0) {
                 currentHeading = 0;
+
             } else {
                 currentHeading = negative ? 359 - gyroSensor.getHeading() : gyroSensor.getHeading();
             }
