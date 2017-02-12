@@ -39,7 +39,7 @@ public class ImageAlignmentTest extends AutonomousProgram {
         final ImageTarget TARGET = ImageTarget.GEARS;
 
         final double MOVE_RANGE = 20;
-        final double DISTANCE_RANGE = 100;
+        final double DISTANCE_RANGE = 40;
         final double ANGLE_RANGE = 3;
 
         final double MOVE_SPEED = 0.3;
@@ -62,6 +62,7 @@ public class ImageAlignmentTest extends AutonomousProgram {
                 opMode.telemetry.addLine("Image is not visible");
             }
 
+            opMode.telemetry.addData("case", state);
             opMode.telemetry.update();
 
             //State 0: Align and center on image
@@ -107,18 +108,25 @@ public class ImageAlignmentTest extends AutonomousProgram {
                             turnPower = -0.1;
                         }
 
-                        if((translation.z > DISTANCE_RANGE + MOVE_RANGE) && (translation.z < DISTANCE_RANGE - MOVE_RANGE)
-                                && (rotation.y < ANGLE_RANGE && rotation.y > -ANGLE_RANGE)) {
+                        if((translation.z < 130) && /*(translation.z < DISTANCE_RANGE - MOVE_RANGE)
+                                && */(rotation.y < ANGLE_RANGE && rotation.y > -ANGLE_RANGE)) {
                             driveTrain.stop();
                             state++;
                         }
 
-                        driveTrain.moveAndTurn(movePower, angle + rotation.y, turnPower);
+                        driveTrain.moveAndTurn(movePower, angle, turnPower);
                         break;
                     case 2:
-                        driveTrain.stop();
-                        opMode.requestOpModeStop();
-                        sound.play();
+
+                        if (translation.x > -20){
+                            driveTrain.move(movePower, 90);
+                        } else  if (translation.x < 20){
+                            driveTrain.move(movePower, 270);
+                        } else {
+                            sound.play();
+                            driveTrain.stop();
+                            opMode.requestOpModeStop();
+                        }
                         break;
                 }
             }
