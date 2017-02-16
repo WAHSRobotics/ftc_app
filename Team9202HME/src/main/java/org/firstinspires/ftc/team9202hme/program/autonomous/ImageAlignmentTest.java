@@ -38,12 +38,18 @@ public class ImageAlignmentTest extends AutonomousProgram {
 
         final ImageTarget TARGET = ImageTarget.GEARS;
 
+        double angleScale;
+        double moveScale;
+
         final double MOVE_RANGE = 20;
         final double DISTANCE_RANGE = 40;
         final double ANGLE_RANGE = 3;
 
-        final double MOVE_SPEED = 0.3;
-        final double TURN_SPEED = 0.2;
+        final double MOVE_SPEED = 0.15;
+        final double TURN_SPEED = 0.1;
+
+        final double MIN = 0.2;
+
 
         double movePower = 0, turnPower = 0, angle = 0;
         int state = 0;
@@ -69,65 +75,79 @@ public class ImageAlignmentTest extends AutonomousProgram {
             //State 1: Get close enough to the image for the color sensor to do its stuff
             //State 2: Stop the program (later this will be for color sensor)
 
+            angleScale = (MIN + (7/900) * rotation.y);
+            moveScale = ((Math.sqrt(Math.abs(translation.x))/(25)));
+
+            if (moveScale > 1.0){
+                moveScale = 1;
+            } else if (moveScale < -1.0){
+                moveScale = -1.0;
+            }
+
+
             if(canSeeTarget) {
                 switch(state) {
                     case 0:
                         if(rotation.y > ANGLE_RANGE) {
-                            movePower = MOVE_SPEED;
+                            movePower = angleScale;
                             angle = 90;
                         } else if(rotation.y < -ANGLE_RANGE) {
-                            movePower = MOVE_SPEED;
+                            movePower = angleScale;
                             angle = 270;
+                        } else {
+                            movePower = 0;
                         }
 
                         if(translation.x > MOVE_RANGE) {
-                            turnPower = TURN_SPEED;
+                            turnPower = movePower;
                         } else if(translation.x < -MOVE_RANGE) {
-                            turnPower = -TURN_SPEED;
+                            turnPower = -movePower;
+                        } else {
+                            turnPower = 0;
                         }
 
                         if((translation.x < MOVE_RANGE && translation.x > -MOVE_RANGE) && (rotation.y < ANGLE_RANGE && rotation.y > -ANGLE_RANGE)) {
                             driveTrain.stop();
-                            state++;
+//                            state++;
                         }
 
                         driveTrain.moveAndTurn(movePower, angle, turnPower);
                         break;
-                    case 1:
-                        if(translation.z > DISTANCE_RANGE + MOVE_RANGE) {
-                            movePower = MOVE_SPEED;
-                            angle = 180;
-                        } else if(translation.z < DISTANCE_RANGE - MOVE_RANGE) {
-                            movePower = MOVE_SPEED;
-                            angle = 0;
-                        }
-
-                        if(rotation.y > ANGLE_RANGE) {
-                            turnPower = 0.1;
-                        } else if(rotation.y < -ANGLE_RANGE) {
-                            turnPower = -0.1;
-                        }
-
-                        if((translation.z < 130) && /*(translation.z < DISTANCE_RANGE - MOVE_RANGE)
-                                && */(rotation.y < ANGLE_RANGE && rotation.y > -ANGLE_RANGE)) {
-                            driveTrain.stop();
-                            state++;
-                        }
-
-                        driveTrain.moveAndTurn(movePower, angle, turnPower);
-                        break;
-                    case 2:
-
-                        if (translation.x > -20){
-                            driveTrain.move(movePower, 90);
-                        } else  if (translation.x < 20){
-                            driveTrain.move(movePower, 270);
-                        } else {
-                            sound.play();
-                            driveTrain.stop();
-                            opMode.requestOpModeStop();
-                        }
-                        break;
+//                    case 1:
+//                        if(translation.z > DISTANCE_RANGE + MOVE_RANGE) {
+//                            movePower = MOVE_SPEED;
+//                            angle = 180;
+//                        } else if(translation.z < DISTANCE_RANGE - MOVE_RANGE) {
+//                            movePower = MOVE_SPEED;
+//                            angle = 0;
+//                        }
+//
+//                        if(rotation.y > ANGLE_RANGE) {
+//                            turnPower = 0.1;
+//                        } else if(rotation.y < -ANGLE_RANGE) {
+//                            turnPower = -0.1;
+//                        }
+//
+//                        if((translation.z < 130) && /*(translation.z < DISTANCE_RANGE - MOVE_RANGE)
+//                                && */(rotation.y < ANGLE_RANGE && rotation.y > -ANGLE_RANGE)) {
+//                            driveTrain.stop();
+//                            state++;
+//                        }
+//
+//                        driveTrain.moveAndTurn(movePower, angle, turnPower);
+//                        break;
+//                    case 2:
+//
+//                        if (translation.x > -20){
+//                            driveTrain.move(movePower, 90);
+//                        } else  if (translation.x < 20){
+//                            driveTrain.move(movePower, 270);
+//                        } else {
+//                            sound.play();
+//                            driveTrain.stop();
+//                            opMode.requestOpModeStop();
+//                        }
+//                        break;
                 }
             }
         }
