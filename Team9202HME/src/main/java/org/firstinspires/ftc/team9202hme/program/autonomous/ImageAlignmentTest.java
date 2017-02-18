@@ -3,6 +3,7 @@ package org.firstinspires.ftc.team9202hme.program.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team9202hme.R;
@@ -25,7 +26,7 @@ public class ImageAlignmentTest extends AutonomousProgram {
     @Override
     public void run() throws InterruptedException {
         HolonomicDriveTrain driveTrain = new HolonomicDriveTrain(76.2, 1120);
-        Navigator navigator = new Navigator(CameraSide.BACK, PhoneOrientation.CHARGER_SIDE_UP, 1, true);
+        Navigator navigator = new Navigator(CameraSide.BACK, PhoneOrientation.CHARGER_SIDE_UP, 1, false);
 
         driveTrain.init(opMode.hardwareMap);
         navigator.init();
@@ -36,20 +37,16 @@ public class ImageAlignmentTest extends AutonomousProgram {
         sound.load(opMode.hardwareMap, R.raw.you_took_the_peepo);
         sound.setVolume(1.0f, 1.0f);
 
-        final ImageTarget TARGET = ImageTarget.GEARS;
-
-        double angleScale;
-        double moveScale;
+        final ImageTarget TARGET = ImageTarget.LEGOS;
 
         final double MOVE_RANGE = 20;
         final double DISTANCE_RANGE = 40;
         final double ANGLE_RANGE = 3;
 
-        final double MOVE_SPEED = 0.15;
-        final double TURN_SPEED = 0.1;
+        final double MOVE_SPEED = 0.3;
+        final double TURN_SPEED = 0.2;
 
-        final double MIN = 0.2;
-
+        final double MIN = 0.05;
 
         double movePower = 0, turnPower = 0, angle = 0;
         int state = 0;
@@ -69,87 +66,59 @@ public class ImageAlignmentTest extends AutonomousProgram {
             }
 
             opMode.telemetry.addData("case", state);
-            opMode.telemetry.update();
 
             //State 0: Align and center on image
             //State 1: Get close enough to the image for the color sensor to do its stuff
             //State 2: Stop the program (later this will be for color sensor)
-
-            angleScale = (MIN + (7/900) * rotation.y);
-            moveScale = ((Math.sqrt(Math.abs(translation.x))/(25)));
-
-            if (moveScale > 1.0){
-                moveScale = 1;
-            } else if (moveScale < -1.0){
-                moveScale = -1.0;
-            }
-
-
             if(canSeeTarget) {
+                double angleScale = ((7.0 / 900.0) * rotation.y) + (rotation.y >= 0 ? MIN : -MIN);
+                angleScale = Range.clip(angleScale, -0.3, 0.3);
+
+                double moveScale = ((Math.sqrt(Math.abs(translation.x))/(25)));
+
+                double hypotenuse = sqrt(pow(translation.x, 2) + pow(translation.z, 2));
+                double alpha = toDegrees(atan2(translation.x, translation.z));
+                double phi = rotation.y - alpha;
+
+                double distanceFromImage = -hypotenuse * sin(toRadians(phi));
+
+                if (moveScale > 1.0){
+                    moveScale = 1;
+                } else if (moveScale < -1.0){
+                    moveScale = -1.0;
+                }
+
                 switch(state) {
                     case 0:
-                        if(rotation.y > ANGLE_RANGE) {
-                            movePower = angleScale;
-                            angle = 90;
-                        } else if(rotation.y < -ANGLE_RANGE) {
-                            movePower = angleScale;
-                            angle = 270;
-                        } else {
-                            movePower = 0;
-                        }
+                        opMode.telemetry.addData("Angle Scale", angleScale);
+                        opMode.telemetry.addData("Distance from Image", distanceFromImage);
 
-                        if(translation.x > MOVE_RANGE) {
-                            turnPower = movePower;
-                        } else if(translation.x < -MOVE_RANGE) {
-                            turnPower = -movePower;
+                        if(rotation.y > ANGLE_RANGE) {
+                           turnPower = angleScale;
+                        } else if(rotation.y < -ANGLE_RANGE) {
+                            turnPower = angleScale;
                         } else {
                             turnPower = 0;
                         }
 
-                        if((translation.x < MOVE_RANGE && translation.x > -MOVE_RANGE) && (rotation.y < ANGLE_RANGE && rotation.y > -ANGLE_RANGE)) {
-                            driveTrain.stop();
-//                            state++;
+                        if(distanceFromImage > MOVE_RANGE) {
+                            movePower = MOVE_SPEED;
+                            angle = 270;
+                        } else if(distanceFromImage < -MOVE_RANGE) {
+                            movePower = MOVE_SPEED;
+                            angle = 90;
+                        } else {
+                            movePower = 0;
                         }
 
                         driveTrain.moveAndTurn(movePower, angle, turnPower);
                         break;
-//                    case 1:
-//                        if(translation.z > DISTANCE_RANGE + MOVE_RANGE) {
-//                            movePower = MOVE_SPEED;
-//                            angle = 180;
-//                        } else if(translation.z < DISTANCE_RANGE - MOVE_RANGE) {
-//                            movePower = MOVE_SPEED;
-//                            angle = 0;
-//                        }
-//
-//                        if(rotation.y > ANGLE_RANGE) {
-//                            turnPower = 0.1;
-//                        } else if(rotation.y < -ANGLE_RANGE) {
-//                            turnPower = -0.1;
-//                        }
-//
-//                        if((translation.z < 130) && /*(translation.z < DISTANCE_RANGE - MOVE_RANGE)
-//                                && */(rotation.y < ANGLE_RANGE && rotation.y > -ANGLE_RANGE)) {
-//                            driveTrain.stop();
-//                            state++;
-//                        }
-//
-//                        driveTrain.moveAndTurn(movePower, angle, turnPower);
-//                        break;
-//                    case 2:
-//
-//                        if (translation.x > -20){
-//                            driveTrain.move(movePower, 90);
-//                        } else  if (translation.x < 20){
-//                            driveTrain.move(movePower, 270);
-//                        } else {
-//                            sound.play();
-//                            driveTrain.stop();
-//                            opMode.requestOpModeStop();
-//                        }
-//                        break;
                 }
+            } else {
+                driveTrain.stop();
             }
+
+            opMode.telemetry.update();
         }
     }
 }
