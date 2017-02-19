@@ -36,12 +36,12 @@ public class HolonomicDriveTrain extends DriveTrain {
     /**
      * The minimum power at which the robot can turn without stalling
      */
-    private final double MINIMUM_TURN_POWER = 0.075;
+    private final double MINIMUM_TURN_POWER = 0.1;
 
     /**
      * The minimum power at which the robot can move without stalling
      */
-    private final double MINIMUM_MOVE_POWER = 0.25;
+    private final double MINIMUM_MOVE_POWER = 0.2;
 
     /**
      * Gives HolonomicDriveTrain the values it needs
@@ -295,5 +295,15 @@ public class HolonomicDriveTrain extends DriveTrain {
         Vector2 direction = new Vector2(movePower * cos(theta), movePower * sin(theta));
 
         holonomicMove(direction, turnPower);
+    }
+
+    @Override
+    public double getMinimumMovePower() {
+        return MINIMUM_MOVE_POWER;
+    }
+
+    @Override
+    public double getMinimumTurnPower() {
+        return MINIMUM_TURN_POWER;
     }
 }

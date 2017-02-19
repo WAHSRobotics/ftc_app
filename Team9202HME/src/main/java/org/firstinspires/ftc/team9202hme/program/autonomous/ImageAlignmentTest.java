@@ -2,10 +2,8 @@ package org.firstinspires.ftc.team9202hme.program.autonomous;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.team9202hme.R;
 import org.firstinspires.ftc.team9202hme.audio.Sound;
 import org.firstinspires.ftc.team9202hme.hardware.driving.HolonomicDriveTrain;
@@ -37,18 +35,14 @@ public class ImageAlignmentTest extends AutonomousProgram {
         sound.load(opMode.hardwareMap, R.raw.you_took_the_peepo);
         sound.setVolume(1.0f, 1.0f);
 
-        final ImageTarget TARGET = ImageTarget.LEGOS;
+        final ImageTarget TARGET = ImageTarget.TOOLS;
 
-        final double MOVE_RANGE = 20;
+        final double LATERAL_DISTANCE_RANGE = 20;
         final double DISTANCE_RANGE = 40;
         final double ANGLE_RANGE = 3;
 
         final double MOVE_SPEED = 0.3;
-        final double TURN_SPEED = 0.2;
 
-        final double MIN = 0.05;
-
-        double movePower = 0, turnPower = 0, angle = 0;
         int state = 0;
 
         while(opMode.opModeIsActive()) {
@@ -67,51 +61,41 @@ public class ImageAlignmentTest extends AutonomousProgram {
 
             opMode.telemetry.addData("case", state);
 
-            //State 0: Align and center on image
-            //State 1: Get close enough to the image for the color sensor to do its stuff
-            //State 2: Stop the program (later this will be for color sensor)
             if(canSeeTarget) {
-                double angleScale = ((7.0 / 900.0) * rotation.y) + (rotation.y >= 0 ? MIN : -MIN);
-                angleScale = Range.clip(angleScale, -0.3, 0.3);
-
-                double moveScale = ((Math.sqrt(Math.abs(translation.x))/(25)));
-
                 double hypotenuse = sqrt(pow(translation.x, 2) + pow(translation.z, 2));
+                @SuppressWarnings("SuspiciousNameCombination") //Math.atan2() doesn't like receiving a variable named "x" for parameter "y"
                 double alpha = toDegrees(atan2(translation.x, translation.z));
                 double phi = rotation.y - alpha;
 
-                double distanceFromImage = -hypotenuse * sin(toRadians(phi));
+                /**
+                 * If a line segment parallel to the image was drawn from the robot (assuming the
+                 * robot is just a point) until it intersected a line perpendicular to the image,
+                 * lateralDistanceFromImage would be the length of that line segment.
+                 */
+                double lateralDistanceFromImage = -(hypotenuse * sin(toRadians(phi)));
 
-                if (moveScale > 1.0){
-                    moveScale = 1;
-                } else if (moveScale < -1.0){
-                    moveScale = -1.0;
-                }
+                double turnPower = ((7.0 / 900.0) * rotation.y) + (driveTrain.getMinimumTurnPower() * signum(rotation.y));
+                turnPower = Range.clip(turnPower, -0.3, 0.3);
 
+                double movePower = /*((1.0 / 1000.0) * abs(lateralDistanceFromImage)) + driveTrain.getMinimumMovePower()*/MOVE_SPEED;
+                movePower = Range.clip(movePower, -0.4, 0.4);
+
+                //State 0: Align and center on image
+                //State 1: Get close enough to the image for the color sensor to do its stuff
+                //State 2: Stop the program (later this will be for color sensor)
                 switch(state) {
                     case 0:
-                        opMode.telemetry.addData("Angle Scale", angleScale);
-                        opMode.telemetry.addData("Distance from Image", distanceFromImage);
+                        opMode.telemetry.addData("Turn Power", turnPower);
+                        opMode.telemetry.addData("Distance from Image", lateralDistanceFromImage);
 
-                        if(rotation.y > ANGLE_RANGE) {
-                           turnPower = angleScale;
-                        } else if(rotation.y < -ANGLE_RANGE) {
-                            turnPower = angleScale;
+                        if(withinRange(rotation.y, ANGLE_RANGE) && withinRange(lateralDistanceFromImage, LATERAL_DISTANCE_RANGE)) {
+                            driveTrain.stop();
                         } else {
-                            turnPower = 0;
+                            driveTrain.moveAndTurn(movePower, 180 + (90 * signum(lateralDistanceFromImage)), turnPower);
                         }
 
-                        if(distanceFromImage > MOVE_RANGE) {
-                            movePower = MOVE_SPEED;
-                            angle = 270;
-                        } else if(distanceFromImage < -MOVE_RANGE) {
-                            movePower = MOVE_SPEED;
-                            angle = 90;
-                        } else {
-                            movePower = 0;
-                        }
-
-                        driveTrain.moveAndTurn(movePower, angle, turnPower);
+                        break;
+                    case 1:
                         break;
                 }
             } else {
@@ -120,5 +104,9 @@ public class ImageAlignmentTest extends AutonomousProgram {
 
             opMode.telemetry.update();
         }
+    }
+
+    private boolean withinRange(double number, double range) {
+        return number < range && number > -range;
     }
 }

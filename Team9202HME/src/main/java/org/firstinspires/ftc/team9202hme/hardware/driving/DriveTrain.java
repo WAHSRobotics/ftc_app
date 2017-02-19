@@ -133,4 +133,20 @@ public abstract class DriveTrain extends HardwareComponent {
      *                  counter-clockwise
      */
     public abstract void moveAndTurn(double movePower, double angle, double turnPower);
+
+    /**
+     * Due to friction, most drive trains will start
+     * stalling when given a motor power low enough
+     *
+     * @return The lowest power at which the drive train will be able to move
+     */
+    public abstract double getMinimumMovePower();
+
+    /**
+     * Due to friction, most drive trains will start
+     * stalling when given a motor power low enough
+     *
+     * @return The lowest power at which the drive train will be able to turn
+     */
+    public abstract double getMinimumTurnPower();
 }
