@@ -13,7 +13,7 @@ import org.firstinspires.ftc.team9202hme.navigation.PhoneOrientation;
 import static java.lang.Math.*;
 
 @TeleOp(name = "Navigation Test", group = "Tests")
-@Disabled
+//@Disabled
 public class NavigationTest extends OpMode {
     private Navigator navigator = new Navigator(CameraSide.BACK, PhoneOrientation.CHARGER_SIDE_UP, 4, true);
 
@@ -25,22 +25,28 @@ public class NavigationTest extends OpMode {
     @Override
     public void loop() {
         for(ImageTarget target : ImageTarget.values()) {
-            telemetry.addData("Navigator Data for Image Target", target.name());
-            telemetry.addData("Visible", navigator.canSeeTarget(target));
-            telemetry.addData("Translation", navigator.getRelativeTargetTranslation(target));
-            telemetry.addData("Rotation", navigator.getRelativeTargetRotation(target));
-
             Vector3 translation = navigator.getRelativeTargetTranslation(target);
             Vector3 rotation = navigator.getRelativeTargetRotation(target);
+            translation.z = abs(translation.z);
 
-            int phi = (int) ((rotation.y + 90) - toDegrees(atan(abs(translation.x) / translation.z)));
+            telemetry.addData("Navigator Data for Image Target", target.name());
+            telemetry.addData("Visible", navigator.canSeeTarget(target));
+            telemetry.addData("Translation", translation);
+            telemetry.addData("Rotation", rotation);
 
-            int h = (int) sqrt(pow(translation.x, 2) + pow(translation.z, 2));
+            double hypotenuse = sqrt(pow(translation.x, 2) + pow(translation.z, 2));
+            @SuppressWarnings("SuspiciousNameCombination") //Math.atan2() doesn't like receiving a variable named "x" for parameter "y"
+                    double alpha = toDegrees(atan2(translation.x, translation.z));
+            double phi = rotation.y - alpha;
 
-            telemetry.addData("Phi", phi);
-            telemetry.addData("Hypotenuse", h);
+            /**
+             * If a line segment parallel to the image was drawn from the robot (assuming the
+             * robot is just a point) until it intersected a line perpendicular to the image,
+             * lateralDistanceFromImage would be the length of that line segment.
+             */
+            double lateralDistanceFromImage = -hypotenuse * sin(toRadians(phi));
 
-            telemetry.addData("Length of Line Parallel to Image", (int) (h * sin(phi)));
+            telemetry.addData("Lateral Distance", lateralDistanceFromImage);
         }
 
         telemetry.update();

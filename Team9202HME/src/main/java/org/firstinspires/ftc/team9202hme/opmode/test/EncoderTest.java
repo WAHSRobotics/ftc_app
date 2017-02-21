@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.team9202hme.hardware.driving.HolonomicDriveTrain;
 
 @TeleOp(name = "Encoder Test", group = "Tests")
-@Disabled
+//@Disabled
 public class EncoderTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -19,6 +19,6 @@ public class EncoderTest extends LinearOpMode {
 
         waitForStart();
 
-        driveTrain.move(0.3, 0, 1000);
+        driveTrain.move(0.3, 180, 3000);
     }
 }

@@ -34,16 +34,6 @@ public class HolonomicDriveTrain extends DriveTrain {
     private final int encoderTicksPerRotation;
 
     /**
-     * The minimum power at which the robot can turn without stalling
-     */
-    private final double MINIMUM_TURN_POWER = 0.1;
-
-    /**
-     * The minimum power at which the robot can move without stalling
-     */
-    private final double MINIMUM_MOVE_POWER = 0.2;
-
-    /**
      * Gives HolonomicDriveTrain the values it needs
      * to calculate how to properly apply motor powers
      * when moving and turning at set distances
@@ -116,7 +106,7 @@ public class HolonomicDriveTrain extends DriveTrain {
     }
 
     private boolean motorsBusy() {
-        return frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy();
+        return frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy();
     }
 
     private boolean encodersExceedTargetPosition() {
@@ -161,11 +151,11 @@ public class HolonomicDriveTrain extends DriveTrain {
     private double time = 0;
     private boolean toggle = false;
 
+    final double COOLDOWN = 0.7f;
+
     @Override
     public void driveControlled(Gamepad controller) {
         setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        final double COOLDOWN = 0.1f;
 
         if(controller.y) {
             if((System.nanoTime() - time) / 1000000000.0f >= COOLDOWN) {
@@ -299,11 +289,11 @@ public class HolonomicDriveTrain extends DriveTrain {
 
     @Override
     public double getMinimumMovePower() {
-        return MINIMUM_MOVE_POWER;
+        return 0.2;
     }
 
     @Override
     public double getMinimumTurnPower() {
-        return MINIMUM_TURN_POWER;
+        return 0.1;
     }
 }
