@@ -11,8 +11,8 @@ import org.firstinspires.ftc.team9202hme.hardware.shooting.RollerShooter;
 import org.firstinspires.ftc.team9202hme.program.TeleOpProgram;
 
 public class HmeTeleOpProgram extends TeleOpProgram {
-    private DriveTrain driveTrain = new HolonomicDriveTrain(76.2, 1120);
-    private Shooter shooter = new RollerShooter();
+    private HolonomicDriveTrain driveTrain = new HolonomicDriveTrain(76.2, 1120);
+    private RollerShooter shooter = new RollerShooter();
 
     public HmeTeleOpProgram(OpMode opMode) {
         super(opMode);
