@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.team9202hme.R;
 import org.firstinspires.ftc.team9202hme.audio.Sound;
 import org.firstinspires.ftc.team9202hme.hardware.driving.HolonomicDriveTrain;
+import org.firstinspires.ftc.team9202hme.hardware.shooting.RollerShooter;
 import org.firstinspires.ftc.team9202hme.math.vector.Vector3;
 import org.firstinspires.ftc.team9202hme.navigation.ImageTarget;
 import org.firstinspires.ftc.team9202hme.navigation.Navigator;
@@ -18,19 +19,21 @@ import org.firstinspires.ftc.team9202hme.program.AutonomousProgram;
 
 import static java.lang.Math.*;
 
-public class ImageAlignmentTest extends AutonomousProgram {
-    public ImageAlignmentTest(LinearOpMode opMode, FieldSide fieldSide) {
+public class BeaconAutonomousProgram extends AutonomousProgram {
+    public BeaconAutonomousProgram(LinearOpMode opMode, FieldSide fieldSide) {
         super(opMode, fieldSide);
     }
 
     @Override
     public void run() throws InterruptedException {
         HolonomicDriveTrain driveTrain = new HolonomicDriveTrain(76.2, 1120);
+        RollerShooter shooter = new RollerShooter();
         Navigator navigator = new Navigator(CameraSide.BACK, PhoneOrientation.CHARGER_SIDE_UP, 1, false);
         ColorSensor colorSensor;
         TouchSensor touchSensor;
 
         driveTrain.init(opMode.hardwareMap);
+        shooter.init(opMode.hardwareMap);
         navigator.init();
         colorSensor = opMode.hardwareMap.colorSensor.get("color");
         colorSensor.enableLed(false);
@@ -44,9 +47,9 @@ public class ImageAlignmentTest extends AutonomousProgram {
 
         ImageTarget target;
 
-        final double LATERAL_DISTANCE_RANGE = 20;
+        final double LATERAL_DISTANCE_RANGE = 10;
         final double DISTANCE_RANGE = 75;
-        final double ANGLE_RANGE = 3;
+        final double ANGLE_RANGE = 2;
 
         final double MOVE_SPEED = 0.3;
         final double TURN_SPEED = 0.2;
@@ -72,7 +75,7 @@ public class ImageAlignmentTest extends AutonomousProgram {
 
         Thread.sleep(500);
 
-        boolean shouldStop = false;
+        boolean onSecondBeacon = false;
 
         while(opMode.opModeIsActive()) {
             boolean canSeeTarget = navigator.canSeeTarget(target);
@@ -127,8 +130,19 @@ public class ImageAlignmentTest extends AutonomousProgram {
 
                     break;
                 case 1:
+                    if(!onSecondBeacon) {
+                        shooter.shoot();
+                    }
+
+                    state++;
+
+                    break;
+                case 2:
                     driveTrain.move(0.3, 180, translation.z - DISTANCE_RANGE);
-                    driveTrain.move(0.2, 270, translation.x + 85);
+
+                    while(!withinRange(translation.x + 40, 10)) {
+                        driveTrain.move(0.25, 180 + (90 * signum(translation.x + 40)));
+                    }
 
                     while(!touchSensor.isPressed()) {
                         driveTrain.move(0.2, 180);
@@ -137,8 +151,9 @@ public class ImageAlignmentTest extends AutonomousProgram {
                     Thread.sleep(500);
 
                     state++;
+
                     break;
-                case 2:
+                case 3:
                     driveTrain.move(0.2, 0, 50);
 
                     switch(fieldSide) {
@@ -162,8 +177,10 @@ public class ImageAlignmentTest extends AutonomousProgram {
                     driveTrain.move(0.5, 0, 400);
 
                     state++;
-                case 3:
-                    if(shouldStop) {
+
+                    break;
+                case 4:
+                    if(onSecondBeacon) {
                         driveTrain.stop();
                         opMode.requestOpModeStop();
                     } else {
@@ -176,7 +193,7 @@ public class ImageAlignmentTest extends AutonomousProgram {
                                 break;
                         }
 
-                        shouldStop = true;
+                        onSecondBeacon = true;
                     }
 
                     switch(fieldSide) {
@@ -187,10 +204,13 @@ public class ImageAlignmentTest extends AutonomousProgram {
                             driveTrain.move(MOVE_SPEED, 90, 1200);
                             break;
                     }
+
                     break;
             }
 
             opMode.telemetry.update();
+
+            Thread.sleep(1);
         }
     }
 

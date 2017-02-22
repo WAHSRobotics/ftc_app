@@ -38,15 +38,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <resources>
 
-  <string name="app_name">YOU TOOK THE PEEPO</string>
+  <string name="app_name">FTC Robot Controller</string>
 
   <!-- Menu -->
   <string name="inspection_mode_menu_item">Self Inspect</string>
-  <string name="programming_mode_menu_item">Mogramming Prode</string>
+  <string name="programming_mode_menu_item">Programming Mode</string>
   <string name="blocks_menu_item">Blocks</string>
   <string name="settings_menu_item">Settings</string>
-  <string name="restart_robot_menu_item">Restart Peepo</string>
-  <string name="configure_robot_menu_item">Configure Peepo</string>
+  <string name="restart_robot_menu_item">Restart Robot</string>
+  <string name="configure_robot_menu_item">Configure Robot</string>
   <string name="about_menu_item">About</string>
   <string name="exit_menu_item">Exit</string>
 
@@ -56,7 +56,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   <!-- Toast messages -->  
   <string name="toastWifiConfigurationComplete">Configuration Complete</string>
-  <string name="toastRestartingRobot">Get away from my croissant!</string>
-  <string name="toastConfigureRobotBeforeProgrammingMode">You must Configure Peepo before starting Mogramming Prode.</string>
+  <string name="toastRestartingRobot">Restarting Robot</string>
+  <string name="toastConfigureRobotBeforeProgrammingMode">You must Configure Robot before starting Programming Mode.</string>
 
 </resources>
