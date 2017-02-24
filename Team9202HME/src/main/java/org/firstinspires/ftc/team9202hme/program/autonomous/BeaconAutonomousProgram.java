@@ -4,6 +4,7 @@ package org.firstinspires.ftc.team9202hme.program.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.team9202hme.hardware.driving.HolonomicDriveTrain;
@@ -23,8 +24,19 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
         super(opMode, fieldSide);
     }
 
+    private ImageTarget target;
+
+    private Vector3 translation = new Vector3();
+    private Vector3 rotation = new Vector3();
+    private Navigator navigator;
+
+    private double lateralDistanceFromImage = 0;
+
+    private int state = 0;
+
+    private boolean onSecondBeacon = false;
+
     @Override
-    @SuppressWarnings("SuspiciousNameCombination")
     public void run() throws InterruptedException {
         /*
         NOTES:
@@ -51,7 +63,7 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
         readings based on the orientation of the phone, you have to specify how the phone
         will be oriented on the robot
          */
-        Navigator navigator = new Navigator(CameraSide.BACK, PhoneOrientation.CHARGER_SIDE_UP, 1, false);
+        navigator = new Navigator(CameraSide.BACK, PhoneOrientation.CHARGER_SIDE_UP, 1, false);
         navigator.init();
 
         //Initialize hardware components using hardware map
@@ -65,13 +77,6 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
         opMode.waitForStart();
 
         /*
-        The image that the navigator will be targeting, changes
-        based on what side of the field we're on, as well as what
-        beacon we're currently pressing
-         */
-        ImageTarget target;
-
-        /*
         These are margins of error for centering the robot on the image,
         necessary because the robot's physical imperfections prevent it
         from being perfectly centered on the image.
@@ -83,7 +88,7 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
         The closest the phone camera can get to the image before it starts to
         have difficulty recognizing it
          */
-        final double MINIMUM_DISTANCE_FROM_IMAGE = 75;
+        final double MINIMUM_DISTANCE_FROM_IMAGE = 150;
 
         /*
         The speed at which, for the most part, the robot will move
@@ -104,12 +109,12 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
          */
         switch(fieldSide) {
             case RED:
-                target = ImageTarget.GEARS;
-                driveTrain.move(MOVE_SPEED, 180 + DIRECTION_TO_IMAGE, DISTANCE_FROM_IMAGE);
+                target = ImageTarget.LEGOS;
+                driveTrain.move(0.4, 180 + DIRECTION_TO_IMAGE, DISTANCE_FROM_IMAGE);
                 break;
             case BLUE:
-                target = ImageTarget.WHEELS;
-                driveTrain.move(MOVE_SPEED, 180 - DIRECTION_TO_IMAGE, DISTANCE_FROM_IMAGE);
+                target = ImageTarget.LEGOS;
+                driveTrain.move(0.4, 180 - DIRECTION_TO_IMAGE, DISTANCE_FROM_IMAGE);
                 break;
             default:
                 target = ImageTarget.GEARS; //If the JVM breaks and fieldSide isn't RED or BLUE, I guess we'll go for gears
@@ -117,64 +122,18 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
 
         //Give Vuforia a few moments to calibrate itself; it doesn't take very long
         Thread.sleep(500);
+        
+        final double CAMERA_OFFSET = 50;
 
-        /*
-        Since the robot shouldn't do things like shoot or continue
-        looking for more beacons after it has found the second, we
-        need a variable to know when the robot has found the second
-        beacon
-         */
-        boolean onSecondBeacon = false;
-
-        /*
-        The current state that the state machine, which is in the loop
-        below, is in. It's rather crude, but it serves as a reliable
-        method of changing from state to state
-         */
-        int state = 0;
-
-        /*
-        This is the main loop of the program, which will continuously update
-        important information, such as the location of the current image target
-        in 3D space
-         */
         while(opMode.opModeIsActive()) {
             //Whether or not the image is visible
             boolean canSeeTarget = navigator.canSeeTarget(target);
 
-            //The image's rotation in 3D space, using Euler angles (pitch, yaw, and roll, respectively x, y, and z)
-            Vector3 rotation = navigator.getRelativeTargetRotation(target);
-
-            //The image's location in 3D space, given by a 3D point at the center of the image
-            Vector3 translation = navigator.getRelativeTargetTranslation(target);
-
-            /*
-            Because of the right hand rule, the z coordinate should technically
-            always be negative in our situation, but it makes programming a bit
-            harder so we just make it positive
-             */
-            translation.z = abs(translation.z);
-
-            /*
-            These are variables are just for computing the lateral distance from the
-            image (see below) which we plan to use to scale our speed, so that the
-            closer the robot is to the image, the slower it goes. This should prevent
-            the robot from over-correcting while aligning.
-             */
-            double hypotenuse = sqrt(pow(translation.x, 2) + pow(translation.z, 2));
-            double alpha = toDegrees(atan2(translation.x, translation.z));
-            double phi = rotation.y - alpha;
-
-            /*
-            If a line segment parallel to the image was drawn from the robot (assuming the
-            robot is just a point) until it intersected a line perpendicular to the image,
-            lateralDistanceFromImage would be the length of that line segment.
-             */
-            double lateralDistanceFromImage = -hypotenuse * sin(toRadians(phi));
+            updateImageLocation();
 
             //State 0: Align so that robot is parallel to the wall, and center robot on image
-            //State 1: Run the shooter to (hopefully) score two pre-loaded particles into the central vortex
-            //State 2: Get close enough to the image for the color sensor to get accurate readings
+            //State 1: Get close enough to the image for the color sensor to get accurate readings
+            //State 2: Run the shooter to (hopefully) score two pre-loaded particles into the central vortex
             //State 3: Activate the correct color on the beacon based on readings from the color sensor
             //State 4: Move over to second beacon and repeat states 0 - 3
             switch(state) {
@@ -202,13 +161,48 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
                             driveTrain.moveAndTurn(MOVE_SPEED, 180 + (90 * signum(lateralDistanceFromImage)), turnPower);
                         }
                     } else {
-                        driveTrain.turn(0.2);
-                        Thread.sleep(500);
                         driveTrain.stop();
                     }
 
                     break;
                 case 1:
+                    driveTrain.move(MOVE_SPEED, 180, translation.z - MINIMUM_DISTANCE_FROM_IMAGE);
+
+                    updateImageLocation();
+
+                    Thread.sleep(10);
+
+                    while(!withinMargin(translation.x + CAMERA_OFFSET, 15)) {
+                        updateImageLocation();
+
+                        if(navigator.canSeeTarget(target)) {
+                            driveTrain.move(MOVE_SPEED, 180 + (90 * signum(translation.x + CAMERA_OFFSET)));
+                        } else {
+                            driveTrain.stop();
+                        }
+
+                        opMode.idle();
+                    }
+
+                    driveTrain.stop();
+
+                    ElapsedTime timer = new ElapsedTime();
+                    timer.reset();
+
+                    while(!touchSensor.isPressed() && timer.seconds() < 3.0) {
+                        driveTrain.move(MOVE_SPEED, 180);
+
+                        opMode.idle();
+                    }
+
+                    driveTrain.stop();
+
+                    Thread.sleep(500);
+
+                    state++;
+
+                    break;
+                case 2:
                     if(!onSecondBeacon) {
                         shooter.shoot();
                     }
@@ -216,38 +210,26 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
                     state++;
 
                     break;
-                case 2:
-                    driveTrain.move(0.3, 180, translation.z - MINIMUM_DISTANCE_FROM_IMAGE);
-
-                    while(!withinMargin(translation.x + 40, 10)) {
-                        driveTrain.move(0.25, 180 + (90 * signum(translation.x + 40)));
-                    }
-
-                    while(!touchSensor.isPressed()) {
-                        driveTrain.move(MOVE_SPEED, 180);
-                    }
-
-                    Thread.sleep(500);
-
-                    state++;
-
-                    break;
                 case 3:
                     driveTrain.move(MOVE_SPEED, 0, 50);
+
+                    updateImageLocation();
+
+                    final double DISTANCE_TO_BUTTON = 65 + (translation.x + CAMERA_OFFSET);
 
                     switch(fieldSide) {
                         case RED:
                             if(colorSensor.red() >= 2) {
-                                driveTrain.move(MOVE_SPEED, 270, 80);
+                                driveTrain.move(MOVE_SPEED, 270, DISTANCE_TO_BUTTON);
                             } else if(colorSensor.blue() >= 2) {
-                                driveTrain.move(MOVE_SPEED, 90, 80);
+                                driveTrain.move(MOVE_SPEED, 90, DISTANCE_TO_BUTTON);
                             }
                             break;
                         case BLUE:
                             if(colorSensor.blue() >= 2) {
-                                driveTrain.move(MOVE_SPEED, 270, 80);
+                                driveTrain.move(MOVE_SPEED, 270, DISTANCE_TO_BUTTON);
                             } else if(colorSensor.red() >= 2) {
-                                driveTrain.move(MOVE_SPEED, 90, 80);
+                                driveTrain.move(MOVE_SPEED, 90, DISTANCE_TO_BUTTON);
                             }
                             break;
                     }
@@ -268,7 +250,7 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
                         switch(fieldSide) {
                             case RED: target = ImageTarget.TOOLS;
                                 break;
-                            case BLUE: target = ImageTarget.LEGOS;
+                            case BLUE: target = ImageTarget.TOOLS;
                                 break;
                         }
 
@@ -277,28 +259,41 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
 
                     switch(fieldSide) {
                         case RED:
-                            driveTrain.move(MOVE_SPEED, 270, 1200);
+                            driveTrain.move(0.4, 270, 1200);
                             break;
                         case BLUE:
-                            driveTrain.move(MOVE_SPEED, 90, 1200);
+                            driveTrain.move(0.4, 90, 1200);
                             break;
                     }
 
                     break;
             }
-
-            /*
-            Update the telemetry with useful information about the image
-            and the state of the program
-             */
-            opMode.telemetry.addData("Current Target", target);
-            opMode.telemetry.addData("Translation", translation);
-            opMode.telemetry.addData("Rotation", rotation);
-            opMode.telemetry.addData("Lateral Distance", lateralDistanceFromImage);
-            opMode.telemetry.addData("Current State", state);
-            opMode.telemetry.addData("Current Beacon", onSecondBeacon ? 2 : 1);
-            opMode.telemetry.update();
         }
+    }
+
+    @SuppressWarnings("SuspiciousNameCombination")
+    private void updateImageLocation() {
+        rotation = navigator.getRelativeTargetRotation(target);
+
+        translation = navigator.getRelativeTargetTranslation(target);
+
+        translation.z = abs(translation.z);
+
+        double hypotenuse = sqrt(pow(translation.x, 2) + pow(translation.z, 2));
+        double alpha = toDegrees(atan2(translation.x, translation.z));
+        double phi = rotation.y - alpha;
+
+        lateralDistanceFromImage = -hypotenuse * sin(toRadians(phi));
+
+        opMode.telemetry.addData("Current Target", target);
+        opMode.telemetry.addData("Target Visible", navigator.getRelativeTargetRotation(target));
+
+        opMode.telemetry.addData("Translation", translation);
+        opMode.telemetry.addData("Rotation", rotation);
+        opMode.telemetry.addData("Lateral Distance", lateralDistanceFromImage);
+        opMode.telemetry.addData("Current State", state);
+        opMode.telemetry.addData("Current Beacon", onSecondBeacon ? 2 : 1);
+        opMode.telemetry.update();
     }
 
     /**

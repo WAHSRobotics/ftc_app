@@ -44,10 +44,12 @@ public class RollerShooter extends Shooter {
         left.setPower(1);
         right.setPower(1);
 
+        Thread.sleep(500);
+
         lift.setPower(1);
         spinner.setPower(1);
 
-        Thread.sleep(3000);
+        Thread.sleep(2500);
 
         left.setPower(0);
         right.setPower(0);
