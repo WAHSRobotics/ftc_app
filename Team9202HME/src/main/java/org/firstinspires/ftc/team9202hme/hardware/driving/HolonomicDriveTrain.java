@@ -165,7 +165,7 @@ public class HolonomicDriveTrain extends DriveTrain {
         }
 
         if(toggle) {
-            holonomicMove(new Vector2(-controller.left_stick_x, -controller.left_stick_y), controller.right_stick_x);
+            holonomicMove(new Vector2(controller.left_stick_x, -controller.left_stick_y), controller.right_stick_x);
         } else {
             holonomicMove(new Vector2(controller.left_stick_x, controller.left_stick_y), controller.right_stick_x);
         }

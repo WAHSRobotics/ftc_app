@@ -38,127 +38,70 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
 
     @Override
     public void run() throws InterruptedException {
-        /*
-        NOTES:
-            - All measurements of distance throughout this program are given in millimeters
-            - All measurements of angle are given in degrees
-            - Since the phone mount and beacon pusher is on the back of the robot,
-              when instructing the robot to move at an angle it is usually 180 plus
-              that angle, since the 180 refers to the back of the robot
-         */
-
-        /*
-        Declare hardware components that the program will be working with. HTML
-        Documentation for HolonomicDriveTrain and RollerShooter can be found in the
-        "doc" folder of this module, Team9202HME
-         */
         HolonomicDriveTrain driveTrain = new HolonomicDriveTrain(76.2, 1120);
         RollerShooter shooter = new RollerShooter();
         ColorSensor colorSensor;
         TouchSensor touchSensor;
 
-        /*
-        Declare and initialize navigator, used for locating images in 3D space. Because
-        Vuforia (the library FTC supplies us with for image recognition) gives different
-        readings based on the orientation of the phone, you have to specify how the phone
-        will be oriented on the robot
-         */
         navigator = new Navigator(CameraSide.BACK, PhoneOrientation.CHARGER_SIDE_UP, 1, false);
         navigator.init();
 
-        //Initialize hardware components using hardware map
         driveTrain.init(opMode.hardwareMap);
         shooter.init(opMode.hardwareMap);
         colorSensor = opMode.hardwareMap.colorSensor.get("color");
         colorSensor.enableLed(false);
         touchSensor = opMode.hardwareMap.touchSensor.get("touch");
 
-        //Suspend this thread until the play button is pressed
         opMode.waitForStart();
 
-        /*
-        These are margins of error for centering the robot on the image,
-        necessary because the robot's physical imperfections prevent it
-        from being perfectly centered on the image.
-         */
-        final double LATERAL_DISTANCE_MARGIN = 10; //The margin of error for lateral distance
-        final double ROTATION_MARGIN = 2; //The margin of error for being parallel with the wall
+        final double LATERAL_DISTANCE_MARGIN = 10;
+        final double ROTATION_MARGIN = 2;
 
-        /*
-        The closest the phone camera can get to the image before it starts to
-        have difficulty recognizing it
-         */
         final double MINIMUM_DISTANCE_FROM_IMAGE = 150;
 
-        /*
-        The speed at which, for the most part, the robot will move
-        throughout the duration of autonomous
-         */
-        final double MOVE_SPEED = 0.3;
+        final double PRECISION_SPEED = 0.25;
+        final double MOVE_SPEED = 0.5;
 
-        //Angle at which to drive to get within range of image
         final int DIRECTION_TO_IMAGE = 60;
 
-        //Distance to drive at the angle specified above
         final int DISTANCE_FROM_IMAGE = 1905;
 
-        /*
-        Sets the image target based on what side of the field the robot
-        is on, specified by the OpModes calling upon this function, and
-        then moves towards it
-         */
         switch(fieldSide) {
             case RED:
-                target = ImageTarget.LEGOS;
-                driveTrain.move(0.4, 180 + DIRECTION_TO_IMAGE, DISTANCE_FROM_IMAGE);
+                target = ImageTarget.GEARS;
+                driveTrain.move(MOVE_SPEED, 180 + DIRECTION_TO_IMAGE, DISTANCE_FROM_IMAGE);
                 break;
             case BLUE:
-                target = ImageTarget.LEGOS;
-                driveTrain.move(0.4, 180 - DIRECTION_TO_IMAGE, DISTANCE_FROM_IMAGE);
+                target = ImageTarget.WHEELS;
+                driveTrain.move(MOVE_SPEED, 180 - DIRECTION_TO_IMAGE, DISTANCE_FROM_IMAGE);
                 break;
             default:
-                target = ImageTarget.GEARS; //If the JVM breaks and fieldSide isn't RED or BLUE, I guess we'll go for gears
+                target = ImageTarget.GEARS; //It's Mr. Gears
         }
-
-        //Give Vuforia a few moments to calibrate itself; it doesn't take very long
-        Thread.sleep(500);
         
-        final double CAMERA_OFFSET = 50;
+        final double CAMERA_OFFSET = 60;
 
         while(opMode.opModeIsActive()) {
-            //Whether or not the image is visible
             boolean canSeeTarget = navigator.canSeeTarget(target);
 
             updateImageLocation();
 
             //State 0: Align so that robot is parallel to the wall, and center robot on image
-            //State 1: Get close enough to the image for the color sensor to get accurate readings
-            //State 2: Run the shooter to (hopefully) score two pre-loaded particles into the central vortex
+            //State 1: Run the shooter to (hopefully) score two pre-loaded particles into the central vortex
+            //State 2: Get close enough to the image for the color sensor to get accurate readings
             //State 3: Activate the correct color on the beacon based on readings from the color sensor
-            //State 4: Move over to second beacon and repeat states 0 - 3
+            //State 4: Move over to second beacon and repeat states 0, 2, and 3
             switch(state) {
                 case 0:
-                    //If the image is visible, align with it. Otherwise, turn for a few moments and then check again.
                     if(canSeeTarget) {
-                        /*
-                        If the robot is centered within its margin of error, then stop the robot and progress to state 1.
-                        Otherwise, attempt to align with the image.
-                         */
                         if(withinMargin(rotation.y, ROTATION_MARGIN) && withinMargin(lateralDistanceFromImage, LATERAL_DISTANCE_MARGIN)) {
                             driveTrain.stop();
                             state++;
                         } else {
-                            //This scales the speed at which the robot turns to correct for rotational error, which helps prevent over-correcting
                             double turnPower = ((7.0 / 900.0) * rotation.y) + (driveTrain.getMinimumTurnPower() * signum(rotation.y));
-                            //If the robot spins too fast it loses sight of the image, so the power is clamped between -0.3 and 0.3
                             turnPower = Range.clip(turnPower, -0.3, 0.3);
 
-                            /*
-                            Moves the robot either to the right or to the left, based on the sign of the lateral distance
-                            from the image (tells us if the image is on the left or the right) and while doing so, spins to
-                            correct for rotational error
-                             */
-                            driveTrain.moveAndTurn(MOVE_SPEED, 180 + (90 * signum(lateralDistanceFromImage)), turnPower);
+                            driveTrain.moveAndTurn(PRECISION_SPEED, 180 + (90 * signum(lateralDistanceFromImage)), turnPower);
                         }
                     } else {
                         driveTrain.stop();
@@ -166,17 +109,17 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
 
                     break;
                 case 1:
-                    driveTrain.move(MOVE_SPEED, 180, translation.z - MINIMUM_DISTANCE_FROM_IMAGE);
+                    driveTrain.move(PRECISION_SPEED, 180, translation.z - MINIMUM_DISTANCE_FROM_IMAGE);
 
                     updateImageLocation();
 
                     Thread.sleep(10);
 
-                    while(!withinMargin(translation.x + CAMERA_OFFSET, 15)) {
+                    while(!withinMargin(translation.x + CAMERA_OFFSET, 12.5)) {
                         updateImageLocation();
 
                         if(navigator.canSeeTarget(target)) {
-                            driveTrain.move(MOVE_SPEED, 180 + (90 * signum(translation.x + CAMERA_OFFSET)));
+                            driveTrain.move(PRECISION_SPEED, 180 + (90 * signum(translation.x + CAMERA_OFFSET)));
                         } else {
                             driveTrain.stop();
                         }
@@ -186,61 +129,55 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
 
                     driveTrain.stop();
 
+                    if(!onSecondBeacon) {
+                        shooter.shoot();
+                    }
+
                     ElapsedTime timer = new ElapsedTime();
                     timer.reset();
 
-                    while(!touchSensor.isPressed() && timer.seconds() < 3.0) {
-                        driveTrain.move(MOVE_SPEED, 180);
+                    while(!touchSensor.isPressed() && timer.seconds() < 2.0) {
+                        driveTrain.move(PRECISION_SPEED, 180);
 
                         opMode.idle();
                     }
 
                     driveTrain.stop();
 
-                    Thread.sleep(500);
-
                     state++;
 
                     break;
                 case 2:
-                    if(!onSecondBeacon) {
-                        shooter.shoot();
+                    driveTrain.move(PRECISION_SPEED, 0, 50);
+
+                    updateImageLocation();
+
+                    final double DISTANCE_TO_BUTTON = 70 + (translation.x + CAMERA_OFFSET);
+
+                    switch(fieldSide) {
+                        case RED:
+                            if(colorSensor.red() >= 2) {
+                                driveTrain.move(PRECISION_SPEED, 270, DISTANCE_TO_BUTTON);
+                            } else if(colorSensor.blue() >= 2) {
+                                driveTrain.move(PRECISION_SPEED, 90, DISTANCE_TO_BUTTON);
+                            }
+                            break;
+                        case BLUE:
+                            if(colorSensor.blue() >= 2) {
+                                driveTrain.move(PRECISION_SPEED, 270, DISTANCE_TO_BUTTON);
+                            } else if(colorSensor.red() >= 2) {
+                                driveTrain.move(PRECISION_SPEED, 90, DISTANCE_TO_BUTTON);
+                            }
+                            break;
                     }
+
+                    driveTrain.move(MOVE_SPEED, 180, 200);
+                    driveTrain.move(MOVE_SPEED, 0, 400);
 
                     state++;
 
                     break;
                 case 3:
-                    driveTrain.move(MOVE_SPEED, 0, 50);
-
-                    updateImageLocation();
-
-                    final double DISTANCE_TO_BUTTON = 65 + (translation.x + CAMERA_OFFSET);
-
-                    switch(fieldSide) {
-                        case RED:
-                            if(colorSensor.red() >= 2) {
-                                driveTrain.move(MOVE_SPEED, 270, DISTANCE_TO_BUTTON);
-                            } else if(colorSensor.blue() >= 2) {
-                                driveTrain.move(MOVE_SPEED, 90, DISTANCE_TO_BUTTON);
-                            }
-                            break;
-                        case BLUE:
-                            if(colorSensor.blue() >= 2) {
-                                driveTrain.move(MOVE_SPEED, 270, DISTANCE_TO_BUTTON);
-                            } else if(colorSensor.red() >= 2) {
-                                driveTrain.move(MOVE_SPEED, 90, DISTANCE_TO_BUTTON);
-                            }
-                            break;
-                    }
-
-                    driveTrain.move(0.5, 180, 200);
-                    driveTrain.move(0.5, 0, 400);
-
-                    state++;
-
-                    break;
-                case 4:
                     if(onSecondBeacon) {
                         driveTrain.stop();
                         opMode.requestOpModeStop();
@@ -250,7 +187,7 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
                         switch(fieldSide) {
                             case RED: target = ImageTarget.TOOLS;
                                 break;
-                            case BLUE: target = ImageTarget.TOOLS;
+                            case BLUE: target = ImageTarget.LEGOS;
                                 break;
                         }
 
@@ -259,10 +196,10 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
 
                     switch(fieldSide) {
                         case RED:
-                            driveTrain.move(0.4, 270, 1200);
+                            driveTrain.move(MOVE_SPEED, 270, 1200);
                             break;
                         case BLUE:
-                            driveTrain.move(0.4, 90, 1200);
+                            driveTrain.move(MOVE_SPEED, 90, 1200);
                             break;
                     }
 

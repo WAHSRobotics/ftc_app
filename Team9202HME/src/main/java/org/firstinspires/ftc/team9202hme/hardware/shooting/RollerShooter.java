@@ -16,11 +16,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class RollerShooter extends Shooter {
     private DcMotor left, right, lift, spinner;
 
+    private final double SHOOT_POWER = 0.7;
+
     @Override
     public void shootControlled(Gamepad controller) {
         if(controller.right_trigger > 0.1){
-            left.setPower(1);
-            right.setPower(1);
+            left.setPower(SHOOT_POWER);
+            right.setPower(SHOOT_POWER);
         } else {
             left.setPower(0);
             right.setPower(0);
@@ -41,15 +43,15 @@ public class RollerShooter extends Shooter {
 
     @Override
     public void shoot() throws InterruptedException {
-        left.setPower(1);
-        right.setPower(1);
+        left.setPower(SHOOT_POWER);
+        right.setPower(SHOOT_POWER);
 
         Thread.sleep(500);
 
         lift.setPower(1);
         spinner.setPower(1);
 
-        Thread.sleep(2500);
+        Thread.sleep(2000);
 
         left.setPower(0);
         right.setPower(0);
