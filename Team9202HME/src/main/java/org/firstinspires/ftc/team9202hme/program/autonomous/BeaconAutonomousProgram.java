@@ -57,10 +57,10 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
         final double LATERAL_DISTANCE_MARGIN = 10;
         final double ROTATION_MARGIN = 2;
 
-        final double MINIMUM_DISTANCE_FROM_IMAGE = 150;
+        final double MINIMUM_DISTANCE_FROM_IMAGE = 75;
 
-        final double PRECISION_SPEED = 0.25;
-        final double MOVE_SPEED = 0.5;
+        final double PRECISION_SPEED = 0.3;
+        final double MOVE_SPEED = 0.4;
 
         final int DIRECTION_TO_IMAGE = 60;
 
@@ -78,7 +78,7 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
             default:
                 target = ImageTarget.GEARS; //It's Mr. Gears
         }
-        
+
         final double CAMERA_OFFSET = 60;
 
         while(opMode.opModeIsActive()) {
@@ -87,10 +87,9 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
             updateImageLocation();
 
             //State 0: Align so that robot is parallel to the wall, and center robot on image
-            //State 1: Run the shooter to (hopefully) score two pre-loaded particles into the central vortex
-            //State 2: Get close enough to the image for the color sensor to get accurate readings
-            //State 3: Activate the correct color on the beacon based on readings from the color sensor
-            //State 4: Move over to second beacon and repeat states 0, 2, and 3
+            //State 1: Get close enough for color sensor to get readings, and shoot two balls into central vortex
+            //State 2: Activate the correct color on the beacon based on readings from the color sensor
+            //State 3: Move over to second beacon and repeat states 0, 2, and 3
             switch(state) {
                 case 0:
                     if(canSeeTarget) {
@@ -115,7 +114,7 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
 
                     Thread.sleep(10);
 
-                    while(!withinMargin(translation.x + CAMERA_OFFSET, 12.5)) {
+                    while(!withinMargin(translation.x + CAMERA_OFFSET, 15)) {
                         updateImageLocation();
 
                         if(navigator.canSeeTarget(target)) {
@@ -152,7 +151,7 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
 
                     updateImageLocation();
 
-                    final double DISTANCE_TO_BUTTON = 70 + (translation.x + CAMERA_OFFSET);
+                    final double DISTANCE_TO_BUTTON = 65 + (translation.x + CAMERA_OFFSET);
 
                     switch(fieldSide) {
                         case RED:
@@ -196,10 +195,10 @@ public class BeaconAutonomousProgram extends AutonomousProgram {
 
                     switch(fieldSide) {
                         case RED:
-                            driveTrain.move(MOVE_SPEED, 270, 1200);
+                            driveTrain.move(MOVE_SPEED, 270, 1250);
                             break;
                         case BLUE:
-                            driveTrain.move(MOVE_SPEED, 90, 1200);
+                            driveTrain.move(MOVE_SPEED, 90, 1250);
                             break;
                     }
 
